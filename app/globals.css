@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0c2143;
+  --navy-dark: #081530;
+  --royal: #0046B6;
+  --vasas-red: #E11D2E;
+  --gold: #B8985C;
+  --cream: #F7F3EC;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  background: #ffffff;
+  color: #0c2143;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Decorative diagonal stripes used for accent backgrounds */
+.bg-stripes {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 2px,
+    transparent 2px,
+    transparent 18px
+  );
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Subtle noise overlay */
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 25% 25%,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.heading-display {
+  font-family: var(--font-display), "Inter", system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+}
+
+.gold-divider {
+  height: 3px;
+  width: 64px;
+  background: linear-gradient(90deg, transparent, #B8985C, transparent);
+  border-radius: 2px;
+}
+
+.section-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #B8985C;
+}
+
+/* Card hover transitions */
+.card-lift {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px rgba(12, 33, 67, 0.35);
+}
+
+/* Visual mockup: cursor stays as default since nothing navigates,
+   but pointer-events remain ON so hover animations still fire. */
+.no-click {
+  cursor: default;
+}
+.no-click:focus,
+.no-click:focus-visible {
+  outline: none;
+}
