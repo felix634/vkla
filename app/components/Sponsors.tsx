@@ -3,14 +3,14 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 const SPONSORS = [
-  "MOL",
-  "OTP Bank",
-  "MVM",
-  "MLSZ",
-  "BKV",
-  "Wizz Air",
-  "Magyar Telekom",
-  "ESET",
+  "Szponzor 1",
+  "Szponzor 2",
+  "Szponzor 3",
+  "Szponzor 4",
+  "Szponzor 5",
+  "Szponzor 6",
+  "Szponzor 7",
+  "Szponzor 8",
 ];
 
 const container = {

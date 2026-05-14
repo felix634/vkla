@@ -3,22 +3,22 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 const AGE_GROUPS = [
-  { name: "U5", players: "32", coach: "Nagy Bence" },
-  { name: "U6", players: "30", coach: "Kovács Tamás" },
-  { name: "U7", players: "34", coach: "Szabó László" },
-  { name: "U8", players: "36", coach: "Tóth Péter" },
-  { name: "U9", players: "32", coach: "Varga Krisztián" },
-  { name: "U10", players: "28", coach: "Horváth Áron" },
-  { name: "U11", players: "30", coach: "Molnár Gábor" },
-  { name: "U12", players: "26", coach: "Balogh Dávid" },
-  { name: "U13", players: "26", coach: "Fekete István" },
-  { name: "U14", players: "24", coach: "Kiss Bálint" },
-  { name: "U15", players: "22", coach: "Németh Zoltán" },
-  { name: "U16", players: "22", coach: "Papp Levente" },
-  { name: "U17", players: "20", coach: "Farkas Ádám" },
-  { name: "U18", players: "20", coach: "Juhász Márton" },
-  { name: "U19", players: "20", coach: "Bíró Dénes" },
-  { name: "Női", players: "18", coach: "Hegedűs Réka", highlight: true },
+  { name: "U5" },
+  { name: "U6" },
+  { name: "U7" },
+  { name: "U8" },
+  { name: "U9" },
+  { name: "U10" },
+  { name: "U11" },
+  { name: "U12" },
+  { name: "U13" },
+  { name: "U14" },
+  { name: "U15" },
+  { name: "U16" },
+  { name: "U17" },
+  { name: "U18" },
+  { name: "U19" },
+  { name: "Női", highlight: true },
 ];
 
 const container = {
@@ -104,9 +104,9 @@ export default function Teams() {
                 {t.name}
               </div>
               <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">
-                {t.players} játékos
+                X játékos
               </div>
-              <div className="text-[11px] text-white/70 mt-2 truncate">{t.coach}</div>
+              <div className="text-[11px] text-white/70 mt-2 truncate">Edző neve</div>
               {t.highlight && (
                 <div className="absolute -top-2 -right-2 text-[9px] uppercase tracking-wider font-bold bg-vasasRed text-white px-2 py-0.5 rounded-sm">
                   Új

@@ -3,9 +3,9 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 const COURSES = [
-  { title: "Labdás technikai gyakorlatok", level: "U7–U10", price: "4 990 Ft", lessons: "12 videós lecke" },
-  { title: "Otthoni cselezőgyakorlatok", level: "U10–U13", price: "5 990 Ft", lessons: "18 videós lecke" },
-  { title: "Mentális felkészítés szülőknek", level: "Minden korosztály", price: "3 490 Ft", lessons: "8 előadás", featured: true },
+  { title: "Tananyag címe", level: "Korosztály", price: "X Ft", lessons: "X videós lecke" },
+  { title: "Tananyag címe", level: "Korosztály", price: "X Ft", lessons: "X videós lecke" },
+  { title: "Tananyag címe", level: "Korosztály", price: "X Ft", lessons: "X előadás", featured: true },
 ];
 
 const container = {

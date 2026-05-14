@@ -2,51 +2,34 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-const UPCOMING = [
-  {
-    date: "MÁJ 11",
-    time: "10:00",
-    home: "Vasas Kubala U14",
-    away: "MTK Budapest U14",
-    venue: "Fáy utca, 1. pálya",
-    league: "U14 Bajnokság",
-  },
-  {
-    date: "MÁJ 11",
-    time: "11:30",
-    home: "Vasas Kubala U16",
-    away: "Ferencváros U16",
-    venue: "Fáy utca, főpálya",
-    league: "U16 Bajnokság",
-  },
-  {
-    date: "MÁJ 12",
-    time: "16:00",
-    home: "Honvéd U17",
-    away: "Vasas Kubala U17",
-    venue: "Bozsik Aréna",
-    league: "U17 Bajnokság",
-    away_game: true,
-  },
-];
+// 10 placeholder upcoming matches — content swapped from CMS later
+const UPCOMING = Array.from({ length: 10 }, (_, i) => ({
+  date: "—",
+  time: "—:—",
+  team: `Vasas Kubala U${[8, 10, 12, 13, 14, 15, 16, 17, 18, 19][i]}`,
+  opponent: "Ellenfél neve",
+  league: "Bajnokság",
+  away: i % 3 === 2,
+}));
 
 const RECENT = [
-  { home: "Vasas Kubala U15", away: "Újpest U15", score: "3-1", win: true },
-  { home: "BKV Előre U13", away: "Vasas Kubala U13", score: "0-4", win: true },
-  { home: "Vasas Kubala U18", away: "Diósgyőr U18", score: "2-2", win: null },
+  { team: "Vasas Kubala", opponent: "Ellenfél neve", score: "—" },
+  { team: "Ellenfél neve", opponent: "Vasas Kubala", score: "—" },
+  { team: "Vasas Kubala", opponent: "Ellenfél neve", score: "—" },
+  { team: "Vasas Kubala", opponent: "Ellenfél neve", score: "—" },
 ];
 
 const container = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.04 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.2, 0.8, 0.2, 1] as const },
+    transition: { duration: 0.45, ease: [0.2, 0.8, 0.2, 1] as const },
   },
 };
 
@@ -84,14 +67,15 @@ export default function Matches() {
                 <span className="w-1.5 h-6 bg-vasasRed rounded-sm" />
                 Közelgő mérkőzések
               </h3>
-              <span className="text-sm text-navy/50">Hétvége</span>
+              <span className="text-sm text-navy/50">Következő 10</span>
             </motion.div>
+
             <motion.div
-              className="space-y-3"
+              className="border border-gray-100 rounded-md overflow-hidden bg-white"
               variants={container}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ once: true, amount: 0.05 }}
             >
               {UPCOMING.map((m, i) => (
                 <motion.div
@@ -101,41 +85,65 @@ export default function Matches() {
                     reduced
                       ? undefined
                       : {
-                          x: 4,
-                          boxShadow: "0 18px 35px -22px rgba(12, 33, 67, 0.4)",
-                          transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] },
+                          backgroundColor: "rgba(247, 243, 236, 1)",
+                          x: 3,
+                          transition: { duration: 0.25, ease: [0.2, 0.8, 0.2, 1] },
                         }
                   }
-                  className="no-click bg-cream border border-gray-100 rounded-md p-5 grid grid-cols-12 gap-4 items-center cursor-default"
+                  className={`no-click flex items-center gap-4 px-4 py-3 cursor-default ${
+                    i !== UPCOMING.length - 1 ? "border-b border-gray-100" : ""
+                  }`}
                 >
-                  <div className="col-span-3 sm:col-span-2 text-center">
-                    <div className="text-navy font-display font-black text-xl leading-none">{m.date}</div>
-                    <div className="text-vasasRed text-sm font-bold mt-1">{m.time}</div>
+                  {/* Date / time */}
+                  <div className="flex-shrink-0 w-16 text-center">
+                    <div className="text-navy font-display font-black text-sm leading-none">
+                      {m.date}
+                    </div>
+                    <div className="text-vasasRed text-[11px] font-bold mt-1">{m.time}</div>
                   </div>
-                  <div className="col-span-9 sm:col-span-10">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex-1">
-                        <div className="text-xs uppercase tracking-widest text-navy/40 mb-1.5">
-                          {m.league}
-                        </div>
-                        <div className="flex items-center gap-3 font-display font-bold text-navy">
-                          <span className={m.away_game ? "text-navy/60" : ""}>{m.home}</span>
-                          <span className="text-navy/30 text-xs">VS</span>
-                          <span className={!m.away_game ? "text-navy/60" : ""}>{m.away}</span>
-                        </div>
-                        <div className="text-xs text-navy/50 mt-1">📍 {m.venue}</div>
-                      </div>
-                      <motion.button
-                        whileHover={reduced ? undefined : { scale: 1.04 }}
-                        className="no-click hidden sm:block bg-white border border-navy/15 text-navy text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-sm hover:border-vasasRed hover:text-vasasRed transition-colors"
-                      >
-                        Részletek
-                      </motion.button>
+
+                  {/* Divider */}
+                  <div className="w-px h-9 bg-gray-200" />
+
+                  {/* Match */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 text-sm font-display font-bold text-navy">
+                      <span className={m.away ? "text-navy/55 truncate" : "truncate"}>
+                        {m.team}
+                      </span>
+                      <span className="text-navy/30 text-[10px] font-sans">VS</span>
+                      <span className={!m.away ? "text-navy/55 truncate" : "truncate"}>
+                        {m.opponent}
+                      </span>
+                    </div>
+                    <div className="text-[11px] uppercase tracking-widest text-navy/40 mt-0.5">
+                      {m.league}
                     </div>
                   </div>
+
+                  {/* Home / away indicator */}
+                  <span
+                    className={`hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-sm flex-shrink-0 ${
+                      m.away
+                        ? "bg-navy/5 text-navy/60"
+                        : "bg-vasasRed/10 text-vasasRed"
+                    }`}
+                  >
+                    {m.away ? "Idegen" : "Hazai"}
+                  </span>
                 </motion.div>
               ))}
             </motion.div>
+
+            <div className="mt-4 text-right">
+              <button className="no-click text-sm font-semibold text-navy hover:text-vasasRed transition-colors inline-flex items-center gap-2 group">
+                Teljes mérkőzésnaptár
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Recent results */}
@@ -151,25 +159,22 @@ export default function Matches() {
                 Eredmények
               </h3>
             </div>
-            <div className="bg-navy text-white rounded-md p-5 space-y-3">
+            <div className="bg-navy text-white rounded-md p-5 space-y-1">
               {RECENT.map((r, i) => (
                 <motion.div
                   key={i}
                   whileHover={reduced ? undefined : { x: 4 }}
                   transition={{ duration: 0.25 }}
-                  className={`py-3 cursor-default ${i !== RECENT.length - 1 ? "border-b border-white/10" : ""}`}
+                  className={`py-2.5 cursor-default ${i !== RECENT.length - 1 ? "border-b border-white/10" : ""}`}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm flex-1">
-                      <div className="font-semibold truncate">{r.home}</div>
-                      <div className="text-white/60 truncate">{r.away}</div>
+                    <div className="text-sm flex-1 min-w-0">
+                      <div className="font-semibold truncate">{r.team}</div>
+                      <div className="text-white/60 truncate">{r.opponent}</div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-display font-black text-xl text-gold-light">{r.score}</span>
-                      {r.win === true && <span className="text-[10px] font-bold text-emerald-400">Ny</span>}
-                      {r.win === false && <span className="text-[10px] font-bold text-vasasRed">V</span>}
-                      {r.win === null && <span className="text-[10px] font-bold text-gold">D</span>}
-                    </div>
+                    <span className="font-display font-black text-lg text-gold-light flex-shrink-0">
+                      {r.score}
+                    </span>
                   </div>
                 </motion.div>
               ))}

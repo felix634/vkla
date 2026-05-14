@@ -120,9 +120,9 @@ export default function Hero() {
             className="grid grid-cols-3 gap-6 mt-14 pt-10 border-t border-white/10 max-w-xl"
           >
             {[
-              { n: "114", label: "év hagyomány" },
-              { n: "16", label: "korosztály" },
-              { n: "450+", label: "aktív játékos" },
+              { n: "1911", label: "alapítás éve" },
+              { n: "X", label: "korosztály" },
+              { n: "X", label: "aktív játékos" },
             ].map((s, i) => (
               <motion.div
                 key={s.label}

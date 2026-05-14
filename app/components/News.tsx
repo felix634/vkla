@@ -7,28 +7,28 @@ const NEWS = [
   {
     cat: "Mérkőzés",
     catColor: "bg-vasasRed",
-    title: "Hétvégi eredmények – 19. forduló",
+    title: "Hír címe ide kerül",
     excerpt:
-      "Az U17-es csapatunk magabiztos hazai győzelmet aratott, az U14 idegenben szerzett három pontot.",
-    date: "2026. május 4.",
+      "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+    date: "Dátum",
     img: "/images/vasas.jpeg",
   },
   {
     cat: "Akadémia",
     catColor: "bg-royal",
-    title: "Új edzői stáb az U10-es korosztálynál",
+    title: "Hír címe ide kerül",
     excerpt:
-      "Bemutatjuk a 2026/27-es szezon új vezetőedzőjét, aki a klub saját nevelésű szakembere.",
-    date: "2026. május 2.",
+      "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+    date: "Dátum",
     img: "/images/vasassc.jpeg",
   },
   {
     cat: "Program",
     catColor: "bg-gold",
-    title: "Nyári táborok – jelentkezés megnyitva",
+    title: "Hír címe ide kerül",
     excerpt:
-      "Június 16. és augusztus 22. között hat turnusban várjuk a 6–12 éves gyerekeket.",
-    date: "2026. április 28.",
+      "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+    date: "Dátum",
     img: "/images/focizzteis.jpeg",
   },
 ];

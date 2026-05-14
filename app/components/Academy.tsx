@@ -117,8 +117,8 @@ export default function Academy() {
               technikai, taktikai és emberi fejlődése egyformán fontos számunkra.
             </p>
             <p className="text-base text-navy/65 leading-relaxed mb-10">
-              Évente több mint 450 fiatal sportoló edz a Fáy utcai sportkomplexumban,
-              16 korosztályban. A Vasas FC és Vasas SC szoros együttműködésében
+              Évente több, mint X fiatal sportoló edz a Fáy utcai sportkomplexumban,
+              X korosztályban. A Vasas FC és Vasas SC szoros együttműködésében
               biztosítjuk az utánpótlástól a profi pályáig vezető utat.
             </p>
 
