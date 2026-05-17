@@ -66,7 +66,7 @@ export default function Academy() {
                 className="absolute inset-0"
               >
                 <Image
-                  src="/images/vasas.jpeg"
+                  src="/images/logo2.png"
                   alt="Vasas Kubala Akadémia"
                   fill
                   className="object-cover"
@@ -122,9 +122,6 @@ export default function Academy() {
               <div>
                 <p className="font-display italic text-2xl md:text-3xl text-navy leading-tight">
                   „Akarni, küzdeni, játszani.”
-                </p>
-                <p className="text-[11px] uppercase tracking-[0.3em] text-gold-dark mt-2 font-semibold">
-                  — A klub mottója
                 </p>
               </div>
             </motion.blockquote>

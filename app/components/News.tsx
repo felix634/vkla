@@ -11,7 +11,7 @@ const NEWS = [
     excerpt:
       "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
     date: "Dátum",
-    img: "/images/vasas.jpeg",
+    img: "/images/flag.jpg",
   },
   {
     cat: "Akadémia",
@@ -20,7 +20,7 @@ const NEWS = [
     excerpt:
       "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
     date: "Dátum",
-    img: "/images/vasassc.jpeg",
+    img: "/images/team.jpg",
   },
   {
     cat: "Program",
@@ -29,7 +29,7 @@ const NEWS = [
     excerpt:
       "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
     date: "Dátum",
-    img: "/images/focizzteis.jpeg",
+    img: "/images/player.jpg",
   },
 ];
 
