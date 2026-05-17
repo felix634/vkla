@@ -52,27 +52,32 @@ export default function Academy() {
             transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
           >
             <motion.div
-              className="relative aspect-[4/5] rounded-md overflow-hidden"
+              className="relative z-10 aspect-[4/5] rounded-md overflow-hidden bg-white shadow-xl shadow-navy/10 border border-gray-100"
               whileHover="hover"
               initial="rest"
               animate="rest"
             >
+              {/* Subtle decorative pattern behind the logo */}
+              <div className="absolute inset-0 bg-grid opacity-[0.04] pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-cream via-white to-cream pointer-events-none" />
+
               <motion.div
                 variants={{
                   rest: { scale: 1 },
-                  hover: reduced ? { scale: 1 } : { scale: 1.08 },
+                  hover: reduced ? { scale: 1 } : { scale: 1.06 },
                 }}
-                transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
-                className="absolute inset-0"
+                transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
+                className="absolute inset-0 flex items-center justify-center p-14 lg:p-20"
               >
-                <Image
-                  src="/images/logo2.png"
-                  alt="Vasas Kubala Akadémia"
-                  fill
-                  className="object-cover"
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/images/logo.png"
+                    alt="Vasas Kubala Akadémia"
+                    fill
+                    className="object-contain drop-shadow-[0_8px_24px_rgba(12,33,67,0.18)]"
+                  />
+                </div>
               </motion.div>
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/40 to-transparent pointer-events-none" />
             </motion.div>
             {/* Floating badge */}
             <motion.div
@@ -81,18 +86,18 @@ export default function Academy() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
               whileHover={reduced ? undefined : { y: -4 }}
-              className="absolute -bottom-6 -right-6 bg-navy text-white p-6 rounded-md shadow-2xl shadow-navy/30 max-w-[220px] cursor-default"
+              className="absolute z-20 -bottom-6 -right-6 bg-navy text-white p-6 rounded-md shadow-2xl shadow-navy/30 max-w-[220px] cursor-default"
             >
               <div className="text-gold text-4xl font-display font-black mb-1">1911</div>
               <div className="text-xs uppercase tracking-widest text-white/70">A klub alapításának éve</div>
             </motion.div>
-            {/* Floating red square */}
+            {/* Floating red square — behind the image frame but above the section background */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="absolute -top-6 -left-6 w-24 h-24 bg-vasasRed -z-10 rounded-sm"
+              className="absolute z-0 -top-6 -left-6 w-24 h-24 bg-vasasRed rounded-sm"
             />
           </motion.div>
 

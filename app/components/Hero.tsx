@@ -17,7 +17,7 @@ export default function Hero() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/focizzteis.jpeg"
+            src="/images/focizzteis2.jpeg"
             alt="Vasas Kubala Akadémia"
             fill
             priority
