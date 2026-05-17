@@ -70,10 +70,22 @@ export default function Hero() {
             ))}
           </h1>
 
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.85, ease: [0.2, 0.8, 0.2, 1] }}
+            className="flex items-center gap-3 mb-8"
+          >
+            <span className="w-10 h-px bg-gold" />
+            <span className="font-display italic text-lg md:text-xl text-gold-light tracking-wide">
+              Akarni, küzdeni, játszani.
+            </span>
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.75, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={{ duration: 0.8, delay: 0.95, ease: [0.2, 0.8, 0.2, 1] }}
             className="text-lg md:text-xl text-white/80 max-w-xl mb-10 leading-relaxed"
           >
             A Vasas Kubala Akadémia 1911 óta a magyar labdarúgás meghatározó

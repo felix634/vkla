@@ -111,14 +111,32 @@ export default function Academy() {
             </h2>
             <div className="gold-divider mb-7" />
 
+            <motion.blockquote
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
+              className="flex items-center gap-5 mb-8"
+            >
+              <span className="w-1 h-14 bg-gold-gradient rounded-sm flex-shrink-0" />
+              <div>
+                <p className="font-display italic text-2xl md:text-3xl text-navy leading-tight">
+                  „Akarni, küzdeni, játszani.”
+                </p>
+                <p className="text-[11px] uppercase tracking-[0.3em] text-gold-dark mt-2 font-semibold">
+                  — A klub mottója
+                </p>
+              </div>
+            </motion.blockquote>
+
             <p className="text-lg text-navy/75 leading-relaxed mb-6">
               A Vasas Kubala Akadémia névadója Kubala László, minden idők egyik
               legnagyobb magyar labdarúgója. Hagyatékát hűségesen ápoljuk: gyermekeink
               technikai, taktikai és emberi fejlődése egyformán fontos számunkra.
             </p>
             <p className="text-base text-navy/65 leading-relaxed mb-10">
-              Évente több, mint X fiatal sportoló edz a Fáy utcai sportkomplexumban,
-              X korosztályban. A Vasas FC és Vasas SC szoros együttműködésében
+              Évente több, mint 450 fiatal sportoló edz a Fáy utcai sportkomplexumban,
+              16 korosztályban. A Vasas FC és Vasas SC szoros együttműködésében
               biztosítjuk az utánpótlástól a profi pályáig vezető utat.
             </p>
 
