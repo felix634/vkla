@@ -24,26 +24,18 @@ export default function Header() {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <motion.div
-          className="flex items-center gap-3 no-click cursor-default"
-          whileHover={reduced ? undefined : { x: -1 }}
-          transition={{ duration: 0.3 }}
+          className="flex-shrink-0 no-click cursor-default"
+          whileHover={reduced ? undefined : { scale: 1.04 }}
+          transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
         >
-          <motion.div
-            whileHover={reduced ? undefined : { rotate: -8, scale: 1.05 }}
-            transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
-          >
-            <Image
-              src="/images/logo.png"
-              alt="Vasas Kubala Akadémia"
-              width={56}
-              height={56}
-              className="h-14 w-14 object-contain"
-            />
-          </motion.div>
-          <div className="leading-tight">
-            <div className="font-display font-black text-navy text-lg tracking-wide">VASAS KUBALA</div>
-            <div className="font-display font-bold text-vasasRed text-sm tracking-[0.3em]">AKADÉMIA</div>
-          </div>
+          <Image
+            src="/images/logo.png"
+            alt="Vasas Kubala Akadémia"
+            width={64}
+            height={64}
+            priority
+            className="block h-16 w-16 object-contain"
+          />
         </motion.div>
 
         <nav className="hidden xl:flex items-center gap-1">
