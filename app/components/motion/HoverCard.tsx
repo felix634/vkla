@@ -9,6 +9,7 @@ interface HoverCardProps {
   lift?: number;
   scale?: number;
   glow?: boolean;
+  id?: string;
 }
 
 export default function HoverCard({
@@ -17,11 +18,13 @@ export default function HoverCard({
   lift = 6,
   scale = 1.015,
   glow = true,
+  id,
 }: HoverCardProps) {
   const reduced = useReducedMotion();
 
   return (
     <motion.div
+      id={id}
       className={className}
       whileHover={
         reduced
