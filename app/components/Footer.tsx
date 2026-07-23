@@ -1,23 +1,22 @@
 import Image from "next/image";
+import Link from "next/link";
+import { FOOTER_COLUMNS, type NavLink } from "../lib/nav";
 
-const FOOTER_NAV = [
-  {
-    title: "Akadémia",
-    links: ["Bemutatkozás", "Kubala László", "Edzői stáb", "Etikai kódex", "Házirend", "TAO"],
-  },
-  {
-    title: "Csapatok",
-    links: ["U5–U9", "U10–U13", "U14–U19", "Női csapat", "Vasas FC II"],
-  },
-  {
-    title: "Mérkőzések",
-    links: ["Naptár", "Eredmények", "Bajnoki tabella", "Galéria", "Videók"],
-  },
-  {
-    title: "Tagság",
-    links: ["Jelentkezés", "Tagdíj fizetés", "Oktatási anyagok", "Webshop", "Dokumentumok"],
-  },
-];
+function FooterLink({ link }: { link: NavLink }) {
+  const cls = "text-sm text-white/65 hover:text-white transition cursor-pointer";
+  if (link.external) {
+    return (
+      <a href={link.href} target="_blank" rel="noopener noreferrer" className={cls}>
+        {link.label}
+      </a>
+    );
+  }
+  return (
+    <Link href={link.href} className={cls}>
+      {link.label}
+    </Link>
+  );
+}
 
 export default function Footer() {
   return (
@@ -26,7 +25,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-12 gap-10">
           {/* Brand block */}
           <div className="lg:col-span-4">
-            <div className="flex items-center gap-3 mb-5">
+            <Link href="/" className="flex items-center gap-3 mb-5 w-fit">
               <Image
                 src="/images/logo.png"
                 alt="VKLA"
@@ -38,10 +37,10 @@ export default function Footer() {
                 <div className="font-display font-black text-lg tracking-wide">VASAS KUBALA</div>
                 <div className="font-display font-bold text-gold text-sm tracking-[0.3em]">AKADÉMIA</div>
               </div>
-            </div>
+            </Link>
             <p className="text-white/65 text-sm leading-relaxed max-w-sm mb-6">
-              Magyarország egyik legnagyobb hagyománnyal rendelkező labdarúgó
-              akadémiája — 1911 óta a fiatal tehetségek otthona.
+              A Vasas Kubala Akadémia 2007 óta a fiatal tehetségek otthona —
+              a magyar utánpótlás-labdarúgás egyik meghatározó műhelye.
             </p>
             <div className="flex items-center gap-3">
               {["FB", "IG", "YT", "TW"].map((s) => (
@@ -56,15 +55,15 @@ export default function Footer() {
           </div>
 
           {/* Nav columns */}
-          {FOOTER_NAV.map((col) => (
+          {FOOTER_COLUMNS.map((col) => (
             <div key={col.title} className="lg:col-span-2">
               <h4 className="font-display font-bold text-sm tracking-[0.2em] uppercase text-gold-light mb-5">
                 {col.title}
               </h4>
               <ul className="space-y-2.5">
                 {col.links.map((l) => (
-                  <li key={l} className="no-click text-sm text-white/65 hover:text-white transition cursor-default">
-                    {l}
+                  <li key={l.label}>
+                    <FooterLink link={l} />
                   </li>
                 ))}
               </ul>

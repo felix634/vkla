@@ -1,16 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
+// Fő támogatók — kiemelten a főoldalon (jegyzőkönyv kérése).
+const MAIN_SPONSORS = ["Fő támogató 1", "Fő támogató 2", "Fő támogató 3"];
+
+// További partnerek rácsban.
 const SPONSORS = [
-  "Szponzor 1",
-  "Szponzor 2",
-  "Szponzor 3",
-  "Szponzor 4",
-  "Szponzor 5",
-  "Szponzor 6",
-  "Szponzor 7",
-  "Szponzor 8",
+  "Partner 1",
+  "Partner 2",
+  "Partner 3",
+  "Partner 4",
+  "Partner 5",
+  "Partner 6",
+  "Partner 7",
+  "Partner 8",
 ];
 
 const container = {
@@ -47,6 +52,30 @@ export default function Sponsors() {
           </h2>
         </motion.div>
 
+        {/* Fő támogatók — kiemelt sor */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"
+          variants={container}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {MAIN_SPONSORS.map((s) => (
+            <motion.div
+              key={s}
+              variants={item}
+              whileHover={reduced ? undefined : { y: -4, transition: { duration: 0.3 } }}
+              className="relative rounded-md border border-gold/40 bg-gradient-to-br from-white/[0.07] to-transparent p-8 flex flex-col items-center justify-center min-h-[130px]"
+            >
+              <span className="absolute top-3 left-3 text-[9px] font-bold uppercase tracking-[0.2em] text-gold-light/80">
+                Fő támogató
+              </span>
+              <span className="font-display font-black text-2xl tracking-wider text-white/80">{s}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* További partnerek */}
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-md overflow-hidden"
           variants={container}
@@ -59,12 +88,7 @@ export default function Sponsors() {
               key={s}
               variants={item}
               whileHover={
-                reduced
-                  ? undefined
-                  : {
-                      backgroundColor: "rgba(12, 33, 67, 1)",
-                      transition: { duration: 0.3 },
-                    }
+                reduced ? undefined : { backgroundColor: "rgba(12, 33, 67, 1)", transition: { duration: 0.3 } }
               }
               className="no-click bg-navy-dark p-8 flex items-center justify-center min-h-[100px] cursor-default group"
             >
@@ -87,14 +111,16 @@ export default function Sponsors() {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <p className="text-white/60 text-sm mb-4">Csatlakozz Te is támogatóink köréhez</p>
-          <motion.button
-            whileHover={reduced ? undefined : { y: -3, backgroundColor: "#B8985C", color: "#0c2143" }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.3 }}
-            className="no-click border-2 border-gold/50 text-gold px-7 py-3 font-bold rounded-sm text-sm"
-          >
-            Szponzorációs lehetőségek →
-          </motion.button>
+          <Link href="/szponzoracio">
+            <motion.span
+              whileHover={reduced ? undefined : { y: -3, backgroundColor: "#B8985C", color: "#0c2143" }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.3 }}
+              className="inline-block border-2 border-gold/50 text-gold px-7 py-3 font-bold rounded-sm text-sm"
+            >
+              Szponzorációs lehetőségek →
+            </motion.span>
+          </Link>
         </motion.div>
       </div>
     </section>

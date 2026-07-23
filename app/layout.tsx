@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Inter, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
+import MockupBanner from "./components/MockupBanner";
+import TopBar from "./components/TopBar";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -19,7 +23,9 @@ const display = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "Vasas Kubala Akadémia — Látványterv",
   description:
-    "Vasas Kubala Akadémia új weboldalának látványterve. Prometheus Digital Kft.",
+    "Vasas Kubala Akadémia új weboldalának teljes látványterve. Prometheus Digital Kft.",
+  // Látványterv — ne kerüljön a keresőkbe a vkla.hu mellé
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
@@ -31,7 +37,12 @@ export default function RootLayout({
     <html lang="hu" className={`${inter.variable} ${display.variable}`}>
       <body>
         <SmoothScroll />
+        {/* Közös chrome — minden aloldalon egységes */}
+        <MockupBanner />
+        <TopBar />
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

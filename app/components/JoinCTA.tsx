@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 export default function JoinCTA() {
@@ -46,41 +47,45 @@ export default function JoinCTA() {
           </h2>
           <div className="gold-divider mb-6" />
           <p className="text-lg text-white/80 max-w-xl mb-8 leading-relaxed">
-            U4-től U9-ig folyamatosan várjuk a focit szerető gyerekeket.
+            U5-től U9-ig folyamatosan várjuk a focit szerető gyerekeket.
             Próbaedzés előzetes regisztrációval — teljesen ingyenesen.
           </p>
           <div className="flex flex-wrap gap-4">
-            <motion.button
-              whileHover={
-                reduced
-                  ? undefined
-                  : { y: -3, boxShadow: "0 22px 45px -18px rgba(225,29,46,0.6)" }
-              }
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.3 }}
-              className="no-click bg-vasasRed hover:bg-vasasRedDark px-8 py-4 font-bold rounded-sm shadow-lg shadow-vasasRed/30 flex items-center gap-2 group"
-            >
-              Próbaedzésre jelentkezem
-              <motion.svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                className="group-hover:translate-x-1 transition-transform"
+            <Link href="/kapcsolat#probaedzes">
+              <motion.span
+                whileHover={
+                  reduced
+                    ? undefined
+                    : { y: -3, boxShadow: "0 22px 45px -18px rgba(225,29,46,0.6)" }
+                }
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.3 }}
+                className="bg-vasasRed hover:bg-vasasRedDark px-8 py-4 font-bold rounded-sm shadow-lg shadow-vasasRed/30 flex items-center gap-2 group"
               >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </motion.svg>
-            </motion.button>
-            <motion.button
-              whileHover={reduced ? undefined : { y: -3 }}
-              whileTap={{ scale: 0.97 }}
-              className="no-click border-2 border-white/30 hover:border-gold hover:text-gold transition-colors px-8 py-4 font-bold rounded-sm"
-            >
-              Letöltöm a brosúrát
-            </motion.button>
+                Próbaedzésre jelentkezem
+                <motion.svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="group-hover:translate-x-1 transition-transform"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </motion.svg>
+              </motion.span>
+            </Link>
+            <Link href="/dokumentumok">
+              <motion.span
+                whileHover={reduced ? undefined : { y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                className="block border-2 border-white/30 hover:border-gold hover:text-gold transition-colors px-8 py-4 font-bold rounded-sm"
+              >
+                Letöltöm a brosúrát
+              </motion.span>
+            </Link>
           </div>
         </motion.div>
 

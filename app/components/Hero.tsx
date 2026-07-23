@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 export default function Hero() {
@@ -88,8 +89,8 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.95, ease: [0.2, 0.8, 0.2, 1] }}
             className="text-lg md:text-xl text-white/80 max-w-xl mb-10 leading-relaxed"
           >
-            A Vasas Kubala Akadémia 1911 óta a magyar labdarúgás meghatározó
-            utánpótlás-bázisa. <span className="text-white font-semibold">U4-től U19-ig</span>{" "}
+            A Vasas Kubala Akadémia 2007 óta a magyar labdarúgás meghatározó
+            utánpótlás-bázisa. <span className="text-white font-semibold">U5-től U19-ig</span>{" "}
             képezzük a következő generáció játékosait.
           </motion.p>
 
@@ -99,29 +100,33 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
             className="flex flex-wrap gap-4"
           >
-            <motion.button
-              whileHover={reduced ? undefined : { y: -3, boxShadow: "0 20px 40px -15px rgba(225, 29, 46, 0.55)" }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
-              className="no-click bg-vasasRed hover:bg-vasasRedDark px-7 py-4 font-bold tracking-wide rounded-sm shadow-lg shadow-vasasRed/30 flex items-center gap-2 group"
-            >
-              Jelentkezz az akadémiára
-              <motion.svg
-                width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="2.5"
-                className="group-hover:translate-x-1 transition-transform"
+            <Link href="/kapcsolat#probaedzes">
+              <motion.span
+                whileHover={reduced ? undefined : { y: -3, boxShadow: "0 20px 40px -15px rgba(225, 29, 46, 0.55)" }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
+                className="bg-vasasRed hover:bg-vasasRedDark px-7 py-4 font-bold tracking-wide rounded-sm shadow-lg shadow-vasasRed/30 flex items-center gap-2 group"
               >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </motion.svg>
-            </motion.button>
-            <motion.button
-              whileHover={reduced ? undefined : { y: -3 }}
-              whileTap={{ scale: 0.97 }}
-              className="no-click border-2 border-white/30 hover:border-gold hover:text-gold transition-colors px-7 py-4 font-bold tracking-wide rounded-sm backdrop-blur-sm"
-            >
-              Megnézem a programokat
-            </motion.button>
+                Jelentkezz az akadémiára
+                <motion.svg
+                  width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2.5"
+                  className="group-hover:translate-x-1 transition-transform"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </motion.svg>
+              </motion.span>
+            </Link>
+            <Link href="/programok">
+              <motion.span
+                whileHover={reduced ? undefined : { y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                className="block border-2 border-white/30 hover:border-gold hover:text-gold transition-colors px-7 py-4 font-bold tracking-wide rounded-sm backdrop-blur-sm"
+              >
+                Megnézem a programokat
+              </motion.span>
+            </Link>
           </motion.div>
 
           {/* Quick stats */}
@@ -132,7 +137,7 @@ export default function Hero() {
             className="grid grid-cols-3 gap-6 mt-14 pt-10 border-t border-white/10 max-w-xl"
           >
             {[
-              { n: "1911", label: "alapítás éve" },
+              { n: "2007", label: "alapítás éve" },
               { n: "16", label: "korosztály" },
               { n: "450+", label: "aktív játékos" },
             ].map((s, i) => (

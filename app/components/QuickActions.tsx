@@ -1,12 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 const ACTIONS = [
   {
     title: "Tagdíj fizetés",
-    desc: "Havi tagdíj kényelmes online befizetése bankkártyával.",
+    desc: "Szülői regisztráció és a havi tagdíj kényelmes online rendezése.",
     badge: "Új",
+    href: "/tagdij",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="2" y="5" width="20" height="14" rx="2" />
@@ -16,20 +18,9 @@ const ACTIONS = [
     accent: "bg-vasasRed",
   },
   {
-    title: "Oktatási anyagok",
-    desc: "Videós tananyagok és edzéstervek otthoni gyakorláshoz.",
-    badge: "Új",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <polygon points="23 7 16 12 23 17 23 7" />
-        <rect x="1" y="5" width="15" height="14" rx="2" />
-      </svg>
-    ),
-    accent: "bg-royal",
-  },
-  {
     title: "Heti programok",
     desc: "Edzések, mérkőzések és események minden korosztálynak.",
+    href: "/programok",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -41,13 +32,28 @@ const ACTIONS = [
     accent: "bg-gold",
   },
   {
-    title: "Webshop",
-    desc: "Hivatalos szurkolói termékek és akadémiai felszerelés.",
+    title: "Próbaedzés",
+    desc: "Jelentkezz ingyenes próbaedzésre — néhány kattintás az egész.",
+    badge: "Ingyenes",
+    href: "/kapcsolat#probaedzes",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <path d="M16 10a4 4 0 0 1-8 0" />
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+    accent: "bg-royal",
+  },
+  {
+    title: "Létesítmények",
+    desc: "Pályáink, öltözőink — és bérlési lehetőség két helyszínen.",
+    badge: "Bérlés",
+    href: "/letesitmenyek",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M3 21h18" />
+        <path d="M5 21V7l7-4 7 4v14" />
+        <path d="M9 21v-6h6v6" />
       </svg>
     ),
     accent: "bg-navy",
@@ -82,60 +88,61 @@ export default function QuickActions() {
           viewport={{ once: true, amount: 0.2 }}
         >
           {ACTIONS.map((a) => (
-            <motion.div
-              key={a.title}
-              variants={item}
-              whileHover={
-                reduced
-                  ? undefined
-                  : {
-                      y: -8,
-                      boxShadow:
-                        "0 30px 60px -25px rgba(12, 33, 67, 0.45)",
-                      transition: { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] },
-                    }
-              }
-              className="no-click bg-white rounded-md p-6 lg:p-7 shadow-xl shadow-navy/10 border border-gray-100 relative overflow-hidden group cursor-default"
-            >
-              <motion.div
-                className={`absolute top-0 left-0 h-1 w-full ${a.accent}`}
-                initial={{ scaleX: 0, originX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1], delay: 0.1 }}
-              />
-              <motion.div
-                className={`w-12 h-12 ${a.accent} text-white rounded-md flex items-center justify-center mb-4`}
-                whileHover={reduced ? undefined : { rotate: -6, scale: 1.08 }}
-                transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
-              >
-                {a.icon}
-              </motion.div>
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-display font-bold text-navy text-xl">{a.title}</h3>
-                {a.badge && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-gold/15 text-gold-dark uppercase tracking-wider">
-                    {a.badge}
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-navy/65 leading-relaxed">{a.desc}</p>
-              <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-navy/80 group-hover:text-vasasRed transition-colors">
-                Megnyitás
-                <motion.svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  animate={{ x: 0 }}
-                  whileHover={{ x: 4 }}
+            <motion.div key={a.title} variants={item}>
+              <Link href={a.href} className="block h-full">
+                <motion.div
+                  whileHover={
+                    reduced
+                      ? undefined
+                      : {
+                          y: -8,
+                          boxShadow: "0 30px 60px -25px rgba(12, 33, 67, 0.45)",
+                          transition: { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] },
+                        }
+                  }
+                  className="h-full bg-white rounded-md p-6 lg:p-7 shadow-xl shadow-navy/10 border border-gray-100 relative overflow-hidden group"
                 >
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </motion.svg>
-              </div>
+                  <motion.div
+                    className={`absolute top-0 left-0 h-1 w-full ${a.accent}`}
+                    initial={{ scaleX: 0, originX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1], delay: 0.1 }}
+                  />
+                  <motion.div
+                    className={`w-12 h-12 ${a.accent} text-white rounded-md flex items-center justify-center mb-4`}
+                    whileHover={reduced ? undefined : { rotate: -6, scale: 1.08 }}
+                    transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+                  >
+                    {a.icon}
+                  </motion.div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-display font-bold text-navy text-xl">{a.title}</h3>
+                    {a.badge && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-gold/15 text-gold-dark uppercase tracking-wider">
+                        {a.badge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-navy/65 leading-relaxed">{a.desc}</p>
+                  <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-navy/80 group-hover:text-vasasRed transition-colors">
+                    Megnyitás
+                    <motion.svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      animate={{ x: 0 }}
+                      whileHover={{ x: 4 }}
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </motion.svg>
+                  </div>
+                </motion.div>
+              </Link>
             </motion.div>
           ))}
         </motion.div>

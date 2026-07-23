@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 const NEWS = [
@@ -65,7 +66,7 @@ export default function News() {
             <h2 className="heading-display text-4xl md:text-5xl text-navy mt-3 mb-3">Hírek és események</h2>
             <div className="gold-divider" />
           </div>
-          <button className="no-click self-start md:self-end flex items-center gap-2 font-semibold text-sm text-navy hover:text-vasasRed transition group">
+          <Link href="/hirek" className="self-start md:self-end flex items-center gap-2 font-semibold text-sm text-navy hover:text-vasasRed transition group">
             Összes hír megtekintése
             <motion.svg
               width="14"
@@ -79,7 +80,7 @@ export default function News() {
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
             </motion.svg>
-          </button>
+          </Link>
         </motion.div>
 
         <motion.div
@@ -101,10 +102,11 @@ export default function News() {
                       transition: { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] },
                     }
               }
-              className="no-click group cursor-default"
+              className="group relative"
               initial="rest"
               animate="rest"
             >
+              <Link href="/hirek" className="absolute inset-0 z-10" aria-label={n.title} />
               <motion.div
                 className="relative aspect-[16/10] overflow-hidden rounded-md bg-navy"
                 whileHover="hover"

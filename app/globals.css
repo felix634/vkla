@@ -101,7 +101,7 @@ body {
 .no-click {
   cursor: default;
 }
-.no-click:focus,
 .no-click:focus-visible {
-  outline: none;
+  outline: 2px solid #0046B6;
+  outline-offset: 2px;
 }

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { EXTERNAL } from "../lib/nav";
+
 export default function TopBar() {
   return (
     <div className="bg-navy-dark text-white/80 text-xs">
@@ -20,9 +23,11 @@ export default function TopBar() {
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-3 pr-4 mr-1 border-r border-white/15">
-            <span className="no-click hover:text-gold transition cursor-default">Vasas FC</span>
+            <a href={EXTERNAL.vasasFc} target="_blank" rel="noopener noreferrer" className="hover:text-gold transition">
+              Vasas FC ↗
+            </a>
             <span className="text-white/30">|</span>
-            <span className="no-click text-gold font-semibold">Kubala Akadémia</span>
+            <span className="text-gold font-semibold">Kubala Akadémia</span>
           </div>
           <div className="flex items-center gap-3 text-white/60">
             <span className="no-click hover:text-white"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></span>
@@ -30,9 +35,9 @@ export default function TopBar() {
             <span className="no-click hover:text-white"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8c.3 1 1.1 1.8 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/></svg></span>
           </div>
           <div className="hidden md:flex items-center gap-2 pl-4 border-l border-white/15">
-            <button className="no-click text-white/70 hover:text-white">Bejelentkezés</button>
+            <Link href="/tagdij" className="text-white/70 hover:text-white transition">Bejelentkezés</Link>
             <span className="text-white/30">/</span>
-            <button className="no-click bg-vasasRed text-white px-3 py-1 rounded-sm font-semibold hover:bg-vasasRedDark transition">Tagdíj fizetés</button>
+            <Link href="/tagdij" className="bg-vasasRed text-white px-3 py-1 rounded-sm font-semibold hover:bg-vasasRedDark transition">Tagdíj fizetés</Link>
           </div>
         </div>
       </div>

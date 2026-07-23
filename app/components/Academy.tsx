@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 const PILLARS = [
@@ -88,8 +89,8 @@ export default function Academy() {
               whileHover={reduced ? undefined : { y: -4 }}
               className="absolute z-20 -bottom-6 -right-6 bg-navy text-white p-6 rounded-md shadow-2xl shadow-navy/30 max-w-[220px] cursor-default"
             >
-              <div className="text-gold text-4xl font-display font-black mb-1">1911</div>
-              <div className="text-xs uppercase tracking-widest text-white/70">A klub alapításának éve</div>
+              <div className="text-gold text-4xl font-display font-black mb-1">2007</div>
+              <div className="text-xs uppercase tracking-widest text-white/70">Az akadémia alapításának éve</div>
             </motion.div>
             {/* Floating red square — behind the image frame but above the section background */}
             <motion.div
@@ -136,11 +137,21 @@ export default function Academy() {
               legnagyobb magyar labdarúgója. Hagyatékát hűségesen ápoljuk: gyermekeink
               technikai, taktikai és emberi fejlődése egyformán fontos számunkra.
             </p>
-            <p className="text-base text-navy/65 leading-relaxed mb-10">
+            <p className="text-base text-navy/65 leading-relaxed mb-8">
               Évente több, mint 450 fiatal sportoló edz a Fáy utcai sportkomplexumban,
               16 korosztályban. A Vasas FC és Vasas SC szoros együttműködésében
               biztosítjuk az utánpótlástól a profi pályáig vezető utat.
             </p>
+            <Link
+              href="/akademia"
+              className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-vasasRed transition-colors mb-10 group"
+            >
+              Tovább az Akadémia oldalra
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
 
             <motion.div
               className="grid sm:grid-cols-2 gap-5"
