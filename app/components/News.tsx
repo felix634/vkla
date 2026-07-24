@@ -92,7 +92,7 @@ export default function News() {
         >
           {NEWS.map((n) => (
             <motion.article
-              key={n.title}
+              key={n.cat}
               variants={item}
               whileHover={
                 reduced
