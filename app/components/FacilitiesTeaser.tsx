@@ -8,12 +8,12 @@ const FACILITIES = [
   {
     name: "Fáy utcai Sportkomplexum",
     meta: "Fő létesítmény · 3 pálya",
-    img: "/images/focizzteis.jpeg",
+    img: "/images/flag.jpg",
   },
   {
     name: "II. számú Létesítmény",
     meta: "Edzőpályák · bérelhető",
-    img: "/images/vasassc.jpeg",
+    img: "/images/player.jpg",
   },
 ];
 

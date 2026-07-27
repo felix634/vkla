@@ -18,7 +18,7 @@ export default function Hero() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/focizzteis2.jpeg"
+            src="/images/flag.jpg"
             alt="Vasas Kubala Akadémia"
             fill
             priority
@@ -44,7 +44,7 @@ export default function Hero() {
             className="inline-flex items-center gap-3 mb-6 bg-white/5 backdrop-blur-sm border border-white/10 px-4 py-1.5 rounded-full"
           >
             <span className="h-2 w-2 rounded-full bg-vasasRed animate-pulse" />
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase">2025/26 Bajnoki Szezon</span>
+            <span className="text-xs font-semibold tracking-[0.2em] uppercase">2026/27 Bajnoki Szezon</span>
           </motion.div>
 
           <h1 className="heading-display text-5xl md:text-7xl lg:text-[5.5rem] mb-6">

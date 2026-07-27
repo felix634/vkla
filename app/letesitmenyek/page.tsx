@@ -13,14 +13,14 @@ const FACILITIES = [
     id: "fay",
     name: "Fáy utcai Sportkomplexum",
     address: "1139 Budapest, Fáy utca 58.",
-    img: "/images/focizzteis.jpeg",
+    img: "/images/flag.jpg",
     amenities: ["2 nagypálya (füves)", "1 műfüves pálya", "Öltözők és kiszolgáló helyiségek", "Fedett lelátó", "Parkolás"],
   },
   {
     id: "ii",
     name: "II. számú Létesítmény",
     address: "Cím — hamarosan",
-    img: "/images/vasassc.jpeg",
+    img: "/images/player.jpg",
     amenities: ["Edzőpályák", "Műfüves pálya", "Öltözők", "Kiegészítő terek", "Megközelítés tömegközlekedéssel"],
   },
 ];

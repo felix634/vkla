@@ -7,15 +7,12 @@ import PageHero from "../components/site/PageHero";
 import SoonBadge from "../components/site/SoonBadge";
 
 const ALBUMS = ["Összes", "Mérkőzés", "Esemény", "Edzés"];
+// Csak valódi fotók — a kampánybannerek (focizzteis*, vasas*, vasassc*) szélesvásznúak,
+// négyzetes csempébe vágva olvashatatlan szövegtöredék látszana belőlük.
 const IMAGES = [
-  "/images/focizzteis.jpeg",
+  "/images/flag.jpg",
   "/images/team.jpg",
   "/images/player.jpg",
-  "/images/flag.jpg",
-  "/images/vasas.jpeg",
-  "/images/focizzteis2.jpeg",
-  "/images/vasassc.jpeg",
-  "/images/focizzteis.jpeg",
 ];
 
 const PHOTOS = Array.from({ length: 12 }, (_, i) => ({

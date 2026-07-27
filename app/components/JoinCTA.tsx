@@ -18,7 +18,7 @@ export default function JoinCTA() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/focizzteis.jpeg"
+            src="/images/team.jpg"
             alt=""
             fill
             className="object-cover"
@@ -113,7 +113,7 @@ export default function JoinCTA() {
               </div>
               <div>
                 <div className="text-xs text-white/50 uppercase tracking-widest mb-1">E-mail</div>
-                <div className="text-white/95 font-medium">iroda@vkla.hu</div>
+                <div className="text-white/95 font-medium">info@vkla.hu</div>
               </div>
               <div className="pt-4 border-t border-white/10">
                 <div className="text-xs text-white/50 uppercase tracking-widest mb-1">Iroda</div>

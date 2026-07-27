@@ -6,7 +6,9 @@ import { MATCH_AGE_GROUPS } from "../lib/ageGroups";
 import SoonBadge from "./site/SoonBadge";
 import GroupFilter from "./site/GroupFilter";
 
-type Match = { group: string; date: string; time: string; team: string; opponent: string; league: string; away: boolean };
+// A score csak a lejátszott mérkőzéseknél van kitöltve — ez különbözteti meg
+// az Eredmények listát a Naptártól.
+type Match = { group: string; date: string; time: string; team: string; opponent: string; league: string; away: boolean; score?: string };
 
 const UPCOMING: Match[] = MATCH_AGE_GROUPS.flatMap((g, gi) =>
   Array.from({ length: 2 }, (_, k) => ({
@@ -29,6 +31,7 @@ const RESULTS: Match[] = MATCH_AGE_GROUPS.flatMap((g, gi) =>
     opponent: "Ellenfél neve",
     league: "Bajnokság",
     away: (gi + k) % 2 === 0,
+    score: "—:—",
   }))
 );
 
@@ -58,7 +61,11 @@ function MatchRow({ m }: { m: Match }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 text-sm font-display font-bold text-navy">
           <span className={m.away ? "text-navy/55 truncate" : "truncate"}>{m.team}</span>
-          <span className="text-navy/30 text-[10px] font-sans">VS</span>
+          {m.score ? (
+            <span className="font-display font-black text-base text-vasasRed flex-shrink-0 px-1">{m.score}</span>
+          ) : (
+            <span className="text-navy/30 text-[10px] font-sans">VS</span>
+          )}
           <span className={!m.away ? "text-navy/55 truncate" : "truncate"}>{m.opponent}</span>
         </div>
         <div className="text-[11px] uppercase tracking-widest text-navy/40 mt-0.5">{m.league}</div>

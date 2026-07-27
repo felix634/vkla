@@ -15,7 +15,7 @@ const CAT_COLOR: Record<string, string> = {
   Sajtó: "bg-navy",
 };
 
-const IMAGES = ["/images/flag.jpg", "/images/team.jpg", "/images/player.jpg", "/images/focizzteis.jpeg", "/images/vasas.jpeg", "/images/vasassc.jpeg"];
+const IMAGES = ["/images/flag.jpg", "/images/team.jpg", "/images/player.jpg"];
 
 const ARTICLES = Array.from({ length: 9 }, (_, i) => ({
   cat: ["Mérkőzés", "Akadémia", "Program", "Sajtó"][i % 4],
