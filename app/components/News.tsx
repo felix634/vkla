@@ -66,7 +66,7 @@ export default function News() {
             <h2 className="heading-display text-4xl md:text-5xl text-navy mt-3 mb-3">Hírek és események</h2>
             <div className="gold-divider" />
           </div>
-          <Link href="/hirek" className="self-start md:self-end flex items-center gap-2 font-semibold text-sm text-navy hover:text-vasasRed transition group">
+          <Link href="/hirek" className="self-start md:self-end flex items-center gap-2 py-2 font-semibold text-sm text-navy hover:text-vasasRed transition group">
             Összes hír megtekintése
             <motion.svg
               width="14"

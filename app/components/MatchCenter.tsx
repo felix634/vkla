@@ -48,16 +48,27 @@ const STANDINGS = Array.from({ length: 10 }, (_, i) => ({
 
 function MatchRow({ m }: { m: Match }) {
   return (
-    <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-100 last:border-0">
-      <div className="w-12 text-center flex-shrink-0">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-vasasRed">{m.group}</span>
+    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-4 px-4 py-3 border-b border-gray-100 last:border-0">
+      {/* Mobilon a korosztály/időpont saját sorba kerül — így a csapatnevek
+          teljes szélességet kapnak. `sm:contents` felett a wrapper eltűnik. */}
+      <div className="flex items-center gap-3 sm:contents">
+        <div className="w-12 text-center flex-shrink-0">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-vasasRed">{m.group}</span>
+        </div>
+        <div className="hidden sm:block w-px h-9 bg-gray-200" />
+        <div className="w-16 text-center flex-shrink-0">
+          <div className="text-navy font-display font-black text-sm leading-none">{m.date}</div>
+          <div className="text-vasasRed text-[11px] font-bold mt-1">{m.time}</div>
+        </div>
+        <div className="hidden sm:block w-px h-9 bg-gray-200" />
+        <span
+          className={`sm:hidden ml-auto text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-sm flex-shrink-0 ${
+            m.away ? "bg-navy/5 text-navy/60" : "bg-vasasRed/10 text-vasasRed"
+          }`}
+        >
+          {m.away ? "Idegen" : "Hazai"}
+        </span>
       </div>
-      <div className="w-px h-9 bg-gray-200" />
-      <div className="w-16 text-center flex-shrink-0">
-        <div className="text-navy font-display font-black text-sm leading-none">{m.date}</div>
-        <div className="text-vasasRed text-[11px] font-bold mt-1">{m.time}</div>
-      </div>
-      <div className="w-px h-9 bg-gray-200" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 text-sm font-display font-bold text-navy">
           <span className={m.away ? "text-navy/55 truncate" : "truncate"}>{m.team}</span>

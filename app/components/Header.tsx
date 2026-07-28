@@ -194,14 +194,15 @@ export default function Header() {
                   >
                     {item.label}
                   </NavAnchor>
+                  {/* py-1.5: a 20px-es sormagasság mobilon túl kicsi érintőfelület */}
                   {item.children && (
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 pl-3 pb-1">
+                    <div className="flex flex-wrap gap-x-4 gap-y-0.5 pl-3 pb-1">
                       {item.children.map((c) => (
                         <NavAnchor
                           key={c.label}
                           item={c}
                           onClick={() => setOpen(false)}
-                          className="text-sm text-navy/60 hover:text-vasasRed transition-colors"
+                          className="py-1.5 text-sm text-navy/60 hover:text-vasasRed transition-colors"
                         >
                           {c.label}
                         </NavAnchor>
@@ -210,13 +211,13 @@ export default function Header() {
                   )}
                 </div>
               ))}
-              <div className="border-t border-gray-100 mt-2 pt-3 flex flex-wrap gap-x-5 gap-y-2">
+              <div className="border-t border-gray-100 mt-2 pt-2 flex flex-wrap gap-x-5 gap-y-1">
                 {MORE_NAV.map((c) => (
                   <NavAnchor
                     key={c.label}
                     item={c}
                     onClick={() => setOpen(false)}
-                    className="text-sm font-semibold text-navy/70 hover:text-vasasRed transition-colors"
+                    className="py-1.5 text-sm font-semibold text-navy/70 hover:text-vasasRed transition-colors"
                   >
                     {c.label}
                   </NavAnchor>

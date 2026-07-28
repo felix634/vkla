@@ -70,8 +70,10 @@ export default function Matches() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Upcoming - takes 2 cols */}
-          <div className="lg:col-span-2">
+          {/* Upcoming - takes 2 cols. A `min-w-0` felülírja a rács-elemek
+              alapértelmezett `min-width: auto` értékét — enélkül a sávot a
+              belső sorok min-content szélessége feszítené a kijelzőn túlra. */}
+          <div className="lg:col-span-2 min-w-0">
             <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
               <h3 className="font-display font-bold text-2xl text-navy flex items-center gap-3">
                 <span className="w-1.5 h-6 bg-vasasRed rounded-sm" />
@@ -105,19 +107,31 @@ export default function Matches() {
                           transition: { duration: 0.25, ease: [0.2, 0.8, 0.2, 1] },
                         }
                   }
-                  className={`flex items-center gap-4 px-4 py-3 ${
+                  className={`flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-4 px-4 py-3 ${
                     i !== upcoming.length - 1 ? "border-b border-gray-100" : ""
                   }`}
                 >
-                  <div className="flex-shrink-0 w-12 text-center">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-vasasRed">{m.group}</div>
+                  {/* Mobilon a korosztály és az időpont külön sorban van, hogy a
+                      csapatnevek ne szoruljanak 100px alá. `sm:contents` felett a
+                      wrapper eltűnik, így az asztali elrendezés változatlan. */}
+                  <div className="flex items-center gap-3 sm:contents">
+                    <div className="flex-shrink-0 w-12 text-center">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-vasasRed">{m.group}</div>
+                    </div>
+                    <div className="hidden sm:block w-px h-9 bg-gray-200" />
+                    <div className="flex-shrink-0 w-16 text-center">
+                      <div className="text-navy font-display font-black text-sm leading-none">{m.date}</div>
+                      <div className="text-vasasRed text-[11px] font-bold mt-1 sm:mt-1">{m.time}</div>
+                    </div>
+                    <div className="hidden sm:block w-px h-9 bg-gray-200" />
+                    <span
+                      className={`sm:hidden ml-auto text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-sm flex-shrink-0 ${
+                        m.away ? "bg-navy/5 text-navy/60" : "bg-vasasRed/10 text-vasasRed"
+                      }`}
+                    >
+                      {m.away ? "Idegen" : "Hazai"}
+                    </span>
                   </div>
-                  <div className="w-px h-9 bg-gray-200" />
-                  <div className="flex-shrink-0 w-16 text-center">
-                    <div className="text-navy font-display font-black text-sm leading-none">{m.date}</div>
-                    <div className="text-vasasRed text-[11px] font-bold mt-1">{m.time}</div>
-                  </div>
-                  <div className="w-px h-9 bg-gray-200" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 text-sm font-display font-bold text-navy">
                       <span className={m.away ? "text-navy/55 truncate" : "truncate"}>{m.team}</span>
@@ -140,7 +154,7 @@ export default function Matches() {
             <div className="mt-4 text-right">
               <Link
                 href="/merkozesek"
-                className="text-sm font-semibold text-navy hover:text-vasasRed transition-colors inline-flex items-center gap-2 group"
+                className="text-sm font-semibold text-navy hover:text-vasasRed transition-colors inline-flex items-center gap-2 py-2 group"
               >
                 Teljes mérkőzésnaptár
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">
@@ -153,6 +167,7 @@ export default function Matches() {
 
           {/* Recent results */}
           <motion.div
+            className="min-w-0"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}

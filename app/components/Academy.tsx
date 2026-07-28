@@ -87,7 +87,7 @@ export default function Academy() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
               whileHover={reduced ? undefined : { y: -4 }}
-              className="absolute z-20 -bottom-6 -right-6 bg-navy text-white p-6 rounded-md shadow-2xl shadow-navy/30 max-w-[220px] cursor-default"
+              className="absolute z-20 -bottom-4 right-2 sm:-bottom-6 sm:-right-6 bg-navy text-white p-5 sm:p-6 rounded-md shadow-2xl shadow-navy/30 max-w-[220px] cursor-default"
             >
               <div className="text-gold text-4xl font-display font-black mb-1">2007</div>
               <div className="text-xs uppercase tracking-widest text-white/70">Az akadémia alapításának éve</div>
@@ -98,7 +98,7 @@ export default function Academy() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="absolute z-0 -top-6 -left-6 w-24 h-24 bg-vasasRed rounded-sm"
+              className="absolute z-0 -top-3 -left-3 sm:-top-6 sm:-left-6 w-16 h-16 sm:w-24 sm:h-24 bg-vasasRed rounded-sm"
             />
           </motion.div>
 
@@ -144,7 +144,7 @@ export default function Academy() {
             </p>
             <Link
               href="/akademia"
-              className="inline-flex items-center gap-2 text-sm font-bold text-navy hover:text-vasasRed transition-colors mb-10 group"
+              className="inline-flex items-center gap-2 py-2 text-sm font-bold text-navy hover:text-vasasRed transition-colors mb-8 group"
             >
               Tovább az Akadémia oldalra
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">

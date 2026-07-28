@@ -3,7 +3,9 @@ import Link from "next/link";
 import { FOOTER_COLUMNS, type NavLink } from "../lib/nav";
 
 function FooterLink({ link }: { link: NavLink }) {
-  const cls = "text-sm text-white/65 hover:text-white transition cursor-pointer";
+  // `block py-1.5`: mobilon a puszta 17px-es sormagasság túl kicsi érintőfelület,
+  // a függőleges belső margó ~29px-re növeli anélkül, hogy a lista szétesne.
+  const cls = "block py-1.5 text-sm text-white/65 hover:text-white transition cursor-pointer";
   if (link.external) {
     return (
       <a href={link.href} target="_blank" rel="noopener noreferrer" className={cls}>
@@ -60,7 +62,7 @@ export default function Footer() {
               <h4 className="font-display font-bold text-sm tracking-[0.2em] uppercase text-gold-light mb-5">
                 {col.title}
               </h4>
-              <ul className="space-y-2.5">
+              <ul className="space-y-0.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
                     <FooterLink link={l} />
@@ -75,7 +77,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/50">
         <div>© 2026 Vasas Kubala Akadémia. Minden jog fenntartva.</div>
-        <div className="flex items-center gap-5">
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <span className="no-click hover:text-white">Adatvédelem</span>
           <span className="no-click hover:text-white">ÁSZF</span>
           <span className="no-click hover:text-white">Impresszum</span>

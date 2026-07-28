@@ -25,11 +25,26 @@ html.lenis body {
   overflow: clip;
 }
 
+/* A szekciók beúszó animációi vízszintesen is eltolják az elemeket (x: ±30–40px).
+   Mobilon ez a képernyő szélén túlra kerül, és az egész oldal oldalra húzhatóvá
+   válik egy üres fehér sávval. A `clip` — a `hidden`-nel ellentétben — nem csinál
+   görgetőkonténert, így a sticky fejléc és a Lenis görgetés érintetlen marad. */
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   background: #ffffff;
   color: #0c2143;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hosszú, szóköz nélküli szövegek (e-mail cím, URL) mobilon ne feszítsék szét
+   a konténerüket. */
+h1, h2, h3, h4, p, li, a, span, div {
+  overflow-wrap: break-word;
 }
 
 /* Decorative diagonal stripes used for accent backgrounds */

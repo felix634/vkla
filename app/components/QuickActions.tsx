@@ -100,7 +100,7 @@ export default function QuickActions() {
                           transition: { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] },
                         }
                   }
-                  className="h-full bg-white rounded-md p-6 lg:p-7 shadow-xl shadow-navy/10 border border-gray-100 relative overflow-hidden group"
+                  className="h-full bg-white rounded-md p-5 sm:p-6 lg:p-7 shadow-xl shadow-navy/10 border border-gray-100 relative overflow-hidden group"
                 >
                   <motion.div
                     className={`absolute top-0 left-0 h-1 w-full ${a.accent}`}
@@ -116,8 +116,10 @@ export default function QuickActions() {
                   >
                     {a.icon}
                   </motion.div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-display font-bold text-navy text-xl">{a.title}</h3>
+                  {/* flex-wrap: keskeny kijelzőn a címke a cím alá csúszik,
+                      nem lóg ki a kártyából. */}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
+                    <h3 className="font-display font-bold text-navy text-lg sm:text-xl">{a.title}</h3>
                     {a.badge && (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-gold/15 text-gold-dark uppercase tracking-wider">
                         {a.badge}
