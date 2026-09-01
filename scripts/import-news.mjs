@@ -204,15 +204,24 @@ async function main() {
         doneSet.add(a.slug);
         continue;
       }
-      // képek feltöltése (indexkép + törzsképek)
+      // törzsképek feltöltése
       const srcToRef = new Map();
       for (const src of a.images ?? []) {
         const ref = await uploadImage(src);
         if (ref) srcToRef.set(src, ref);
       }
-      const heroRef = a.thumb ? await uploadImage(a.thumb) : null;
 
-      const blocks = convertBody(a.bodyHtml ?? "", srcToRef);
+      let blocks = convertBody(a.bodyHtml ?? "", srcToRef);
+      // Indexkép: a cikk első (nagy felbontású) képe. A listaoldali bélyegkép
+      // a régi oldalon mindössze 195x97 px — az csak végső tartalék.
+      // Az első képet kivesszük a törzsből, hogy ne szerepeljen duplán.
+      let heroRef = null;
+      if (blocks[0]?._type === "image" && blocks[0]?.asset?._ref) {
+        heroRef = blocks[0].asset._ref;
+        blocks = blocks.slice(1);
+      } else if (a.thumb) {
+        heroRef = await uploadImage(a.thumb);
+      }
       const doc = {
         _id: sanitizeId(a.slug),
         _type: "hir",

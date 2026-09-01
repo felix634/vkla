@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import SoonBadge from "./site/SoonBadge";
 import type { HirListItem } from "../lib/sanity/hirek";
+import { sized } from "../lib/sanity/imageUrl";
 
 const FO_KATEGORIAK = ["Összes", "VKLA", "VFC", "VFCII", "MLSZ", "KUPA", "SAJTÓ"];
 const KOROSZTALY_KATEGORIAK = [
@@ -138,7 +139,7 @@ export default function HirekList({
               <div className="relative aspect-[16/10] rounded-md overflow-hidden bg-navy">
                 {featured.imageUrl && (
                   <Image
-                    src={featured.imageUrl}
+                    src={sized(featured.imageUrl, 1200)!}
                     alt={featured.title}
                     fill
                     className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
@@ -184,7 +185,7 @@ export default function HirekList({
                 <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-navy">
                   {n.imageUrl && (
                     <Image
-                      src={n.imageUrl}
+                      src={sized(n.imageUrl, 700)!}
                       alt={n.title}
                       fill
                       className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"

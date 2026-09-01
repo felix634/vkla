@@ -31,6 +31,9 @@ function argVal(name, fallback) {
 }
 const FROM = Number(argVal("--from", "2011"));
 const TO = Number(argVal("--to", "2026"));
+// Képeket csak ettől az évtől töltünk (a cikkszöveg minden évre megvan) —
+// a teljes képanyag ~25 ezer fájl / ~8-10 GB lenne, feleslegesen.
+const IMG_FROM = Number(argVal("--images-from-year", "0"));
 const ONLY_LISTING = args.includes("--only-listing");
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -262,8 +265,11 @@ async function main() {
       };
       await writeFile(dest, JSON.stringify(record, null, 2));
     }
-    if (record.thumb) imageUrls.add(record.thumb);
-    for (const img of record.images ?? []) imageUrls.add(img);
+    const recYear = record.dateIso ? Number(record.dateIso.slice(0, 4)) : record.year;
+    if (recYear >= IMG_FROM) {
+      if (record.thumb) imageUrls.add(record.thumb);
+      for (const img of record.images ?? []) imageUrls.add(img);
+    }
   });
 
   // 3. Képek

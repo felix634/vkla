@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import YouTubeEmbed from "./YouTubeEmbed";
+import { sized } from "../lib/sanity/imageUrl";
 
 function instagramEmbedUrl(url: string): string | null {
   const m = url.match(/instagram\.com\/(p|reel|tv)\/([A-Za-z0-9_-]+)/);
@@ -58,7 +59,7 @@ const components: PortableTextComponents = {
           <div className="relative w-full rounded-md overflow-hidden bg-navy/5">
             {/* A cikk-képek eredeti aránnyal jelennek meg */}
             <Image
-              src={url}
+              src={sized(url, 1400)!}
               alt={value?.alt ?? ""}
               width={1200}
               height={800}

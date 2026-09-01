@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getHir } from "../../../lib/sanity/hirek";
 import PortableBody from "../../../components/PortableBody";
+import { sized } from "../../../lib/sanity/imageUrl";
 
 export const revalidate = 300;
 
@@ -68,7 +69,7 @@ export default async function HirPage({ params }: { params: { slug: string } }) 
         <div className="max-w-3xl mx-auto px-6 -mt-0 pt-10">
           <div className="relative aspect-[16/9] rounded-md overflow-hidden bg-navy/5">
             <Image
-              src={hir.imageUrl}
+              src={sized(hir.imageUrl, 1600)!}
               alt={hir.title}
               fill
               priority
