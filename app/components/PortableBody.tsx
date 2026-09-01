@@ -12,7 +12,7 @@ function instagramEmbedUrl(url: string): string | null {
 const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="text-navy/80 leading-relaxed mb-5">{children}</p>
+      <p className="text-navy/80 leading-relaxed mb-5 text-justify hyphens-auto">{children}</p>
     ),
     h2: ({ children }) => (
       <h2 className="font-display font-bold text-2xl md:text-3xl text-navy mt-10 mb-4">
