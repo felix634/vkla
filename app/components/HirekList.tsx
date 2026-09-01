@@ -7,28 +7,13 @@ import { motion } from "framer-motion";
 import SoonBadge from "./site/SoonBadge";
 import type { HirListItem } from "../lib/sanity/hirek";
 import { sized } from "../lib/sanity/imageUrl";
+import { catColor, formatDate } from "../lib/newsFormat";
 
 const FO_KATEGORIAK = ["Összes", "VKLA", "VFC", "VFCII", "MLSZ", "KUPA", "SAJTÓ"];
 const KOROSZTALY_KATEGORIAK = [
   "U5", "U6", "U7", "U8", "U9", "U10", "U11", "U12", "U13", "U14", "U15",
   "U16", "U17", "U18", "U19", "U10L", "U11L", "U12L", "U13L", "U14L", "U16L", "U19L", "Női",
 ];
-
-function catColor(cat: string): string {
-  if (/^U\d/.test(cat) || cat === "Női") return "bg-royal";
-  if (cat === "VKLA") return "bg-vasasRed";
-  if (cat === "VFC" || cat === "VFCII" || cat === "NBII") return "bg-navy";
-  return "bg-gold";
-}
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "Dátum";
-  return new Date(iso).toLocaleDateString("hu-HU", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 function hrefFor(category: string, page = 1): string {
   const p = new URLSearchParams();

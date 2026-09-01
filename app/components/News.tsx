@@ -3,34 +3,41 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import type { HirListItem } from "../lib/sanity/hirek";
+import { sized } from "../lib/sanity/imageUrl";
+import { catColor, formatDate } from "../lib/newsFormat";
 
-const NEWS = [
+// Helykitöltők — amíg a CMS nincs bekötve, a látványterv ezt mutatja.
+const PLACEHOLDER: HirListItem[] = [
   {
-    cat: "Mérkőzés",
-    catColor: "bg-vasasRed",
+    _id: "ph-1",
     title: "Hír címe ide kerül",
+    slug: null,
+    publishedAt: null,
+    category: "VKLA",
     excerpt:
       "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
-    date: "Dátum",
-    img: "/images/flag.jpg",
+    imageUrl: "/images/flag.jpg",
   },
   {
-    cat: "Akadémia",
-    catColor: "bg-royal",
+    _id: "ph-2",
     title: "Hír címe ide kerül",
+    slug: null,
+    publishedAt: null,
+    category: "U10",
     excerpt:
       "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
-    date: "Dátum",
-    img: "/images/team.jpg",
+    imageUrl: "/images/team.jpg",
   },
   {
-    cat: "Program",
-    catColor: "bg-gold",
+    _id: "ph-3",
     title: "Hír címe ide kerül",
+    slug: null,
+    publishedAt: null,
+    category: "MLSZ",
     excerpt:
       "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
-    date: "Dátum",
-    img: "/images/player.jpg",
+    imageUrl: "/images/player.jpg",
   },
 ];
 
@@ -48,8 +55,9 @@ const item = {
   },
 };
 
-export default function News() {
+export default function News({ items }: { items?: HirListItem[] }) {
   const reduced = useReducedMotion();
+  const news = items && items.length > 0 ? items.slice(0, 3) : PLACEHOLDER;
 
   return (
     <section className="py-24 px-6 bg-white">
@@ -90,9 +98,9 @@ export default function News() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
         >
-          {NEWS.map((n) => (
+          {news.map((n) => (
             <motion.article
-              key={n.cat}
+              key={n._id}
               variants={item}
               whileHover={
                 reduced
@@ -106,7 +114,11 @@ export default function News() {
               initial="rest"
               animate="rest"
             >
-              <Link href="/hirek" className="absolute inset-0 z-10" aria-label={n.title} />
+              <Link
+                href={n.slug ? `/hirek/${n.slug}` : "/hirek"}
+                className="absolute inset-0 z-10"
+                aria-label={n.title}
+              />
               <motion.div
                 className="relative aspect-[16/10] overflow-hidden rounded-md bg-navy"
                 whileHover="hover"
@@ -121,12 +133,14 @@ export default function News() {
                   transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
                   className="absolute inset-0"
                 >
-                  <Image
-                    src={n.img}
-                    alt={n.title}
-                    fill
-                    className="object-cover opacity-90"
-                  />
+                  {n.imageUrl && (
+                    <Image
+                      src={sized(n.imageUrl, 700)!}
+                      alt={n.title}
+                      fill
+                      className="object-cover opacity-90"
+                    />
+                  )}
                 </motion.div>
                 <motion.div
                   variants={{
@@ -137,21 +151,23 @@ export default function News() {
                   className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent"
                 />
                 <motion.span
-                  className={`absolute top-4 left-4 ${n.catColor} text-white text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-sm`}
+                  className={`absolute top-4 left-4 ${catColor(n.category)} text-white text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-sm`}
                   variants={{
                     rest: { y: 0 },
                     hover: reduced ? { y: 0 } : { y: -2 },
                   }}
                 >
-                  {n.cat}
+                  {n.category}
                 </motion.span>
               </motion.div>
               <div className="pt-5">
-                <div className="text-xs text-navy/50 mb-2 font-medium">{n.date}</div>
-                <h3 className="font-display font-bold text-2xl text-navy leading-tight mb-3 group-hover:text-vasasRed transition-colors duration-300">
+                <div className="text-xs text-navy/50 mb-2 font-medium">{formatDate(n.publishedAt)}</div>
+                <h3 className="font-display font-bold text-2xl text-navy leading-tight mb-3 group-hover:text-vasasRed transition-colors duration-300 line-clamp-2">
                   {n.title}
                 </h3>
-                <p className="text-sm text-navy/65 leading-relaxed">{n.excerpt}</p>
+                {n.excerpt && (
+                  <p className="text-sm text-navy/65 leading-relaxed line-clamp-3">{n.excerpt}</p>
+                )}
                 <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-navy">
                   Tovább olvasom
                   <motion.span
