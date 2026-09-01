@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import PageHero from "../../components/site/PageHero";
 import SoonBadge from "../../components/site/SoonBadge";
+import TagdijForm from "../../components/TagdijForm";
+import { stripeMode, TAGDIJ_MONTHLY_HUF } from "../../lib/tagdij/stripe";
 
 export const metadata: Metadata = {
   title: "Tagdíj fizetés — Vasas Kubala Akadémia",
@@ -78,39 +81,11 @@ export default function TagdijPage() {
       {/* Portál: regisztráció/bejelentkezés + szülői dashboard */}
       <section className="bg-cream">
         <div className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-12 gap-8 items-start">
-          {/* Bal: belépés / regisztráció */}
-          <div className="lg:col-span-5 bg-white rounded-lg border border-gray-100 shadow-xl shadow-navy/5 p-7">
-            <div className="flex gap-2 mb-6 p-1 bg-cream rounded-md">
-              <span className="flex-1 text-center py-2 rounded-md bg-white shadow-sm font-semibold text-sm text-navy">
-                Bejelentkezés
-              </span>
-              <span className="flex-1 text-center py-2 rounded-md font-semibold text-sm text-navy/50">
-                Regisztráció
-              </span>
-            </div>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-navy/60 uppercase tracking-wider mb-1.5">E-mail</label>
-                <input type="email" placeholder="szulo@email.hu" className={inputCls} />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-navy/60 uppercase tracking-wider mb-1.5">Jelszó</label>
-                <input type="password" placeholder="••••••••" className={inputCls} />
-              </div>
-              <button
-                type="button"
-                className="no-click w-full bg-navy hover:bg-royal transition-colors text-white font-bold py-3 rounded-md text-sm"
-              >
-                Belépés
-              </button>
-              <p className="text-center text-xs text-navy/45">
-                Új szülő vagy? <span className="text-royal font-semibold">Regisztrálj itt</span>
-              </p>
-            </form>
-            <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between text-xs text-navy/50">
-              <span>Fizetési kapu:</span>
-              <span className="flex items-center gap-2 font-semibold text-navy/70">SimplePay · Stripe <SoonBadge /></span>
-            </div>
+          {/* Bal: működő tagdíj-befizetési űrlap (demo/teszt/éles mód env szerint) */}
+          <div className="lg:col-span-5">
+            <Suspense>
+              <TagdijForm monthlyHuf={TAGDIJ_MONTHLY_HUF} mode={stripeMode} />
+            </Suspense>
           </div>
 
           {/* Jobb: szülői dashboard előnézet */}
