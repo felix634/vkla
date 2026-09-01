@@ -2,12 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "../../components/site/PageHero";
 import WeeklySchedule from "../../components/WeeklySchedule";
+import SzekcioBlock from "../../components/SzekcioBlock";
+import { getSzekciok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "Programok — Vasas Kubala Akadémia",
 };
 
-export default function ProgramokPage() {
+export const revalidate = 300;
+
+export default async function ProgramokPage() {
+  const szekciok = await getSzekciok();
   return (
     <main className="min-h-screen">
       <PageHero
@@ -36,6 +41,11 @@ export default function ProgramokPage() {
         </div>
       </section>
 
+      {/* Akadémiai előadások (CMS) */}
+      {szekciok?.["eloadasok"] && (
+        <SzekcioBlock szekcio={szekciok["eloadasok"]} id="eloadasok" eyebrow="Edukáció" tone="cream" />
+      )}
+
       {/* Karitatív */}
       <section id="karitativ" className="bg-navy text-white scroll-mt-28 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
@@ -58,6 +68,11 @@ export default function ProgramokPage() {
           </div>
         </div>
       </section>
+
+      {/* Karitatív program részletei (CMS) */}
+      {szekciok?.["karitativ"] && (
+        <SzekcioBlock szekcio={szekciok["karitativ"]} id="karitativ-reszletek" eyebrow="Hajrá Vasas" />
+      )}
     </main>
   );
 }

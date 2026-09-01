@@ -50,6 +50,28 @@ export default function TagdijPage() {
               </div>
             ))}
           </div>
+
+          {/* Jelenlegi befizetési mód — átutalás (a Drive-ból kapott valós adatok) */}
+          <div className="mt-8 rounded-md border border-gold/40 bg-gold/5 p-6 md:p-7">
+            <div className="flex items-center gap-2 mb-3">
+              <h3 className="font-display font-bold text-lg text-navy">
+                Befizetés átutalással (jelenleg)
+              </h3>
+              <SoonBadge label="Online fizetés — hamarosan" />
+            </div>
+            <p className="text-sm text-navy/70 mb-4">
+              Amíg az online fizetés el nem indul, a képzési díj a Vasas Akadémia Kft.
+              bankszámlájára utalható:
+            </p>
+            <div className="font-display font-black text-2xl text-navy tracking-wider mb-4">
+              11731001-21170988
+            </div>
+            <div className="text-sm text-navy/70">
+              <span className="font-semibold text-navy">A közlemény rovatban kérjük feltüntetni:</span>{" "}
+              a gyermek nevét, a gyermek korosztályát, valamint a hónapot, amelyre a
+              képzési díj befizetésre kerül.
+            </div>
+          </div>
         </div>
       </section>
 

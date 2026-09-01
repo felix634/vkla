@@ -11,6 +11,7 @@ import galeria from "./galeria";
 import video from "./video";
 import hetirend from "./hetirend";
 import beallitasok from "./beallitasok";
+import oldalszekcio from "./oldalszekcio";
 
 export const schemaTypes = [
   // dokumentumtípusok
@@ -25,6 +26,7 @@ export const schemaTypes = [
   video,
   hetirend,
   beallitasok,
+  oldalszekcio,
   // beágyazható objektumok
   youtube,
   instagram,

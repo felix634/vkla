@@ -110,3 +110,28 @@ export async function getEdzok(): Promise<EdzoData[] | null> {
   );
   return edzok.sort((a, b) => roleRank(a.role) - roleRank(b.role));
 }
+
+export type SzekcioData = {
+  key: string;
+  title: string;
+  body: unknown[] | null;
+  headerImageUrl: string | null;
+  imageUrls: string[] | null;
+};
+
+// Oldal-szekciók kulcs szerint (Akadémia/Programok szöveges blokkjai).
+export async function getSzekciok(): Promise<Record<string, SzekcioData> | null> {
+  if (!sanityEnabled || !client) return null;
+  const list = await client.fetch<SzekcioData[]>(
+    `*[_type == "oldalszekcio"]{
+      key,
+      title,
+      body[]{ ..., _type == "image" => { ..., "url": asset->url } },
+      "headerImageUrl": headerImage.asset->url,
+      "imageUrls": images[].asset->url
+    }`,
+    {},
+    REVALIDATE
+  );
+  return Object.fromEntries(list.map((s) => [s.key, s]));
+}

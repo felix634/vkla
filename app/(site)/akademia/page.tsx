@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import PageHero from "../../components/site/PageHero";
-import { getEdzok, type EdzoData } from "../../lib/sanity/tartalom";
+import { getEdzok, getSzekciok, type EdzoData } from "../../lib/sanity/tartalom";
+import PortableBody from "../../components/PortableBody";
+import SzekcioBlock from "../../components/SzekcioBlock";
 import { sized } from "../../lib/sanity/imageUrl";
 import Reveal from "../../components/motion/Reveal";
 import HoverCard from "../../components/motion/HoverCard";
@@ -40,7 +42,9 @@ const DOCS = [
 ];
 
 export default async function AkademiaPage() {
-  const edzok = await getEdzok();
+  const [edzok, szekciok] = await Promise.all([getEdzok(), getSzekciok()]);
+  const bemutatkozas = szekciok?.["bemutatkozas"] ?? null;
+  const kubala = szekciok?.["kubala"] ?? null;
   // A vezetők külön kártyákon szerepelnek — a rácsban a szakmai stáb többi tagja.
   const leaderNames = new Set(LEADERSHIP.map((l) => l.name));
   const stab =
@@ -68,16 +72,22 @@ export default async function AkademiaPage() {
             <span className="section-eyebrow">Bemutatkozás</span>
             <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3 mb-5">Az utánpótlás otthona 2007 óta</h2>
             <div className="gold-divider mb-6" />
-            <p className="text-navy/75 leading-relaxed mb-4">
-              A Vasas Kubala Akadémia 2007-ben alakult, és azóta a magyar utánpótlás-labdarúgás
-              egyik meghatározó műhelye. Évente több, mint 450 fiatal sportoló edz nálunk, 16
-              korosztályban, a Fáy utcai sportkomplexumban.
-            </p>
-            <p className="text-navy/65 leading-relaxed">
-              Célunk, hogy a gyerekek technikai, taktikai és emberi fejlődése egyaránt fontos
-              legyen — az utánpótlástól a profi pályáig vezető úton. A Vasas FC és a Vasas SC
-              szoros együttműködésében dolgozunk.
-            </p>
+            {bemutatkozas?.body ? (
+              <PortableBody value={bemutatkozas.body.slice(0, 4)} />
+            ) : (
+              <>
+                <p className="text-navy/75 leading-relaxed mb-4">
+                  A Vasas Kubala Akadémia 2007-ben alakult, és azóta a magyar utánpótlás-labdarúgás
+                  egyik meghatározó műhelye. Évente több, mint 450 fiatal sportoló edz nálunk, 16
+                  korosztályban, a Fáy utcai sportkomplexumban.
+                </p>
+                <p className="text-navy/65 leading-relaxed">
+                  Célunk, hogy a gyerekek technikai, taktikai és emberi fejlődése egyaránt fontos
+                  legyen — az utánpótlástól a profi pályáig vezető úton. A Vasas FC és a Vasas SC
+                  szoros együttműködésében dolgozunk.
+                </p>
+              </>
+            )}
             <div className="grid grid-cols-3 gap-6 mt-8 pt-8 border-t border-gray-100">
               {[
                 { n: "2007", l: "alapítás éve" },
@@ -94,12 +104,31 @@ export default async function AkademiaPage() {
           <Reveal direction="left" delay={0.15} className="lg:col-span-6">
             <HoverCard lift={4} scale={1.01}>
               <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-navy">
-                <Image src="/images/team.jpg" alt="Vasas Kubala Akadémia" fill className="object-cover opacity-90" />
+                <Image
+                  src={bemutatkozas?.imageUrls?.[0] ? sized(bemutatkozas.imageUrls[0], 1000)! : "/images/team.jpg"}
+                  alt="Vasas Kubala Akadémia"
+                  fill
+                  className="object-cover opacity-90"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent" />
               </div>
             </HoverCard>
           </Reveal>
         </div>
+        {bemutatkozas?.body && bemutatkozas.body.length > 4 && (
+          <div className="max-w-4xl mx-auto px-6 pb-16">
+            <PortableBody value={bemutatkozas.body.slice(4)} />
+            {bemutatkozas.imageUrls && bemutatkozas.imageUrls.length > 1 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-8">
+                {bemutatkozas.imageUrls.slice(1).map((u, i) => (
+                  <div key={i} className="relative aspect-[3/2] rounded-md overflow-hidden bg-navy/5">
+                    <Image src={sized(u, 700)!} alt={`Akadémia — fotó ${i + 2}`} fill className="object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Kubala László */}
@@ -107,8 +136,14 @@ export default async function AkademiaPage() {
         <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-12 gap-12 items-center relative">
           <Reveal direction="right" className="lg:col-span-5">
-            <div className="relative aspect-[4/5] rounded-md overflow-hidden bg-navy-dark border border-white/10 flex items-center justify-center p-12">
-              <Image src="/images/logo.png" alt="Kubala László" width={320} height={320} className="object-contain drop-shadow-[0_0_40px_rgba(184,152,92,0.35)]" />
+            <div className="relative aspect-[4/5] rounded-md overflow-hidden bg-navy-dark border border-white/10">
+              {kubala?.imageUrls?.[0] ? (
+                <Image src={sized(kubala.imageUrls[0], 900)!} alt="Kubala László" fill className="object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center p-12">
+                  <Image src="/images/logo.png" alt="Kubala László" width={320} height={320} className="object-contain drop-shadow-[0_0_40px_rgba(184,152,92,0.35)]" />
+                </div>
+              )}
             </div>
           </Reveal>
           <Reveal direction="left" delay={0.15} className="lg:col-span-7">
@@ -118,11 +153,16 @@ export default async function AkademiaPage() {
             <blockquote className="font-display italic text-2xl md:text-3xl text-gold-light leading-tight mb-6">
               „Akarni, küzdeni, játszani.”
             </blockquote>
-            <p className="text-white/75 leading-relaxed">
-              Akadémiánk névadója Kubala László, minden idők egyik legnagyobb magyar labdarúgója.
-              Hagyatékát hűségesen ápoljuk — szellemisége minden korosztályunk munkájában jelen van.
-              (A részletes életrajz és képanyag a tartalomfeltöltés során kerül fel.)
-            </p>
+            {kubala?.body ? (
+              <div className="[&_p]:text-white/75 [&_h3]:text-gold-light">
+                <PortableBody value={kubala.body} />
+              </div>
+            ) : (
+              <p className="text-white/75 leading-relaxed">
+                Akadémiánk névadója Kubala László, minden idők egyik legnagyobb magyar labdarúgója.
+                Hagyatékát hűségesen ápoljuk — szellemisége minden korosztályunk munkájában jelen van.
+              </p>
+            )}
           </Reveal>
         </div>
       </section>
@@ -208,6 +248,20 @@ export default async function AkademiaPage() {
           </div>
         </div>
       </section>
+
+      {/* CMS-szekciók: Képzési modell, Együttműködések, Sportiskolai háttér */}
+      {szekciok?.["kepzesi-modell"] && (
+        <SzekcioBlock szekcio={szekciok["kepzesi-modell"]} id="kepzesi-modell" eyebrow="Szakmai munka" tone="cream" />
+      )}
+      {szekciok?.["egyuttmukodes-vasas"] && (
+        <SzekcioBlock szekcio={szekciok["egyuttmukodes-vasas"]} id="egyuttmukodes" eyebrow="Együttműködés" />
+      )}
+      {szekciok?.["egyuttmukodes-osei"] && (
+        <SzekcioBlock szekcio={szekciok["egyuttmukodes-osei"]} id="osei" eyebrow="Sportegészségügy" tone="cream" />
+      )}
+      {szekciok?.["oktatasi-program"] && (
+        <SzekcioBlock szekcio={szekciok["oktatasi-program"]} id="oktatas" eyebrow="Oktatás" />
+      )}
 
       {/* Etikai kódex + Házirend */}
       <section className="bg-white">
