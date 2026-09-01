@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { sized } from "../lib/sanity/imageUrl";
+import type { SzponzorData } from "../lib/sanity/tartalom";
 
 // Fő támogatók — kiemelten a főoldalon (jegyzőkönyv kérése).
 const MAIN_SPONSORS = ["Fő támogató 1", "Fő támogató 2", "Fő támogató 3"];
@@ -32,8 +35,11 @@ const item = {
   },
 };
 
-export default function Sponsors() {
+export default function Sponsors({ szponzorok }: { szponzorok?: SzponzorData[] | null }) {
   const reduced = useReducedMotion();
+  const fo = szponzorok?.filter((x) => x.tier === "fo") ?? [];
+  const partnerek = szponzorok?.filter((x) => x.tier === "partner") ?? [];
+  const cmsOn = !!(szponzorok && szponzorok.length > 0);
 
   return (
     <section className="py-20 px-6 bg-navy-dark text-white relative overflow-hidden">
@@ -53,6 +59,7 @@ export default function Sponsors() {
         </motion.div>
 
         {/* Fő támogatók — kiemelt sor */}
+        {(cmsOn ? fo.length > 0 : true) && (
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"
           variants={container}
@@ -60,7 +67,7 @@ export default function Sponsors() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {MAIN_SPONSORS.map((s) => (
+          {(cmsOn ? fo.map((x) => x.name) : MAIN_SPONSORS).map((s) => (
             <motion.div
               key={s}
               variants={item}
@@ -74,6 +81,7 @@ export default function Sponsors() {
             </motion.div>
           ))}
         </motion.div>
+        )}
 
         {/* További partnerek */}
         <motion.div
@@ -83,24 +91,50 @@ export default function Sponsors() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {SPONSORS.map((s) => (
-            <motion.div
-              key={s}
-              variants={item}
-              whileHover={
-                reduced ? undefined : { backgroundColor: "rgba(12, 33, 67, 1)", transition: { duration: 0.3 } }
-              }
-              className="no-click bg-navy-dark p-8 flex items-center justify-center min-h-[100px] cursor-default group"
-            >
-              <motion.span
-                whileHover={reduced ? undefined : { scale: 1.1, color: "#ffffff" }}
-                transition={{ duration: 0.3 }}
-                className="font-display font-bold text-xl tracking-wider text-white/50"
-              >
-                {s}
-              </motion.span>
-            </motion.div>
-          ))}
+          {cmsOn
+            ? partnerek.map((x) => (
+                <motion.div
+                  key={x._id}
+                  variants={item}
+                  className="bg-white p-6 flex items-center justify-center min-h-[110px] group"
+                >
+                  {x.logoUrl ? (
+                    <motion.div
+                      whileHover={reduced ? undefined : { scale: 1.06 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative h-14 w-full"
+                    >
+                      <Image src={sized(x.logoUrl, 400)!} alt={x.name} fill className="object-contain" />
+                    </motion.div>
+                  ) : (
+                    <motion.span
+                      whileHover={reduced ? undefined : { scale: 1.06 }}
+                      transition={{ duration: 0.3 }}
+                      className="font-display font-bold text-xl tracking-wider text-navy/60"
+                    >
+                      {x.name}
+                    </motion.span>
+                  )}
+                </motion.div>
+              ))
+            : SPONSORS.map((s) => (
+                <motion.div
+                  key={s}
+                  variants={item}
+                  whileHover={
+                    reduced ? undefined : { backgroundColor: "rgba(12, 33, 67, 1)", transition: { duration: 0.3 } }
+                  }
+                  className="no-click bg-navy-dark p-8 flex items-center justify-center min-h-[100px] cursor-default group"
+                >
+                  <motion.span
+                    whileHover={reduced ? undefined : { scale: 1.1, color: "#ffffff" }}
+                    transition={{ duration: 0.3 }}
+                    className="font-display font-bold text-xl tracking-wider text-white/50"
+                  >
+                    {s}
+                  </motion.span>
+                </motion.div>
+              ))}
         </motion.div>
 
         <motion.div

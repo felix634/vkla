@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PageHero from "../../components/site/PageHero";
+import { getSzponzorok } from "../../lib/sanity/tartalom";
+import { sized } from "../../lib/sanity/imageUrl";
 
 export const metadata: Metadata = {
   title: "Szponzoráció — Vasas Kubala Akadémia",
@@ -32,7 +35,13 @@ const PACKAGES = [
   },
 ];
 
-export default function SzponzoracioPage() {
+export const revalidate = 300;
+
+export default async function SzponzoracioPage() {
+  const szponzorok = await getSzponzorok();
+  const fo = szponzorok?.filter((x) => x.tier === "fo") ?? [];
+  const partnerek = szponzorok?.filter((x) => x.tier === "partner") ?? [];
+  const cmsOn = !!(szponzorok && szponzorok.length > 0);
   return (
     <main className="min-h-screen">
       <PageHero
@@ -47,6 +56,7 @@ export default function SzponzoracioPage() {
       />
 
       {/* Fő támogatók */}
+      {(!cmsOn || fo.length > 0) && (
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="text-center mb-10">
@@ -55,7 +65,7 @@ export default function SzponzoracioPage() {
             <div className="gold-divider mx-auto mt-4" />
           </div>
           <div className="grid sm:grid-cols-3 gap-5">
-            {MAIN.map((s) => (
+            {(cmsOn ? fo.map((x) => x.name) : MAIN).map((s) => (
               <div key={s} className="relative rounded-md border border-gold/40 bg-gradient-to-br from-cream to-white p-10 flex items-center justify-center min-h-[150px]">
                 <span className="absolute top-3 left-3 text-[9px] font-bold uppercase tracking-[0.2em] text-gold-dark">Fő támogató</span>
                 <span className="font-display font-black text-2xl tracking-wider text-navy/70">{s}</span>
@@ -64,6 +74,7 @@ export default function SzponzoracioPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* További partnerek */}
       <section className="bg-cream">
@@ -73,12 +84,24 @@ export default function SzponzoracioPage() {
             <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3">Támogatóink köre</h2>
             <div className="gold-divider mx-auto mt-4" />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-gray-200 border border-gray-200 rounded-md overflow-hidden">
-            {PARTNERS.map((p) => (
-              <div key={p} className="bg-white p-8 flex items-center justify-center min-h-[110px]">
-                <span className="font-display font-bold text-lg tracking-wider text-navy/40">{p}</span>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-gray-200 border border-gray-200 rounded-md overflow-hidden">
+            {cmsOn
+              ? partnerek.map((x) => (
+                  <div key={x._id} className="bg-white p-8 flex items-center justify-center min-h-[130px]">
+                    {x.logoUrl ? (
+                      <div className="relative h-16 w-full">
+                        <Image src={sized(x.logoUrl, 500)!} alt={x.name} fill className="object-contain" />
+                      </div>
+                    ) : (
+                      <span className="font-display font-bold text-lg tracking-wider text-navy/60">{x.name}</span>
+                    )}
+                  </div>
+                ))
+              : PARTNERS.map((p) => (
+                  <div key={p} className="bg-white p-8 flex items-center justify-center min-h-[110px]">
+                    <span className="font-display font-bold text-lg tracking-wider text-navy/40">{p}</span>
+                  </div>
+                ))}
           </div>
         </div>
       </section>

@@ -135,3 +135,22 @@ export async function getSzekciok(): Promise<Record<string, SzekcioData> | null>
   );
   return Object.fromEntries(list.map((s) => [s.key, s]));
 }
+
+export type SzponzorData = {
+  _id: string;
+  name: string;
+  tier: "fo" | "partner";
+  logoUrl: string | null;
+  url: string | null;
+};
+
+export async function getSzponzorok(): Promise<SzponzorData[] | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "szponzor"] | order(order asc) {
+      _id, name, tier, "logoUrl": logo.asset->url, url
+    }`,
+    {},
+    REVALIDATE
+  );
+}
