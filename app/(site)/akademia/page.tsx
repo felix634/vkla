@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import PageHero from "../../components/site/PageHero";
+import { getEdzok, type EdzoData } from "../../lib/sanity/tartalom";
+import { sized } from "../../lib/sanity/imageUrl";
 import Reveal from "../../components/motion/Reveal";
 import HoverCard from "../../components/motion/HoverCard";
 
@@ -16,20 +18,36 @@ const VALUES = [
 ];
 
 const LEADERSHIP = [
-  { role: "Ügyvezető", name: "Név" },
-  { role: "Szakmai igazgató", name: "Név" },
-  { role: "Utánpótlás-koordinátor", name: "Név" },
-  { role: "Gazdasági vezető", name: "Név" },
+  { role: "Akadémia igazgató", name: "Nagy Miklós" },
+  { role: "Szakmai vezető", name: "Tóth Csaba" },
+  { role: "Alsó szekció vezetője", name: "Angyal Péter" },
+  { role: "Szervezési és technikai vezető", name: "Kiss Dávid" },
 ];
 
-const STAFF = Array.from({ length: 8 }, () => ({ name: "Munkatárs neve", role: "Vezetőedző" }));
+const STAFF_PLACEHOLDER: EdzoData[] = Array.from({ length: 8 }, () => ({
+  name: "Munkatárs neve",
+  role: "Vezetőedző",
+  photoUrl: null,
+}));
+
+function initials(name: string): string {
+  return name.split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
+}
 
 const DOCS = [
   { title: "Etikai kódex", id: "etika", desc: "Az akadémia működésének alapelvei és magatartási normái." },
   { title: "Házirend", id: "hazirend", desc: "A sportkomplexum használatának és a mindennapoknak a szabályai." },
 ];
 
-export default function AkademiaPage() {
+export default async function AkademiaPage() {
+  const edzok = await getEdzok();
+  // A vezetők külön kártyákon szerepelnek — a rácsban a szakmai stáb többi tagja.
+  const leaderNames = new Set(LEADERSHIP.map((l) => l.name));
+  const stab =
+    edzok && edzok.length > 0
+      ? edzok.filter((e) => !leaderNames.has(e.name))
+      : STAFF_PLACEHOLDER;
+
   return (
     <main className="min-h-screen">
       <PageHero
@@ -147,8 +165,8 @@ export default function AkademiaPage() {
             {LEADERSHIP.map((p, i) => (
               <Reveal key={p.role} delay={i * 0.08} className="h-full">
                 <HoverCard className="h-full rounded-md border border-gray-100 bg-cream p-6 text-center">
-                  <div className="w-16 h-16 rounded-full bg-navy/5 mx-auto mb-4 flex items-center justify-center text-navy/40 font-display font-black">
-                    VKLA
+                  <div className="w-16 h-16 rounded-full bg-navy/5 mx-auto mb-4 flex items-center justify-center text-navy/40 font-display font-black text-xl">
+                    {initials(p.name)}
                   </div>
                   <div className="font-display font-bold text-navy">{p.name}</div>
                   <div className="text-xs uppercase tracking-widest text-vasasRed mt-1">{p.role}</div>
@@ -168,15 +186,21 @@ export default function AkademiaPage() {
             <div className="gold-divider mt-4" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {STAFF.map((s, i) => (
-              <Reveal key={i} delay={(i % 4) * 0.08} className="h-full">
+            {stab.map((e, i) => (
+              <Reveal key={e.name + i} delay={(i % 4) * 0.08} className="h-full">
                 <HoverCard className="h-full bg-white rounded-md border border-gray-100 overflow-hidden">
-                  <div className="relative aspect-square bg-navy">
-                    <Image src="/images/player.jpg" alt="Edző" fill className="object-cover opacity-90" />
+                  <div className="relative aspect-square bg-navy flex items-center justify-center">
+                    {e.photoUrl ? (
+                      <Image src={sized(e.photoUrl, 500)!} alt={e.name} fill className="object-cover opacity-90" />
+                    ) : (
+                      <span className="font-display font-black text-4xl text-white/15">
+                        {initials(e.name)}
+                      </span>
+                    )}
                   </div>
                   <div className="p-4">
-                    <div className="font-display font-bold text-navy">{s.name}</div>
-                    <div className="text-xs uppercase tracking-widest text-navy/50 mt-1">{s.role}</div>
+                    <div className="font-display font-bold text-navy">{e.name}</div>
+                    <div className="text-xs uppercase tracking-widest text-navy/50 mt-1">{e.role}</div>
                   </div>
                 </HoverCard>
               </Reveal>

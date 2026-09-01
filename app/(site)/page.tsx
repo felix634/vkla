@@ -9,6 +9,7 @@ import FacilitiesTeaser from "../components/FacilitiesTeaser";
 import Sponsors from "../components/Sponsors";
 import JoinCTA from "../components/JoinCTA";
 import { getHirek } from "../lib/sanity/hirek";
+import { getCsapatok } from "../lib/sanity/tartalom";
 
 export const revalidate = 300;
 
@@ -16,7 +17,7 @@ export const revalidate = 300;
 // Az "Oktatás" szekció kikerült; helyére a Létesítmények teaser került (jegyzőkönyv).
 export default async function Home() {
   // A 3 legfrissebb hír a CMS-ből; env nélkül a News a saját placeholderét mutatja.
-  const { items } = await getHirek({ page: 1 });
+  const [{ items }, csapatok] = await Promise.all([getHirek({ page: 1 }), getCsapatok()]);
 
   return (
     <main className="min-h-screen">
@@ -24,7 +25,7 @@ export default async function Home() {
       <QuickActions />
       <News items={items.slice(0, 3)} />
       <Academy />
-      <Teams />
+      <Teams teams={csapatok} />
       <Matches />
       <Programs />
       <FacilitiesTeaser />

@@ -1,14 +1,24 @@
 import type { Metadata } from "next";
 import PageHero from "../../components/site/PageHero";
 import CoachRoster from "../../components/CoachRoster";
-import { AGE_GROUPS, AGE_BANDS } from "../../lib/ageGroups";
+import { getCsapatok } from "../../lib/sanity/tartalom";
 import { EXTERNAL } from "../../lib/nav";
 
 export const metadata: Metadata = {
   title: "Csapatok — Vasas Kubala Akadémia",
 };
 
-export default function CsapatokPage() {
+export const revalidate = 300;
+
+const SECTIONS = [
+  { id: "felso", name: "Felső szekció" },
+  { id: "also", name: "Alsó szekció" },
+  { id: "noi", name: "Női szakág" },
+];
+
+export default async function CsapatokPage() {
+  const csapatok = await getCsapatok();
+
   return (
     <main className="min-h-screen">
       <PageHero
@@ -16,27 +26,35 @@ export default function CsapatokPage() {
         eyebrow="Csapataink"
         title={
           <>
-            16 korosztály, <span className="text-gold-light">egy közös cél.</span>
+            {csapatok?.length ?? 16} korosztály,{" "}
+            <span className="text-gold-light">egy közös cél.</span>
           </>
         }
-        subtitle="Válaszd ki a korosztályt, és az edzőre kattintva megnézheted a keret játékosait. A névsor és a képek a CMS-ből, illetve az MLSZ adatbankból töltődnek fel."
+        subtitle="Válaszd ki a korosztályt, és az edzőre kattintva megnézheted a stábot és a keretet. A játékos-névsorok és a fotók folyamatosan töltődnek fel."
       />
 
       <section className="bg-navy text-white">
         <div className="max-w-7xl mx-auto px-6 py-16 space-y-16">
-          {AGE_BANDS.map((band) => {
-            const groups = AGE_GROUPS.filter((g) => g.band === band.id);
-            return (
-              <div key={band.id} id={band.id} className="scroll-mt-28">
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="font-display font-black text-2xl md:text-3xl text-white">{band.label}</h2>
-                  <span className="flex-1 h-px bg-white/10" />
-                  <span className="text-sm text-white/50">{groups.length} korosztály</span>
+          {csapatok && csapatok.length > 0 ? (
+            SECTIONS.map((sec) => {
+              const teams = csapatok.filter((c) => c.section === sec.name);
+              if (teams.length === 0) return null;
+              return (
+                <div key={sec.id} id={sec.id} className="scroll-mt-28">
+                  <div className="flex items-center gap-4 mb-6">
+                    <h2 className="font-display font-black text-2xl md:text-3xl text-white">
+                      {sec.name}
+                    </h2>
+                    <span className="flex-1 h-px bg-white/10" />
+                    <span className="text-sm text-white/50">{teams.length} korosztály</span>
+                  </div>
+                  <CoachRoster teams={teams} />
                 </div>
-                <CoachRoster groups={groups} />
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <CoachRoster teams={null} />
+          )}
 
           {/* Vasas FC II — átkötő link (jegyzőkönyv) */}
           <div className="rounded-md border border-white/10 bg-white/5 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">

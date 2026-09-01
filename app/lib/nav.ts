@@ -38,10 +38,9 @@ export const PRIMARY_NAV: NavItem[] = [
     label: "Csapatok",
     href: "/csapatok",
     children: [
-      { label: "U5–U9", href: "/csapatok#u5-u9" },
-      { label: "U10–U13", href: "/csapatok#u10-u13" },
-      { label: "U14–U19", href: "/csapatok#u14-u19" },
-      { label: "Női csapat", href: "/csapatok#noi" },
+      { label: "Felső szekció (U14–U19)", href: "/csapatok#felso" },
+      { label: "Alsó szekció (U5–U13)", href: "/csapatok#also" },
+      { label: "Női szakág", href: "/csapatok#noi" },
       { label: "Vasas FC II ↗", href: EXTERNAL.vasasFcII, external: true },
     ],
   },

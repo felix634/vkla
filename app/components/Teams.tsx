@@ -4,9 +4,11 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import CoachRoster from "./CoachRoster";
 import { EXTERNAL } from "../lib/nav";
+import type { CsapatData } from "../lib/sanity/tartalom";
 
-export default function Teams() {
+export default function Teams({ teams }: { teams?: CsapatData[] | null }) {
   const reduced = useReducedMotion();
+  const count = teams && teams.length > 0 ? teams.length : 16;
 
   return (
     <section className="py-24 px-6 bg-navy text-white relative overflow-hidden">
@@ -24,7 +26,7 @@ export default function Teams() {
           <div>
             <span className="section-eyebrow">Csapataink</span>
             <h2 className="heading-display text-4xl md:text-5xl lg:text-6xl mt-3 mb-3">
-              16 korosztály.
+              {count} korosztály.
               <br />
               <span className="text-gold-light">Egy közös cél.</span>
             </h2>
@@ -42,7 +44,7 @@ export default function Teams() {
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
         >
-          <CoachRoster />
+          <CoachRoster teams={teams} />
         </motion.div>
 
         <motion.div
