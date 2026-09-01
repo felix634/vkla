@@ -4,3 +4,6 @@ out
 .env*.local
 *.log
 .DS_Store
+
+# scraper kimenet (nagy, nem verziozott)
+scraped/
