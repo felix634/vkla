@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "./components/SmoothScroll";
-import MockupBanner from "./components/MockupBanner";
-import TopBar from "./components/TopBar";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -28,6 +23,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Csupasz gyökér-layout: csak a betűtípusok és a globális stílus.
+// A site-chrome (banner, menü, lábléc, Lenis) az app/(site)/layout.tsx-ben van,
+// így a /studio (Sanity) saját, chrome-mentes felületet kap.
 export default function RootLayout({
   children,
 }: {
@@ -35,15 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="hu" className={`${inter.variable} ${display.variable}`}>
-      <body>
-        <SmoothScroll />
-        {/* Közös chrome — minden aloldalon egységes */}
-        <MockupBanner />
-        <TopBar />
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
