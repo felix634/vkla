@@ -20,6 +20,18 @@ export default defineType({
       to: [{ type: "edzo" }],
     }),
     defineField({
+      name: "section",
+      title: "Szekció",
+      type: "string",
+      options: { list: ["Felső szekció", "Alsó szekció", "Női szakág"] },
+    }),
+    defineField({
+      name: "assistants",
+      title: "Asszisztensedzők / utánpótlásedzők",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({
       name: "players",
       title: "Játékosok",
       type: "array",
