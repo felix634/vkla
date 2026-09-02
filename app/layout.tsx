@@ -15,12 +15,27 @@ const display = Barlow_Condensed({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vkla.vercel.app";
+// Az indexelés env-kapcsolós: éles domainre állásig (vkla.hu) noindex marad,
+// hogy a keresők ne duplikálják a régi oldal mellé. Élesítéskor:
+// NEXT_PUBLIC_SITE_INDEXABLE=true a Vercelen.
+const INDEXABLE = process.env.NEXT_PUBLIC_SITE_INDEXABLE === "true";
+
 export const metadata: Metadata = {
-  title: "Vasas Kubala Akadémia — Látványterv",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Vasas Kubala Akadémia",
+    template: "%s",
+  },
   description:
-    "Vasas Kubala Akadémia új weboldalának teljes látványterve. Prometheus Digital Kft.",
-  // Látványterv — ne kerüljön a keresőkbe a vkla.hu mellé
-  robots: { index: false, follow: false },
+    "A Vasas Kubala Akadémia hivatalos oldala — hírek, csapatok, edzői stáb, programok, létesítmények, tagdíjfizetés és szponzoráció.",
+  openGraph: {
+    siteName: "Vasas Kubala Akadémia",
+    locale: "hu_HU",
+    type: "website",
+    images: ["/images/team.jpg"],
+  },
+  robots: INDEXABLE ? { index: true, follow: true } : { index: false, follow: false },
 };
 
 // Csupasz gyökér-layout: csak a betűtípusok és a globális stílus.

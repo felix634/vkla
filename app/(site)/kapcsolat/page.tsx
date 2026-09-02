@@ -1,24 +1,35 @@
 import type { Metadata } from "next";
 import PageHero from "../../components/site/PageHero";
 import SoonBadge from "../../components/site/SoonBadge";
+import { getBeallitasok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "Kapcsolat — Vasas Kubala Akadémia",
 };
 
-const CONTACTS = [
-  { label: "Cím", value: "1139 Budapest, Fáy utca 58.", icon: "M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10z M12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" },
-  { label: "Telefon", value: "+36 20 378 4880", icon: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.98.36 1.92.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.34 1.83.57 2.81.7A2 2 0 0 1 22 16.92z" },
-  { label: "E-mail", value: "info@vkla.hu", icon: "M4 4h16v16H4z M22 6l-10 7L2 6" },
-  { label: "Iroda nyitvatartás", value: "Hétfő–Péntek: 9:00–17:00", icon: "M12 6v6l4 2 M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z" },
-];
+export const revalidate = 300;
+
+const ICONS = {
+  cim: "M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10z M12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  telefon: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.98.36 1.92.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.34 1.83.57 2.81.7A2 2 0 0 1 22 16.92z",
+  email: "M4 4h16v16H4z M22 6l-10 7L2 6",
+  ora: "M12 6v6l4 2 M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z",
+};
 
 const inputCls =
   "w-full rounded-md border border-gray-200 px-3.5 py-2.5 text-sm text-navy placeholder:text-navy/35 focus:outline-none focus:border-royal focus:ring-2 focus:ring-royal/15 transition";
 
 const labelCls = "block text-xs font-semibold text-navy/60 uppercase tracking-wider mb-1.5";
 
-export default function KapcsolatPage() {
+export default async function KapcsolatPage() {
+  const b = await getBeallitasok();
+  const CONTACTS = [
+    { label: "Cím", value: b?.address ?? "1139 Budapest, Fáy utca 58.", icon: ICONS.cim },
+    { label: "Telefon", value: b?.phone ?? "+36 20 378 4880", icon: ICONS.telefon },
+    { label: "E-mail", value: b?.email ?? "info@vkla.hu", icon: ICONS.email },
+    { label: "Iroda nyitvatartás", value: b?.officeHours ?? "Hétfő–Péntek: 9:00–17:00", icon: ICONS.ora },
+  ];
+  const probaedzesEmail = b?.probaedzesEmail ?? b?.email ?? "info@vkla.hu";
   return (
     <main className="min-h-screen">
       <PageHero
@@ -92,7 +103,7 @@ export default function KapcsolatPage() {
                 <circle cx="12" cy="11" r="2" />
               </svg>
               <div className="font-display font-bold text-lg">Fáy utcai Sportkomplexum</div>
-              <div className="text-sm text-white/60 mt-1">1139 Budapest, Fáy utca 58.</div>
+              <div className="text-sm text-white/60 mt-1">{b?.address ?? "1139 Budapest, Fáy utca 58."}</div>
               <div className="mt-4">
                 <SoonBadge label="Interaktív térkép — hamarosan" />
               </div>
@@ -112,7 +123,7 @@ export default function KapcsolatPage() {
             <div className="gold-divider mx-auto" />
             <p className="text-white/70 mt-6 max-w-2xl mx-auto">
               U5-től U9-ig folyamatosan várjuk a focit szerető gyerekeket. A jelentkezés
-              a központi e-mail címünkre (info@vkla.hu) érkezik, kollégáink hamarosan
+              a központi e-mail címünkre ({probaedzesEmail}) érkezik, kollégáink hamarosan
               felveszik veled a kapcsolatot.
             </p>
           </div>

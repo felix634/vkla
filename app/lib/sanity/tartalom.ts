@@ -136,6 +136,94 @@ export async function getSzekciok(): Promise<Record<string, SzekcioData> | null>
   return Object.fromEntries(list.map((s) => [s.key, s]));
 }
 
+export type BeallitasokData = {
+  phone: string | null;
+  email: string | null;
+  probaedzesEmail: string | null;
+  address: string | null;
+  officeHours: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  youtubeChannel: string | null;
+  tiktok: string | null;
+  webshopUrl: string | null;
+  vasasFcUrl: string | null;
+  vasasFcIIUrl: string | null;
+};
+
+// Oldal-beállítások singleton (elérhetőségek, social + külső linkek).
+export async function getBeallitasok(): Promise<BeallitasokData | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "beallitasok" && _id == "beallitasok"][0]{
+      phone, email, probaedzesEmail, address, officeHours,
+      facebook, instagram, youtubeChannel, tiktok,
+      webshopUrl, vasasFcUrl, vasasFcIIUrl
+    }`,
+    {},
+    REVALIDATE
+  );
+}
+
+export type HetirendAlkalom = {
+  day: string;
+  from: string | null;
+  to: string | null;
+  location: string | null;
+};
+
+export type HetirendData = {
+  korosztaly: string;
+  entries: HetirendAlkalom[] | null;
+};
+
+export async function getHetirend(): Promise<HetirendData[] | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "hetirend"] | order(korosztaly asc) {
+      korosztaly,
+      entries[]{ day, from, to, location }
+    }`,
+    {},
+    REVALIDATE
+  );
+}
+
+export type GaleriaAlbumData = {
+  _id: string;
+  title: string;
+  category: string;
+  date: string | null;
+  imageUrls: string[] | null;
+};
+
+export type VideoData = {
+  _id: string;
+  title: string;
+  url: string;
+  date: string | null;
+};
+
+export async function getGaleriaAlbumok(): Promise<GaleriaAlbumData[] | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "galeria"] | order(date desc) {
+      _id, title, category, date, "imageUrls": images[].asset->url
+    }`,
+    {},
+    REVALIDATE
+  );
+}
+
+export async function getVideok(): Promise<VideoData[] | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "video"] | order(date desc) { _id, title, url, date }`,
+    {},
+    REVALIDATE
+  );
+}
+
 export type LetesitmenyData = {
   _id: string;
   name: string;

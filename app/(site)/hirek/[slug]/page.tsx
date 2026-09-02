@@ -27,6 +27,12 @@ export async function generateMetadata({
   return {
     title: `${hir.title} — Vasas Kubala Akadémia`,
     description: hir.excerpt ?? undefined,
+    openGraph: {
+      title: hir.title,
+      description: hir.excerpt ?? undefined,
+      type: "article",
+      ...(hir.imageUrl ? { images: [`${hir.imageUrl}?w=1200&auto=format`] } : {}),
+    },
   };
 }
 

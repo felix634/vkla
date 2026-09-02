@@ -36,9 +36,11 @@ function initials(name: string): string {
   return name.split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
 }
 
+// A kártyák tartalma a CMS oldal-szekcióiból jön (kulcs: etikai-kodex, hazirend);
+// amíg nincs feltöltve, "feltöltés alatt" jelzés látszik.
 const DOCS = [
-  { title: "Etikai kódex", id: "etika", desc: "Az akadémia működésének alapelvei és magatartási normái." },
-  { title: "Házirend", id: "hazirend", desc: "A sportkomplexum használatának és a mindennapoknak a szabályai." },
+  { title: "Etikai kódex", id: "etika", key: "etikai-kodex", desc: "Az akadémia működésének alapelvei és magatartási normái." },
+  { title: "Házirend", id: "hazirend", key: "hazirend", desc: "A sportkomplexum használatának és a mindennapoknak a szabályai." },
 ];
 
 export default async function AkademiaPage() {
@@ -263,33 +265,56 @@ export default async function AkademiaPage() {
         <SzekcioBlock szekcio={szekciok["oktatasi-program"]} id="oktatas" eyebrow="Oktatás" />
       )}
 
-      {/* Etikai kódex + Házirend */}
+      {/* Etikai kódex + Házirend — CMS-szekciókból, kattintásra kinyíló teljes szöveggel */}
       <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-6">
-          {DOCS.map((d, i) => (
-            <Reveal key={d.id} delay={i * 0.1} className="h-full">
-              <HoverCard id={d.id} className="h-full scroll-mt-28 rounded-md border border-gray-100 bg-cream p-7 flex items-start gap-5">
-              <div className="w-12 h-12 rounded-md bg-navy text-gold flex items-center justify-center flex-shrink-0">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-display font-bold text-xl text-navy mb-1">{d.title}</h3>
-                <p className="text-sm text-navy/60 leading-relaxed mb-3">{d.desc}</p>
-                <span className="no-click inline-flex items-center gap-2 text-sm font-bold text-royal">
-                  Letöltés (PDF)
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
+        <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-6 items-start">
+          {DOCS.map((d, i) => {
+            const szekcio = szekciok?.[d.key];
+            const card = (
+              <div className="flex items-start gap-5">
+                <div className="w-12 h-12 rounded-md bg-navy text-gold flex items-center justify-center flex-shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
                   </svg>
-                </span>
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-xl text-navy mb-1">{d.title}</h3>
+                  <p className="text-sm text-navy/60 leading-relaxed mb-3">{d.desc}</p>
+                  {szekcio?.body?.length ? (
+                    <span className="inline-flex items-center gap-2 text-sm font-bold text-royal">
+                      Elolvasom
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="transition-transform group-open:rotate-180">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </span>
+                  ) : (
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-gold/15 text-gold-dark px-2 py-1 rounded-sm">
+                      Tartalom feltöltés alatt
+                    </span>
+                  )}
+                </div>
               </div>
-              </HoverCard>
-            </Reveal>
-          ))}
+            );
+            return (
+              <Reveal key={d.id} delay={i * 0.1} className="h-full">
+                {szekcio?.body?.length ? (
+                  <details id={d.id} className="group scroll-mt-28 rounded-md border border-gray-100 bg-cream">
+                    <summary className="cursor-pointer list-none p-7 [&::-webkit-details-marker]:hidden">
+                      {card}
+                    </summary>
+                    <div className="px-7 pb-7 pt-1 border-t border-gray-200/60 max-h-[28rem] overflow-y-auto">
+                      <PortableBody value={szekcio.body} />
+                    </div>
+                  </details>
+                ) : (
+                  <HoverCard id={d.id} className="h-full scroll-mt-28 rounded-md border border-gray-100 bg-cream p-7">
+                    {card}
+                  </HoverCard>
+                )}
+              </Reveal>
+            );
+          })}
         </div>
       </section>
     </main>

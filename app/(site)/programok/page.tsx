@@ -3,7 +3,7 @@ import Link from "next/link";
 import PageHero from "../../components/site/PageHero";
 import WeeklySchedule from "../../components/WeeklySchedule";
 import SzekcioBlock from "../../components/SzekcioBlock";
-import { getSzekciok } from "../../lib/sanity/tartalom";
+import { getSzekciok, getHetirend } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "Programok — Vasas Kubala Akadémia",
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function ProgramokPage() {
-  const szekciok = await getSzekciok();
+  const [szekciok, hetirend] = await Promise.all([getSzekciok(), getHetirend()]);
   return (
     <main className="min-h-screen">
       <PageHero
@@ -37,7 +37,7 @@ export default async function ProgramokPage() {
               Korosztályonként lebontott heti beosztás. A pontos időpontok a CMS-ből frissülnek.
             </p>
           </div>
-          <WeeklySchedule />
+          <WeeklySchedule rendek={hetirend} />
         </div>
       </section>
 

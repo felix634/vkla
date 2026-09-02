@@ -1,14 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FOOTER_COLUMNS, type NavLink } from "../lib/nav";
+import type { BeallitasokData } from "../lib/sanity/tartalom";
 
-function FooterLink({ link }: { link: NavLink }) {
+function FooterLink({ link, href }: { link: NavLink; href?: string }) {
   // `block py-1.5`: mobilon a puszta 17px-es sormagasság túl kicsi érintőfelület,
   // a függőleges belső margó ~29px-re növeli anélkül, hogy a lista szétesne.
   const cls = "block py-1.5 text-sm text-white/65 hover:text-white transition cursor-pointer";
   if (link.external) {
     return (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" className={cls}>
+      <a href={href ?? link.href} target="_blank" rel="noopener noreferrer" className={cls}>
         {link.label}
       </a>
     );
@@ -20,7 +21,23 @@ function FooterLink({ link }: { link: NavLink }) {
   );
 }
 
-export default function Footer() {
+// A CMS beállításaiból felülírható külső linkek (végleges URL-ek az ügyféltől).
+function externalOverride(label: string, b?: BeallitasokData | null): string | undefined {
+  if (!b) return undefined;
+  if (label.startsWith("Webshop")) return b.webshopUrl ?? undefined;
+  if (label.startsWith("Vasas FC II")) return b.vasasFcIIUrl ?? undefined;
+  if (label.startsWith("Vasas FC")) return b.vasasFcUrl ?? undefined;
+  return undefined;
+}
+
+export default function Footer({ b }: { b?: BeallitasokData | null }) {
+  const socials = [
+    { label: "FB", url: b?.facebook ?? null },
+    { label: "IG", url: b?.instagram ?? null },
+    { label: "YT", url: b?.youtubeChannel ?? null },
+    { label: "TT", url: b?.tiktok ?? null },
+  ];
+
   return (
     <footer className="bg-navy-dark text-white">
       <div className="border-b border-white/10">
@@ -45,14 +62,26 @@ export default function Footer() {
               a magyar utánpótlás-labdarúgás egyik meghatározó műhelye.
             </p>
             <div className="flex items-center gap-3">
-              {["FB", "IG", "YT", "TW"].map((s) => (
-                <span
-                  key={s}
-                  className="no-click w-9 h-9 rounded-sm bg-white/5 hover:bg-vasasRed transition flex items-center justify-center text-xs font-bold border border-white/10"
-                >
-                  {s}
-                </span>
-              ))}
+              {socials.map((s) =>
+                s.url ? (
+                  <a
+                    key={s.label}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-sm bg-white/5 hover:bg-vasasRed transition flex items-center justify-center text-xs font-bold border border-white/10"
+                  >
+                    {s.label}
+                  </a>
+                ) : (
+                  <span
+                    key={s.label}
+                    className="no-click w-9 h-9 rounded-sm bg-white/5 hover:bg-vasasRed transition flex items-center justify-center text-xs font-bold border border-white/10"
+                  >
+                    {s.label}
+                  </span>
+                )
+              )}
             </div>
           </div>
 
@@ -65,7 +94,7 @@ export default function Footer() {
               <ul className="space-y-0.5">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <FooterLink link={l} />
+                    <FooterLink link={l} href={externalOverride(l.label, b)} />
                   </li>
                 ))}
               </ul>
