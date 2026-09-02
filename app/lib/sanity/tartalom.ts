@@ -136,6 +136,30 @@ export async function getSzekciok(): Promise<Record<string, SzekcioData> | null>
   return Object.fromEntries(list.map((s) => [s.key, s]));
 }
 
+export type LetesitmenyData = {
+  _id: string;
+  name: string;
+  address: string | null;
+  body: unknown[] | null;
+  amenities: string[] | null;
+  rentInfo: string | null;
+  imageUrls: string[] | null;
+  mapImageUrl: string | null;
+};
+
+export async function getLetesitmenyek(): Promise<LetesitmenyData[] | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "letesitmeny"] | order(order asc) {
+      _id, name, address, body, amenities, rentInfo,
+      "imageUrls": images[].asset->url,
+      "mapImageUrl": mapImage.asset->url
+    }`,
+    {},
+    REVALIDATE
+  );
+}
+
 export type SzponzorData = {
   _id: string;
   name: string;

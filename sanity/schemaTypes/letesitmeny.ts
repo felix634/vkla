@@ -8,6 +8,12 @@ export default defineType({
     defineField({ name: "name", title: "Név", type: "string", validation: (r) => r.required() }),
     defineField({ name: "address", title: "Cím", type: "string" }),
     defineField({
+      name: "body",
+      title: "Leírás",
+      type: "array",
+      of: [{ type: "block" }],
+    }),
+    defineField({
       name: "images",
       title: "Fotók",
       type: "array",
