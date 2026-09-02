@@ -37,6 +37,7 @@ const structure: StructureResolver = (S) =>
       S.documentTypeListItem("szponzor").title("Szponzorok"),
       S.documentTypeListItem("letesitmeny").title("Létesítmények"),
       S.documentTypeListItem("dokumentum").title("Dokumentumok"),
+      S.documentTypeListItem("oldalszekcio").title("Oldal-szekciók (Akadémia szövegei)"),
       S.documentTypeListItem("allas").title("Karrier — álláshirdetések"),
       S.divider(),
       S.listItem()
