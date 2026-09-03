@@ -231,7 +231,9 @@ export default async function AkademiaPage() {
             {stab.map((e, i) => (
               <Reveal key={e.name + i} delay={(i % 4) * 0.08} className="h-full">
                 <HoverCard className="h-full bg-white rounded-md border border-gray-100 overflow-hidden">
-                  <div className="relative aspect-square bg-navy flex items-center justify-center">
+                  {/* A portrék egységesen 2:3 arányúak (Patrik vágása) — a keret
+                      ugyanilyen arányú, így a képből semmi nem vágódik le. */}
+                  <div className="relative aspect-[2/3] bg-navy flex items-center justify-center">
                     {e.photoUrl ? (
                       <Image src={sized(e.photoUrl, 500)!} alt={e.name} fill className="object-cover opacity-90" />
                     ) : (

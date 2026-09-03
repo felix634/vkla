@@ -49,7 +49,8 @@ function CoachAvatar({
       style={{ height: size, width: size }}
     >
       {photoUrl ? (
-        <Image src={sized(photoUrl, size * 2)!} alt={name ?? "Edző"} fill className="object-cover" />
+        // A 2:3-as portrékon a fej felül van — a kör-avatár a kép tetejét mutassa.
+        <Image src={sized(photoUrl, size * 2)!} alt={name ?? "Edző"} fill className="object-cover object-top" />
       ) : (
         <span className="font-display font-bold text-gold" style={{ fontSize: size * 0.34 }}>
           {initials(name)}
