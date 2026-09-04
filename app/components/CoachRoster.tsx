@@ -181,7 +181,9 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {selected.players.map((p, i) => (
                       <div key={i} className="rounded-md border border-white/10 bg-white/5 overflow-hidden">
-                        <div className="relative aspect-[4/5] bg-navy-dark flex items-center justify-center">
+                        {/* A játékosportrék egységesen 2:3 arányúak (Patrik vágása) —
+                            a keret ugyanilyen, így semmi nem vágódik le. */}
+                        <div className="relative aspect-[2/3] bg-navy-dark flex items-center justify-center">
                           {p.photoUrl ? (
                             <Image src={sized(p.photoUrl, 400)!} alt={p.name} fill className="object-cover opacity-90" />
                           ) : (
