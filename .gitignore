@@ -8,3 +8,7 @@ out
 # scraper kimenet (nagy, nem verziozott)
 scraped/
 tsconfig.tsbuildinfo
+
+# Statikus hir-archivum — a vegleges vagasi datummal, a "flip" lepesben kerul commitolasra
+content/archiv/
+public/archiv/

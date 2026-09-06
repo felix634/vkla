@@ -1,4 +1,5 @@
 import { client, sanityEnabled } from "./client";
+import { getArchivIndex, getArchivCikk, archivLetezik } from "../archiv";
 
 export type HirListItem = {
   _id: string;
@@ -57,24 +58,47 @@ export async function getHirek(opts: {
   const from = (page - 1) * HIREK_OLDALMERET;
   const to = from + HIREK_OLDALMERET;
   const filter = `_type == "hir" && defined(slug.current) && ($category == "" || category == $category)`;
-  const [items, total] = await Promise.all([
-    client.fetch<HirListItem[]>(
-      `*[${filter}] | order(publishedAt desc) [$from...$to]{ ${LIST_FIELDS} }`,
-      { category, from, to },
+
+  // A statikus archívum a CMS-nél régebbi cikkeket tartalmazza; a lista a
+  // CMS-találatok után az archívumot folytatja. Ami a CMS-ben is megvan, azt
+  // az archívum nem duplikálja.
+  const [sanityTotal, sanitySlugs, archivIndex] = await Promise.all([
+    client.fetch<number>(`count(*[${filter}])`, { category }, { next: { revalidate: 300 } }),
+    client.fetch<string[]>(
+      `*[_type == "hir" && defined(slug.current)].slug.current`,
+      {},
       { next: { revalidate: 300 } }
     ),
-    client.fetch<number>(
-      `count(*[${filter}])`,
-      { category },
-      { next: { revalidate: 300 } }
-    ),
+    getArchivIndex(),
   ]);
+  const cmsSlugs = new Set(sanitySlugs);
+  const archiv = archivIndex.filter(
+    (a) =>
+      (category === "" || a.category === category) &&
+      !cmsSlugs.has(a.slug ?? "")
+  );
+  const total = sanityTotal + archiv.length;
+
+  let items: HirListItem[] = [];
+  if (from < sanityTotal) {
+    const sTo = Math.min(to, sanityTotal);
+    items = await client.fetch<HirListItem[]>(
+      `*[${filter}] | order(publishedAt desc) [$from...$to]{ ${LIST_FIELDS} }`,
+      { category, from, to: sTo },
+      { next: { revalidate: 300 } }
+    );
+  }
+  if (to > sanityTotal) {
+    const aFrom = Math.max(0, from - sanityTotal);
+    const aTo = to - sanityTotal;
+    items = items.concat(archiv.slice(aFrom, aTo));
+  }
   return { items, total };
 }
 
 export async function getHir(slug: string): Promise<HirDetail | null> {
   if (!sanityEnabled || !client) return null;
-  return client.fetch<HirDetail | null>(
+  const hir = await client.fetch<HirDetail | null>(
     `*[_type == "hir" && slug.current == $slug][0]{
       ${LIST_FIELDS},
       body[]{
@@ -85,6 +109,8 @@ export async function getHir(slug: string): Promise<HirDetail | null> {
     { slug },
     { next: { revalidate: 300 } }
   );
+  // A CMS-ben már nem szereplő (archivált) cikkek a statikus archívumból jönnek.
+  return hir ?? (await getArchivCikk(slug));
 }
 
 export async function hirLetezik(slug: string): Promise<boolean> {
@@ -94,5 +120,5 @@ export async function hirLetezik(slug: string): Promise<boolean> {
     { slug },
     { next: { revalidate: 3600 } }
   );
-  return n > 0;
+  return n > 0 || (await archivLetezik(slug));
 }
