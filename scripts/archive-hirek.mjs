@@ -99,7 +99,7 @@ async function main() {
     const to = Math.min(from + CHUNK, max);
     const cikkek = await client.fetch(
       `*[_type == "hir" && defined(slug.current) && publishedAt < $cutoff]
-        | order(publishedAt desc) [$from...$to]{
+        | order(publishedAt desc, _id asc) [$from...$to]{
         _id, title, "slug": slug.current, publishedAt, category, excerpt, legacy,
         "imageUrl": heroImage.asset->url,
         body[]{ ..., _type == "image" => { ..., "url": asset->url } }
@@ -108,6 +108,7 @@ async function main() {
     );
 
     for (const c of cikkek) {
+      if (index.some((i) => i.slug === c.slug)) continue; // lapozási határ-duplikátum
       // képek: vezérkép + törzsképek lokálisra
       const heroLocal = c.imageUrl ? await downloadKep(c.imageUrl, kepMap) : null;
       const body = [];
