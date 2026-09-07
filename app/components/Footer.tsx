@@ -118,7 +118,7 @@ export default function Footer({ b }: { b?: BeallitasokData | null }) {
       <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/50">
         <div>© 2026 Vasas Kubala Akadémia. Minden jog fenntartva.</div>
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-          <span className="no-click hover:text-white">Adatvédelem</span>
+          <Link href="/dokumentumok" className="hover:text-white">Adatvédelem</Link>
           <span className="no-click hover:text-white">ÁSZF</span>
           <span className="no-click hover:text-white">Impresszum</span>
           <span className="no-click hover:text-white">Süti beállítások</span>

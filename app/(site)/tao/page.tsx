@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import PageHero from "../../components/site/PageHero";
 import SoonBadge from "../../components/site/SoonBadge";
-import { getDokumentumok, type DokumentumData } from "../../lib/sanity/tartalom";
+import PortableBody from "../../components/PortableBody";
+import { getDokumentumok, getSzekciok, type DokumentumData } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "TAO — Vasas Kubala Akadémia",
@@ -45,8 +46,9 @@ function DocRow({ title, url }: { title: string; url: string | null }) {
 }
 
 export default async function TaoPage() {
-  const all = await getDokumentumok();
+  const [all, szekciok] = await Promise.all([getDokumentumok(), getSzekciok()]);
   const tao = all?.filter((d) => d.category === "TAO") ?? null;
+  const tamogatas = szekciok?.["tao-tamogatas"];
 
   // Évek szerint csoportosítva (legfrissebb elöl), az év nélküliek a végén.
   let groups: { label: string; docs: DokumentumData[] }[] = [];
@@ -81,6 +83,20 @@ export default async function TaoPage() {
         }
         subtitle="A 107/2011. Kormányrendelet alapján itt tölthetők le a Vasas Akadémia Kft. sportfejlesztési programját jóváhagyó határozatok és a kapcsolódó dokumentumok."
       />
+
+      {/* Támogassa Ön is — CMS-szekció a dokumentumok fölött */}
+      {tamogatas?.body?.length ? (
+        <section id="tamogatas" className="bg-cream scroll-mt-28">
+          <div className="max-w-4xl mx-auto px-6 py-16">
+            <span className="section-eyebrow">Támogatás</span>
+            <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3 mb-3">
+              {tamogatas.title}
+            </h2>
+            <div className="gold-divider mb-7" />
+            <PortableBody value={tamogatas.body} />
+          </div>
+        </section>
+      ) : null}
 
       <section className="bg-white">
         <div className="max-w-4xl mx-auto px-6 py-16">
