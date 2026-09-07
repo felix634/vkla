@@ -145,6 +145,7 @@ export type BeallitasokData = {
   facebook: string | null;
   instagram: string | null;
   youtubeChannel: string | null;
+  twitter: string | null;
   tiktok: string | null;
   webshopUrl: string | null;
   vasasFcUrl: string | null;
@@ -157,7 +158,7 @@ export async function getBeallitasok(): Promise<BeallitasokData | null> {
   return client.fetch(
     `*[_type == "beallitasok" && _id == "beallitasok"][0]{
       phone, email, probaedzesEmail, address, officeHours,
-      facebook, instagram, youtubeChannel, tiktok,
+      facebook, instagram, youtubeChannel, twitter, tiktok,
       webshopUrl, vasasFcUrl, vasasFcIIUrl
     }`,
     {},

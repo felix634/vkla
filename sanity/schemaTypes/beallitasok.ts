@@ -18,6 +18,7 @@ export default defineType({
     defineField({ name: "facebook", title: "Facebook link", type: "url" }),
     defineField({ name: "instagram", title: "Instagram link", type: "url" }),
     defineField({ name: "youtubeChannel", title: "YouTube csatorna", type: "url" }),
+    defineField({ name: "twitter", title: "X (Twitter) link", type: "url" }),
     defineField({ name: "tiktok", title: "TikTok link", type: "url" }),
     defineField({ name: "webshopUrl", title: "Vasas webshop link", type: "url" }),
     defineField({ name: "vasasFcUrl", title: "Vasas FC link", type: "url" }),

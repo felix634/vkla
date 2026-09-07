@@ -35,7 +35,8 @@ export default function Footer({ b }: { b?: BeallitasokData | null }) {
     { label: "FB", url: b?.facebook ?? null },
     { label: "IG", url: b?.instagram ?? null },
     { label: "YT", url: b?.youtubeChannel ?? null },
-    { label: "TT", url: b?.tiktok ?? null },
+    { label: "X", url: b?.twitter ?? null },
+    ...(b?.tiktok ? [{ label: "TT", url: b.tiktok }] : []),
   ];
 
   return (
