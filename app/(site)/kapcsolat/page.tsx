@@ -23,11 +23,12 @@ const labelCls = "block text-xs font-semibold text-navy/60 uppercase tracking-wi
 
 export default async function KapcsolatPage() {
   const b = await getBeallitasok();
+  // Az iroda-nyitvatartás / fogadóóra kártya az ügyfél kérésére lekerült
+  // (Berkes Máté, 2026.09.08).
   const CONTACTS = [
     { label: "Cím", value: b?.address ?? "1139 Budapest, Fáy utca 58.", icon: ICONS.cim },
     { label: "Telefon", value: b?.phone ?? "+36 20 378 4880", icon: ICONS.telefon },
     { label: "E-mail", value: b?.email ?? "info@vkla.hu", icon: ICONS.email },
-    { label: "Iroda nyitvatartás", value: b?.officeHours ?? "Hétfő–Péntek: 9:00–17:00", icon: ICONS.ora },
   ];
   const probaedzesEmail = b?.probaedzesEmail ?? b?.email ?? "info@vkla.hu";
   return (
@@ -46,7 +47,7 @@ export default async function KapcsolatPage() {
       {/* Elérhetőségek */}
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-14">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-3 gap-5">
             {CONTACTS.map((c) => (
               <div key={c.label} className="rounded-md border border-gray-100 bg-cream p-6">
                 <div className="w-11 h-11 rounded-md bg-navy text-gold flex items-center justify-center mb-4">
@@ -132,25 +133,37 @@ export default async function KapcsolatPage() {
             <form className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Gyermek neve</label>
-                  <input type="text" placeholder="Gyermek teljes neve" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Gyermek neve *</label>
+                  <input type="text" required placeholder="Gyermek teljes neve" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Születési év / korosztály</label>
-                  <input type="text" placeholder="pl. 2016 / U9" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Születési idő *</label>
+                  <input type="date" required className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition [color-scheme:dark]" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Szülő neve</label>
-                  <input type="text" placeholder="Szülő teljes neve" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Születési hely *</label>
+                  <input type="text" required placeholder="pl. Budapest" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Telefonszám</label>
-                  <input type="tel" placeholder="+36 …" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Édesanyja leánykori neve *</label>
+                  <input type="text" required placeholder="Teljes név" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">E-mail</label>
-                <input type="email" placeholder="szulo@email.hu" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                <div>
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Jelenlegi csapata *</label>
+                  <input type="text" required placeholder="pl. XYZ SE U9 (ha nincs, írd: nincs)" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Szülő neve *</label>
+                  <input type="text" required placeholder="Szülő teljes neve" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Telefonszám *</label>
+                  <input type="tel" required placeholder="+36 …" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">E-mail *</label>
+                  <input type="email" required placeholder="szulo@email.hu" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Megjegyzés</label>

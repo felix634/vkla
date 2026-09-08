@@ -167,16 +167,10 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                 </button>
               </div>
 
+              {/* Az asszisztensek sora az ügyfél kérésére lekerült — a teljes
+                  szakmai stáb (erőnléti, kapusedző stb.) az Akadémia oldalon
+                  szerepel, csoportosítva (Berkes Máté, 2026.09.08). */}
               <div className="px-6 py-5">
-                {selected.assistants && selected.assistants.length > 0 && (
-                  <div className="mb-4 text-sm text-white/70">
-                    <span className="text-white/45 uppercase tracking-wider text-[11px] mr-2">
-                      Asszisztensek:
-                    </span>
-                    {selected.assistants.join(", ")}
-                  </div>
-                )}
-
                 {selected.players && selected.players.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {selected.players.map((p, i) => (

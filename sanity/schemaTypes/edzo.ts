@@ -6,6 +6,12 @@ export default defineType({
   type: "document",
   fields: [
     defineField({ name: "name", title: "Név", type: "string", validation: (r) => r.required() }),
+    defineField({
+      name: "order",
+      title: "Sorrend",
+      type: "number",
+      description: "Megjelenési sorrend az Edzői stáb oldalon (kisebb szám = előrébb).",
+    }),
     defineField({ name: "role", title: "Beosztás", type: "string", description: "Pl. korosztály vezetőedző" }),
     defineField({ name: "photo", title: "Fotó", type: "image", options: { hotspot: true } }),
     defineField({ name: "bio", title: "Rövid bemutatkozás", type: "text", rows: 4 }),

@@ -40,6 +40,7 @@ export type CsapatData = {
 export type EdzoData = {
   name: string;
   role: string | null;
+  order: number | null;
   photoUrl: string | null;
 };
 
@@ -103,12 +104,15 @@ export async function getEdzok(): Promise<EdzoData[] | null> {
   if (!sanityEnabled || !client) return null;
   const edzok = await client.fetch<EdzoData[]>(
     `*[_type == "edzo" && featured == true] | order(name asc) {
-      name, role, "photoUrl": photo.asset->url
+      name, role, order, "photoUrl": photo.asset->url
     }`,
     {},
     REVALIDATE
   );
-  return edzok.sort((a, b) => roleRank(a.role) - roleRank(b.role));
+  // Elsődlegesen a Studióban megadott sorrend, e nélkül a szerepkör-rangsor.
+  return edzok.sort(
+    (a, b) => (a.order ?? 900 + roleRank(a.role)) - (b.order ?? 900 + roleRank(b.role))
+  );
 }
 
 export type SzekcioData = {

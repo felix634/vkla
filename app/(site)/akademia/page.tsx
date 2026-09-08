@@ -29,6 +29,7 @@ const LEADERSHIP = [
 const STAFF_PLACEHOLDER: EdzoData[] = Array.from({ length: 8 }, () => ({
   name: "Munkatárs neve",
   role: "Vezetőedző",
+  order: null,
   photoUrl: null,
 }));
 
@@ -36,12 +37,6 @@ function initials(name: string): string {
   return name.split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
 }
 
-// A kártyák tartalma a CMS oldal-szekcióiból jön (kulcs: etikai-kodex, hazirend);
-// amíg nincs feltöltve, "feltöltés alatt" jelzés látszik.
-const DOCS = [
-  { title: "Etikai kódex", id: "etika", key: "etikai-kodex", desc: "Az akadémia működésének alapelvei és magatartási normái." },
-  { title: "Házirend", id: "hazirend", key: "hazirend", desc: "A sportkomplexum használatának és a mindennapoknak a szabályai." },
-];
 
 export default async function AkademiaPage() {
   const [edzok, szekciok] = await Promise.all([getEdzok(), getSzekciok()]);
@@ -53,6 +48,24 @@ export default async function AkademiaPage() {
     edzok && edzok.length > 0
       ? edzok.filter((e) => !leaderNames.has(e.name))
       : STAFF_PLACEHOLDER;
+
+  // A stáb csoportosított megjelenítése (Berkes Máté 2026.09.08-i kérése):
+  // vezetőedzők korosztály-sorrendben, majd a szakmai csoportok. A besorolás a
+  // szerepkörből jön, a sorrendet a Studio "Sorrend" mezője adja.
+  const csoport = (pred: (r: string) => boolean) =>
+    stab.filter((e) => pred((e.role ?? "").toLowerCase()));
+  const stabCsoportok = [
+    { title: "Vezetőedzők", tagok: csoport((r) => r.includes("vezetőedző")) },
+    { title: "Asszisztensedzők", tagok: csoport((r) => r.includes("asszisztens")) },
+    { title: "Erőnléti edzők", tagok: csoport((r) => r.includes("erőnléti") || r.includes("teljesítmény")) },
+    { title: "Kapusedzők", tagok: csoport((r) => r.startsWith("kapusedző")) },
+    { title: "Videóelemzők", tagok: csoport((r) => r.includes("videó") || r.includes("video")) },
+    { title: "Rehabilitáció", tagok: csoport((r) => r.includes("fizioterapeuta") || r.includes("rehabilit")) },
+  ].filter((cs) => cs.tagok.length > 0);
+  // Ami egyik csoportba sem esett (pl. placeholder), az a végére kerül.
+  const besorolt = new Set(stabCsoportok.flatMap((cs) => cs.tagok.map((t) => t.name)));
+  const egyeb = stab.filter((e) => !besorolt.has(e.name));
+  if (egyeb.length > 0) stabCsoportok.push({ title: "Szakembereink", tagok: egyeb });
 
   return (
     <main className="min-h-screen">
@@ -195,12 +208,12 @@ export default async function AkademiaPage() {
         </div>
       </section>
 
-      {/* Szervezeti struktúra */}
-      <section id="struktura" className="bg-white scroll-mt-28">
+      {/* Vezetőség */}
+      <section id="vezetoseg" className="bg-white scroll-mt-28">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="mb-10">
             <span className="section-eyebrow">Szervezet</span>
-            <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3">Szervezeti struktúra</h2>
+            <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3">Vezetőség</h2>
             <div className="gold-divider mt-4" />
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -227,29 +240,37 @@ export default async function AkademiaPage() {
             <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3">Edzői stáb</h2>
             <div className="gold-divider mt-4" />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {stab.map((e, i) => (
-              <Reveal key={e.name + i} delay={(i % 4) * 0.08} className="h-full">
-                <HoverCard className="h-full bg-white rounded-md border border-gray-100 overflow-hidden">
-                  {/* A portrék egységesen 2:3 arányúak (Patrik vágása) — a keret
-                      ugyanilyen arányú, így a képből semmi nem vágódik le. */}
-                  <div className="relative aspect-[2/3] bg-navy flex items-center justify-center">
-                    {e.photoUrl ? (
-                      <Image src={sized(e.photoUrl, 500)!} alt={e.name} fill className="object-cover opacity-90" />
-                    ) : (
-                      <span className="font-display font-black text-4xl text-white/15">
-                        {initials(e.name)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <div className="font-display font-bold text-navy">{e.name}</div>
-                    <div className="text-xs uppercase tracking-widest text-navy/50 mt-1">{e.role}</div>
-                  </div>
-                </HoverCard>
-              </Reveal>
-            ))}
-          </div>
+          {stabCsoportok.map((cs) => (
+            <div key={cs.title} className="mb-12 last:mb-0">
+              <h3 className="font-display font-bold text-2xl text-navy mb-5 flex items-baseline gap-3">
+                {cs.title}
+                <span className="text-xs font-sans font-semibold text-navy/40">{cs.tagok.length} fő</span>
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                {cs.tagok.map((e, i) => (
+                  <Reveal key={e.name + i} delay={(i % 4) * 0.08} className="h-full">
+                    <HoverCard className="h-full bg-white rounded-md border border-gray-100 overflow-hidden">
+                      {/* A portrék egységesen 2:3 arányúak (Patrik vágása) — a keret
+                          ugyanilyen arányú, így a képből semmi nem vágódik le. */}
+                      <div className="relative aspect-[2/3] bg-navy flex items-center justify-center">
+                        {e.photoUrl ? (
+                          <Image src={sized(e.photoUrl, 500)!} alt={e.name} fill className="object-cover opacity-90" />
+                        ) : (
+                          <span className="font-display font-black text-4xl text-white/15">
+                            {initials(e.name)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <div className="font-display font-bold text-navy">{e.name}</div>
+                        <div className="text-xs uppercase tracking-widest text-navy/50 mt-1">{e.role}</div>
+                      </div>
+                    </HoverCard>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -267,58 +288,6 @@ export default async function AkademiaPage() {
         <SzekcioBlock szekcio={szekciok["oktatasi-program"]} id="oktatas" eyebrow="Oktatás" />
       )}
 
-      {/* Etikai kódex + Házirend — CMS-szekciókból, kattintásra kinyíló teljes szöveggel */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-6 items-start">
-          {DOCS.map((d, i) => {
-            const szekcio = szekciok?.[d.key];
-            const card = (
-              <div className="flex items-start gap-5">
-                <div className="w-12 h-12 rounded-md bg-navy text-gold flex items-center justify-center flex-shrink-0">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-display font-bold text-xl text-navy mb-1">{d.title}</h3>
-                  <p className="text-sm text-navy/60 leading-relaxed mb-3">{d.desc}</p>
-                  {szekcio?.body?.length ? (
-                    <span className="inline-flex items-center gap-2 text-sm font-bold text-royal">
-                      Elolvasom
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="transition-transform group-open:rotate-180">
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </span>
-                  ) : (
-                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-gold/15 text-gold-dark px-2 py-1 rounded-sm">
-                      Tartalom feltöltés alatt
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-            return (
-              <Reveal key={d.id} delay={i * 0.1} className="h-full">
-                {szekcio?.body?.length ? (
-                  <details id={d.id} className="group scroll-mt-28 rounded-md border border-gray-100 bg-cream">
-                    <summary className="cursor-pointer list-none p-7 [&::-webkit-details-marker]:hidden">
-                      {card}
-                    </summary>
-                    <div className="px-7 pb-7 pt-1 border-t border-gray-200/60 max-h-[28rem] overflow-y-auto">
-                      <PortableBody value={szekcio.body} />
-                    </div>
-                  </details>
-                ) : (
-                  <HoverCard id={d.id} className="h-full scroll-mt-28 rounded-md border border-gray-100 bg-cream p-7">
-                    {card}
-                  </HoverCard>
-                )}
-              </Reveal>
-            );
-          })}
-        </div>
-      </section>
     </main>
   );
 }
