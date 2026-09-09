@@ -23,7 +23,8 @@ export default defineType({
       name: "section",
       title: "Szekció",
       type: "string",
-      options: { list: ["Felső szekció", "Alsó szekció", "Női szakág"] },
+      options: { list: ["Akadémia", "Pre-akadémia", "Női szakág"] },
+      description: "Üresen hagyva a csapat nem jelenik meg a weboldalon.",
     }),
     defineField({
       name: "assistants",

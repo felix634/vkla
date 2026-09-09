@@ -10,14 +10,17 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 
+// Felosztás Berkes Máté 2026.09.09-i döntése szerint: Akadémia (U15–U19),
+// Pre-akadémia (U12–U14), Női szakág — az U5–U11 fiúcsapatok nem szerepelnek.
 const SECTIONS = [
-  { id: "felso", name: "Felső szekció" },
-  { id: "also", name: "Alsó szekció" },
+  { id: "akademia", name: "Akadémia" },
+  { id: "pre-akademia", name: "Pre-akadémia" },
   { id: "noi", name: "Női szakág" },
 ];
 
 export default async function CsapatokPage() {
   const csapatok = await getCsapatok();
+  const lathato = csapatok?.filter((c) => SECTIONS.some((s) => s.name === c.section));
 
   return (
     <main className="min-h-screen">
@@ -26,7 +29,7 @@ export default async function CsapatokPage() {
         eyebrow="Csapataink"
         title={
           <>
-            {csapatok?.length ?? 16} korosztály,{" "}
+            {lathato?.length ?? 16} korosztály,{" "}
             <span className="text-gold-light">egy közös cél.</span>
           </>
         }
