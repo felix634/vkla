@@ -284,6 +284,9 @@ export default async function AkademiaPage() {
       {szekciok?.["egyuttmukodes-osei"] && (
         <SzekcioBlock szekcio={szekciok["egyuttmukodes-osei"]} id="osei" eyebrow="Sportegészségügy" tone="cream" />
       )}
+      {szekciok?.["egyuttmukodes-tf"] && (
+        <SzekcioBlock szekcio={szekciok["egyuttmukodes-tf"]} id="tf" eyebrow="Együttműködés" />
+      )}
       {szekciok?.["oktatasi-program"] && (
         <SzekcioBlock szekcio={szekciok["oktatasi-program"]} id="oktatas" eyebrow="Oktatás" />
       )}
