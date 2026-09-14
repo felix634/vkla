@@ -217,17 +217,27 @@ export default async function AkademiaPage() {
             <div className="gold-divider mt-4" />
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {LEADERSHIP.map((p, i) => (
-              <Reveal key={p.role} delay={i * 0.08} className="h-full">
-                <HoverCard className="h-full rounded-md border border-gray-100 bg-cream p-6 text-center">
-                  <div className="w-16 h-16 rounded-full bg-navy/5 mx-auto mb-4 flex items-center justify-center text-navy/40 font-display font-black text-xl">
-                    {initials(p.name)}
-                  </div>
-                  <div className="font-display font-bold text-navy">{p.name}</div>
-                  <div className="text-xs uppercase tracking-widest text-vasasRed mt-1">{p.role}</div>
-                </HoverCard>
-              </Reveal>
-            ))}
+            {LEADERSHIP.map((p, i) => {
+              // Vezetői portré a CMS-ből, ha van — különben monogram.
+              const foto = edzok?.find((e) => e.name === p.name)?.photoUrl ?? null;
+              return (
+                <Reveal key={p.role} delay={i * 0.08} className="h-full">
+                  <HoverCard className="h-full rounded-md border border-gray-100 bg-cream p-6 text-center">
+                    {foto ? (
+                      <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-4">
+                        <Image src={sized(foto, 200)!} alt={p.name} fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-navy/5 mx-auto mb-4 flex items-center justify-center text-navy/40 font-display font-black text-xl">
+                        {initials(p.name)}
+                      </div>
+                    )}
+                    <div className="font-display font-bold text-navy">{p.name}</div>
+                    <div className="text-xs uppercase tracking-widest text-vasasRed mt-1">{p.role}</div>
+                  </HoverCard>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
