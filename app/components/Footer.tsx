@@ -120,7 +120,7 @@ export default function Footer({ b }: { b?: BeallitasokData | null }) {
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <Link href="/dokumentumok" className="hover:text-white">Adatvédelem</Link>
           <span className="no-click hover:text-white">ÁSZF</span>
-          <span className="no-click hover:text-white">Impresszum</span>
+          <Link href="/impresszum" className="hover:text-white">Impresszum</Link>
           <span className="no-click hover:text-white">Süti beállítások</span>
         </div>
       </div>

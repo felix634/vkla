@@ -30,6 +30,7 @@ export const PRIMARY_NAV: NavItem[] = [
       { label: "Kubala László", href: "/akademia#kubala" },
       { label: "Edzői stáb", href: "/akademia#stab" },
       { label: "Vezetőség", href: "/akademia#vezetoseg" },
+      { label: "Képzési modell", href: "/akademia#kepzesi-modell" },
       { label: "Együttműködések", href: "/akademia#osei" },
     ],
   },

@@ -19,6 +19,7 @@ const STATIC_ROUTES = [
   "/tao",
   "/karrier",
   "/dokumentumok",
+  "/impresszum",
 ];
 
 export const revalidate = 3600;
