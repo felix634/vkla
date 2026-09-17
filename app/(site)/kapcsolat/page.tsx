@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import PageHero from "../../components/site/PageHero";
 import SoonBadge from "../../components/site/SoonBadge";
+import KapcsolatForm from "../../components/KapcsolatForm";
+import ProbaedzesForm from "../../components/ProbaedzesForm";
 import { getBeallitasok } from "../../lib/sanity/tartalom";
+import { emailEnabled } from "../../lib/email";
 
 export const metadata: Metadata = {
   title: "Kapcsolat — Vasas Kubala Akadémia",
@@ -15,11 +18,6 @@ const ICONS = {
   email: "M4 4h16v16H4z M22 6l-10 7L2 6",
   ora: "M12 6v6l4 2 M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z",
 };
-
-const inputCls =
-  "w-full rounded-md border border-gray-200 px-3.5 py-2.5 text-sm text-navy placeholder:text-navy/35 focus:outline-none focus:border-royal focus:ring-2 focus:ring-royal/15 transition";
-
-const labelCls = "block text-xs font-semibold text-navy/60 uppercase tracking-wider mb-1.5";
 
 export default async function KapcsolatPage() {
   const b = await getBeallitasok();
@@ -69,29 +67,7 @@ export default async function KapcsolatPage() {
           <div className="bg-white rounded-lg border border-gray-100 shadow-xl shadow-navy/5 p-7">
             <h2 className="font-display font-bold text-2xl text-navy mb-1">Általános megkeresés</h2>
             <p className="text-sm text-navy/55 mb-6">Válaszolunk, amint tudunk.</p>
-            <form className="space-y-4">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className={labelCls}>Név</label>
-                  <input type="text" placeholder="Teljes név" className={inputCls} />
-                </div>
-                <div>
-                  <label className={labelCls}>E-mail</label>
-                  <input type="email" placeholder="email@pelda.hu" className={inputCls} />
-                </div>
-              </div>
-              <div>
-                <label className={labelCls}>Tárgy</label>
-                <input type="text" placeholder="Miben segíthetünk?" className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Üzenet</label>
-                <textarea rows={5} placeholder="Írd le a kérdésed…" className={inputCls} />
-              </div>
-              <button type="button" className="no-click w-full bg-navy hover:bg-royal transition-colors text-white font-bold py-3 rounded-md text-sm">
-                Üzenet küldése
-              </button>
-            </form>
+            <KapcsolatForm enabled={emailEnabled} />
           </div>
 
           {/* Térkép placeholder */}
@@ -130,52 +106,7 @@ export default async function KapcsolatPage() {
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-lg p-7 backdrop-blur-sm">
-            <form className="space-y-4">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Gyermek neve *</label>
-                  <input type="text" required placeholder="Gyermek teljes neve" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Születési idő *</label>
-                  <input type="date" required className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition [color-scheme:dark]" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Születési hely *</label>
-                  <input type="text" required placeholder="pl. Budapest" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Édesanyja leánykori neve *</label>
-                  <input type="text" required placeholder="Teljes név" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Jelenlegi csapata *</label>
-                  <input type="text" required placeholder="pl. XYZ SE U9 (ha nincs, írd: nincs)" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Szülő neve *</label>
-                  <input type="text" required placeholder="Szülő teljes neve" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Telefonszám *</label>
-                  <input type="tel" required placeholder="+36 …" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">E-mail *</label>
-                  <input type="email" required placeholder="szulo@email.hu" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-white/60 uppercase tracking-wider mb-1.5">Megjegyzés</label>
-                <textarea rows={4} placeholder="Bármi, amit fontosnak tartasz…" className="w-full rounded-md bg-white/10 border border-white/15 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition" />
-              </div>
-              <button type="button" className="no-click w-full bg-vasasRed hover:bg-vasasRedDark transition-colors text-white font-bold py-3.5 rounded-md">
-                Jelentkezés elküldése
-              </button>
-              <p className="text-center text-xs text-white/45">
-                A küldés gomb a backend fázisban kapcsolódik a központi e-mail címhez.
-              </p>
-            </form>
+            <ProbaedzesForm enabled={emailEnabled} />
           </div>
         </div>
       </section>
