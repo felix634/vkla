@@ -14,8 +14,8 @@ type Mezo =
 const OSZLOPOK: Record<Mezo, string[]> = {
   szamlaszam: ["szamlaszam", "sorszam", "szamlasorszam"],
   email: ["email", "emailcim"],
-  vevo_nev: ["vevonev", "vevo", "szulonev", "szulo", "nev"],
-  gyermek_nev: ["gyermeknev", "gyermek", "jatekos", "sportolo"],
+  vevo_nev: ["vevonev", "vevoneve", "vevo", "szulonev", "szuloneve", "szulo", "nev"],
+  gyermek_nev: ["gyermeknev", "gyermekneve", "gyermek", "jatekos", "jatekosneve", "sportolo", "sportoloneve"],
   korosztaly: ["korosztaly"],
   idoszak: ["idoszak", "honap", "targyhonap"],
   osszeg: ["osszeg", "brutto", "bruttoosszeg", "fizetendo"],
