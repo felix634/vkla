@@ -225,11 +225,11 @@ export default function Header() {
               </div>
               <div className="flex gap-3 mt-4">
                 <Link
-                  href="/tagdij"
+                  href="/kepzesi-dij"
                   onClick={() => setOpen(false)}
                   className="flex-1 text-center bg-vasasRed text-white px-4 py-2.5 rounded-sm font-semibold text-sm"
                 >
-                  Tagdíj fizetés
+                  Képzési díj
                 </Link>
                 <Link
                   href="/kapcsolat#probaedzes"

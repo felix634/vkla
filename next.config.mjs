@@ -18,6 +18,12 @@ const nextConfig = {
     // A Sanity Studio styled-components-et használ
     styledComponents: true,
   },
+  async redirects() {
+    return [
+      // A klub kérésére „tagdíj” helyett „képzési díj” (2026.09.23).
+      { source: "/tagdij", destination: "/kepzesi-dij", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

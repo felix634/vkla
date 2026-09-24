@@ -15,7 +15,7 @@ const STATIC_ROUTES = [
   "/letesitmenyek",
   "/szponzoracio",
   "/kapcsolat",
-  "/tagdij",
+  "/kepzesi-dij",
   "/tao",
   "/karrier",
   "/dokumentumok",

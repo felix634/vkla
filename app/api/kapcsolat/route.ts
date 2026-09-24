@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { emailEnabled, sendFormEmail, sorok } from "../../lib/email";
+import { emailEnabled, sendEmail, sorok } from "../../lib/email";
 import { getBeallitasok } from "../../lib/sanity/tartalom";
 
 // Általános kapcsolatfelvételi űrlap → e-mail a központi címre.
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
   const cimzett = b?.email ?? "info@vkla.hu";
 
   try {
-    await sendFormEmail({
+    await sendEmail({
       to: cimzett,
       subject: `Weboldal-megkeresés: ${targy}`,
       replyTo: email,

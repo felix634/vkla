@@ -57,9 +57,9 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
             )}
           </div>
           <div className="hidden md:flex items-center gap-2 pl-4 border-l border-white/15">
-            <Link href="/tagdij" className="text-white/70 hover:text-white transition">Bejelentkezés</Link>
+            <Link href="/belepes" className="text-white/70 hover:text-white transition">Szülői fiók</Link>
             <span className="text-white/30">/</span>
-            <Link href="/tagdij" className="bg-vasasRed text-white px-3 py-1 rounded-sm font-semibold hover:bg-vasasRedDark transition">Tagdíj fizetés</Link>
+            <Link href="/kepzesi-dij" className="bg-vasasRed text-white px-3 py-1 rounded-sm font-semibold hover:bg-vasasRedDark transition">Képzési díj</Link>
           </div>
         </div>
       </div>

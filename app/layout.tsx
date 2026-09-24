@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "A Vasas Kubala Akadémia hivatalos oldala — hírek, csapatok, edzői stáb, programok, létesítmények, tagdíjfizetés és szponzoráció.",
+    "A Vasas Kubala Akadémia hivatalos oldala — hírek, csapatok, edzői stáb, programok, létesítmények, képzési díj és szponzoráció.",
   openGraph: {
     siteName: "Vasas Kubala Akadémia",
     locale: "hu_HU",

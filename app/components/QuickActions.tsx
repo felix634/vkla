@@ -5,10 +5,10 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const ACTIONS = [
   {
-    title: "Tagdíj fizetés",
-    desc: "Szülői regisztráció és a havi tagdíj kényelmes online rendezése.",
+    title: "Képzési díj",
+    desc: "Szülői fiók: a havi képzési díj számlái egy helyen, e-mailes értesítéssel.",
     badge: "Új",
-    href: "/tagdij",
+    href: "/kepzesi-dij",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="2" y="5" width="20" height="14" rx="2" />

@@ -92,7 +92,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   {
     title: "Ügyintézés",
     links: [
-      { label: "Tagdíj fizetés", href: "/tagdij" },
+      { label: "Képzési díj", href: "/kepzesi-dij" },
       { label: "Próbaedzés", href: "/kapcsolat#probaedzes" },
       { label: "TAO", href: "/tao" },
       { label: "Dokumentumok", href: "/dokumentumok" },

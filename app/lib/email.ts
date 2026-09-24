@@ -1,4 +1,5 @@
-// Űrlap-értesítő e-mailek a Resend REST API-n keresztül (SDK nélkül).
+// E-mailek (űrlap-értesítők, belépési linkek, számlák) a Resend REST API-n
+// keresztül (SDK nélkül).
 // RESEND_API_KEY nélkül a küldés kikapcsolt állapotban van — az űrlapok
 // gombja inaktív, az API 503-at ad. A FORMS_TO_OVERRIDE env-vel (staging)
 // minden levél egyetlen címre irányítható át, hogy teszt közben ne az
@@ -30,33 +31,54 @@ export function sorok(parok: [string, string | undefined][]): string {
   return `<table style="border-collapse:collapse">${tr}</table>`;
 }
 
-export async function sendFormEmail({
+// Egyszerű, levélkliens-barát gomb (táblázat nélkül is jól jelenik meg).
+export function gomb(href: string, felirat: string): string {
+  return (
+    `<p style="margin:24px 0"><a href="${esc(href)}" style="display:inline-block;background:#123274;color:#ffffff;` +
+    `font-weight:bold;font-size:14px;text-decoration:none;padding:12px 22px;border-radius:6px">${esc(felirat)}</a></p>`
+  );
+}
+
+export type Csatolmany = { filename: string; content: string /* base64 */ };
+
+export async function sendEmail({
   to,
   subject,
   html,
   replyTo,
+  attachments,
 }: {
   to: string;
   subject: string;
   html: string;
   replyTo?: string;
+  attachments?: Csatolmany[];
 }): Promise<void> {
   if (!API_KEY) throw new Error("RESEND_API_KEY nincs beállítva");
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: FROM,
-      to: [OVERRIDE ?? to],
-      subject: OVERRIDE ? `[teszt → ${to}] ${subject}` : subject,
-      html,
-      ...(replyTo ? { reply_to: replyTo } : {}),
-    }),
+  const body = JSON.stringify({
+    from: FROM,
+    to: [OVERRIDE ?? to],
+    subject: OVERRIDE ? `[teszt → ${to}] ${subject}` : subject,
+    html,
+    ...(replyTo ? { reply_to: replyTo } : {}),
+    ...(attachments?.length ? { attachments } : {}),
   });
-  if (!res.ok) {
+  // Tömeges számlaküldésnél a Resend másodpercenkénti korlátja (429) elérhető —
+  // ilyenkor rövid várakozás után újrapróbáljuk.
+  for (let probalkozas = 0; ; probalkozas++) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body,
+    });
+    if (res.ok) return;
+    if (res.status === 429 && probalkozas < 3) {
+      await new Promise((r) => setTimeout(r, 1100 * (probalkozas + 1)));
+      continue;
+    }
     const hiba = await res.text().catch(() => "");
     throw new Error(`Resend ${res.status}: ${hiba.slice(0, 300)}`);
   }
