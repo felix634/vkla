@@ -25,6 +25,7 @@ export default async function KapcsolatPage() {
   // (Berkes Máté, 2026.09.08).
   const CONTACTS = [
     { label: "Cím", value: b?.address ?? "1139 Budapest, Fáy utca 58.", icon: ICONS.cim },
+    ...(b?.irodaCim ? [{ label: "Központi iroda", value: b.irodaCim, icon: ICONS.cim }] : []),
     { label: "Telefon", value: b?.phone ?? "+36 20 378 4880", icon: ICONS.telefon },
     { label: "E-mail", value: b?.email ?? "info@vkla.hu", icon: ICONS.email },
   ];
@@ -45,7 +46,7 @@ export default async function KapcsolatPage() {
       {/* Elérhetőségek */}
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-14">
-          <div className="grid sm:grid-cols-3 gap-5">
+          <div className={`grid gap-5 ${CONTACTS.length > 3 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3"}`}>
             {CONTACTS.map((c) => (
               <div key={c.label} className="rounded-md border border-gray-100 bg-cream p-6">
                 <div className="w-11 h-11 rounded-md bg-navy text-gold flex items-center justify-center mb-4">

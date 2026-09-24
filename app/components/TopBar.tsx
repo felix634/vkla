@@ -8,6 +8,7 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
   const phone = b?.phone ?? "+36 20 378 4880";
   const email = b?.email ?? "info@vkla.hu";
   const address = b?.address ?? "Budapest, Fáy utca 58.";
+  const iroda = b?.irodaCim ?? null;
   const vasasFc = b?.vasasFcUrl ?? EXTERNAL.vasasFc;
   const socials = [
     { key: "fb", url: b?.facebook ?? null, path: "M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" },
@@ -34,6 +35,7 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
             {email}
           </a>
           <span className="hidden lg:inline text-white/50">{address}</span>
+          {iroda && <span className="hidden xl:inline text-white/50">Központi iroda: {iroda}</span>}
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-3 pr-4 mr-1 border-r border-white/15">

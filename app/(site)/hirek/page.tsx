@@ -3,6 +3,7 @@ import PageHero from "../../components/site/PageHero";
 import HirekList from "../../components/HirekList";
 import { getHirek, HIREK_OLDALMERET } from "../../lib/sanity/hirek";
 import { sanityEnabled } from "../../lib/sanity/client";
+import { getBeallitasok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "Hírek — Vasas Kubala Akadémia",
@@ -15,7 +16,10 @@ export default async function HirekPage({
 }) {
   const category = searchParams.kategoria ?? "";
   const page = Math.max(1, Number(searchParams.oldal) || 1);
-  const { items, total } = await getHirek({ category, page });
+  // A klub kérésére a lista csak az aktuális szezon híreit mutatja (Studio:
+  // Oldal beállítások → Hírlista kezdő dátuma); a régebbiek linkkel elérhetők.
+  const b = await getBeallitasok();
+  const { items, total } = await getHirek({ category, page, since: b?.hirekKezdete });
 
   return (
     <main className="min-h-screen">

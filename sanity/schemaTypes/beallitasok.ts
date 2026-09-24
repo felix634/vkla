@@ -14,6 +14,14 @@ export default defineType({
       type: "string",
     }),
     defineField({ name: "address", title: "Cím", type: "string" }),
+    defineField({ name: "irodaCim", title: "Központi iroda címe", type: "string" }),
+    defineField({
+      name: "hirekKezdete",
+      title: "Hírlista kezdő dátuma",
+      type: "date",
+      description:
+        "A Hírek oldalon csak az ettől a naptól megjelent hírek látszanak (pl. az aktuális szezon kezdete). A régebbi hírek linkkel továbbra is elérhetők. Üresen hagyva minden hír megjelenik.",
+    }),
     defineField({ name: "officeHours", title: "Iroda nyitvatartás", type: "string" }),
     defineField({ name: "facebook", title: "Facebook link", type: "url" }),
     defineField({ name: "instagram", title: "Instagram link", type: "url" }),

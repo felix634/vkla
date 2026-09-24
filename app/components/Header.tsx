@@ -97,7 +97,7 @@ export default function Header() {
             <div key={item.label} className="relative group">
               <NavAnchor
                 item={item}
-                className={`px-3 py-2 text-sm font-semibold transition-colors flex items-center gap-1 ${
+                className={`px-2.5 py-2 text-sm font-semibold transition-colors flex items-center gap-1 ${
                   active(item.href) ? "text-vasasRed" : "text-navy hover:text-vasasRed"
                 }`}
               >
@@ -110,7 +110,7 @@ export default function Header() {
 
           {/* Továbbiak */}
           <div className="relative group">
-            <button className="px-3 py-2 text-sm font-semibold text-navy hover:text-vasasRed transition-colors flex items-center gap-1">
+            <button className="px-2.5 py-2 text-sm font-semibold text-navy hover:text-vasasRed transition-colors flex items-center gap-1">
               Továbbiak
               <Chevron className="group-hover:rotate-180 transition-transform duration-300" />
             </button>

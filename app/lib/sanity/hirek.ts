@@ -43,8 +43,11 @@ const PLACEHOLDER_HIREK: HirListItem[] = Array.from({ length: 9 }, (_, i) => ({
 export async function getHirek(opts: {
   category?: string;
   page?: number;
+  /** Csak az ettől a naptól (YYYY-MM-DD) megjelent hírek — a régebbiek linkkel elérhetők maradnak. */
+  since?: string | null;
 }): Promise<{ items: HirListItem[]; total: number }> {
   const category = opts.category ?? "";
+  const since = opts.since ?? "";
   const page = Math.max(1, opts.page ?? 1);
 
   if (!sanityEnabled || !client) {
@@ -57,13 +60,13 @@ export async function getHirek(opts: {
 
   const from = (page - 1) * HIREK_OLDALMERET;
   const to = from + HIREK_OLDALMERET;
-  const filter = `_type == "hir" && defined(slug.current) && ($category == "" || category == $category)`;
+  const filter = `_type == "hir" && defined(slug.current) && ($category == "" || category == $category) && ($since == "" || publishedAt >= $since)`;
 
   // A statikus archívum a CMS-nél régebbi cikkeket tartalmazza; a lista a
   // CMS-találatok után az archívumot folytatja. Ami a CMS-ben is megvan, azt
   // az archívum nem duplikálja.
   const [sanityTotal, sanitySlugs, archivIndex] = await Promise.all([
-    client.fetch<number>(`count(*[${filter}])`, { category }, { next: { revalidate: 300 } }),
+    client.fetch<number>(`count(*[${filter}])`, { category, since }, { next: { revalidate: 300 } }),
     client.fetch<string[]>(
       `*[_type == "hir" && defined(slug.current)].slug.current`,
       {},
@@ -75,6 +78,7 @@ export async function getHirek(opts: {
   const archiv = archivIndex.filter(
     (a) =>
       (category === "" || a.category === category) &&
+      (since === "" || (a.publishedAt ?? "") >= since) &&
       !cmsSlugs.has(a.slug ?? "")
   );
   const total = sanityTotal + archiv.length;
@@ -84,7 +88,7 @@ export async function getHirek(opts: {
     const sTo = Math.min(to, sanityTotal);
     items = await client.fetch<HirListItem[]>(
       `*[${filter}] | order(publishedAt desc) [$from...$to]{ ${LIST_FIELDS} }`,
-      { category, from, to: sTo },
+      { category, since, from, to: sTo },
       { next: { revalidate: 300 } }
     );
   }
