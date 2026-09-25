@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "../../components/site/PageHero";
-import { BANKSZAMLA, KEDVEZMENYEZETT } from "../../lib/fiok/format";
+import { BANKSZAMLA, KEDVEZMENYEZETT, ft } from "../../lib/fiok/format";
+import { getBeallitasok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "Képzési díj — Vasas Kubala Akadémia",
@@ -33,7 +34,15 @@ const STEPS = [
   },
 ];
 
-export default function KepzesiDijPage() {
+export default async function KepzesiDijPage() {
+  // Az összegek a Studióból jönnek (Oldal beállítások); a klub 2026.09.25-én
+  // jóváhagyta a megjelenítésüket.
+  const b = await getBeallitasok();
+  const dijak = [
+    { cimke: "Fiú korosztályok", osszeg: b?.kepzesiDijFiu ?? null },
+    { cimke: "Leány korosztályok", osszeg: b?.kepzesiDijLany ?? null },
+  ].filter((d): d is { cimke: string; osszeg: number } => d.osszeg != null);
+
   return (
     <main className="min-h-screen">
       <PageHero
@@ -69,6 +78,26 @@ export default function KepzesiDijPage() {
               </div>
             ))}
           </div>
+
+          {dijak.length > 0 && (
+            <div className="mt-8 rounded-md bg-navy text-white p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-5 md:gap-10">
+              <div>
+                <div className="text-xs uppercase tracking-widest text-gold-light mb-1">Havi képzési díj</div>
+                <p className="text-sm text-white/60">Egész évben, minden hónapban, a képzési szerződés alapján.</p>
+              </div>
+              <div className="flex flex-wrap gap-x-10 gap-y-4 md:ml-auto">
+                {dijak.map((d) => (
+                  <div key={d.cimke}>
+                    <div className="text-sm text-white/60">{d.cimke}</div>
+                    <div className="font-display font-black text-3xl">
+                      {ft(d.osszeg)}
+                      <span className="text-base font-bold text-white/50"> / hó</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

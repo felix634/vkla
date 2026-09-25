@@ -148,6 +148,8 @@ export type BeallitasokData = {
   irodaCim: string | null;
   hirekKezdete: string | null; // YYYY-MM-DD
   officeHours: string | null;
+  kepzesiDijFiu: number | null;
+  kepzesiDijLany: number | null;
   facebook: string | null;
   instagram: string | null;
   youtubeChannel: string | null;
@@ -163,7 +165,7 @@ export async function getBeallitasok(): Promise<BeallitasokData | null> {
   if (!sanityEnabled || !client) return null;
   return client.fetch(
     `*[_type == "beallitasok" && _id == "beallitasok"][0]{
-      phone, email, probaedzesEmail, address, irodaCim, hirekKezdete, officeHours,
+      phone, email, probaedzesEmail, address, irodaCim, hirekKezdete, officeHours, kepzesiDijFiu, kepzesiDijLany,
       facebook, instagram, youtubeChannel, twitter, tiktok,
       webshopUrl, vasasFcUrl, vasasFcIIUrl
     }`,

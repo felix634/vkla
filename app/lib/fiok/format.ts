@@ -8,8 +8,10 @@ const HONAPOK = [
   "július", "augusztus", "szeptember", "október", "november", "december",
 ];
 
+// Ezres tagolás négyjegyű összegeknél is (7 500 Ft), nem törő szóközzel —
+// a hu-HU locale a négyjegyűeket nem tagolná, ami 15 000 mellett következetlen.
 export function ft(n: number): string {
-  return `${n.toLocaleString("hu-HU")} Ft`;
+  return `${String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} Ft`;
 }
 
 // "2026-10-31" -> "2026. október 31."
