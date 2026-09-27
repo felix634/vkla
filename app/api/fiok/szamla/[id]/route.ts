@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { get } from "@vercel/blob";
-import { fiokEnabled, szamlaById } from "../../../../lib/fiok/db";
+import { fiokEnabled, szamlaById, szamlaLathato } from "../../../../lib/fiok/db";
 import { aktualisEmail, isAdmin } from "../../../../lib/fiok/auth";
 
-// Számla-PDF letöltése a privát Blob-tárból. Csak a számla címzettje
-// (vagy a pénzügy) érheti el — a jogosultság-ellenőrzés itt, közvetlenül a
+// Számla-PDF letöltése a privát Blob-tárból. Csak a gyermekhez rendelt szülők
+// (vagy a pénzügy) érhetik el — a jogosultság-ellenőrzés itt, közvetlenül a
 // get() mellett történik, nem middleware-ben.
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
   if (!fiokEnabled) return new NextResponse("Nem elérhető", { status: 503 });
@@ -13,7 +13,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   if (!email) return new NextResponse("Bejelentkezés szükséges", { status: 401 });
 
   const sz = await szamlaById(params.id);
-  if (!sz || (sz.email !== email && !isAdmin(email))) {
+  if (!sz || (!isAdmin(email) && !(await szamlaLathato(email, sz)))) {
     return new NextResponse("Nem található", { status: 404 });
   }
 

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import PageHero from "../../../components/site/PageHero";
-import KilepesGomb from "../../../components/fiok/KilepesGomb";
+import AdminFejlec from "../../../components/fiok/AdminFejlec";
 import SzamlaFeltolto from "../../../components/fiok/SzamlaFeltolto";
 import SzamlaMuveletek from "../../../components/fiok/SzamlaMuveletek";
 import { emailEnabled } from "../../../lib/email";
@@ -30,35 +28,25 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
   const szamlak = (
     q
       ? await db.query(
-          `SELECT ${SZAMLA_MEZOK} FROM szamla
-           WHERE email ILIKE $1 OR szamlaszam ILIKE $1 OR gyermek_nev ILIKE $1 OR vevo_nev ILIKE $1
-           ORDER BY created_at DESC LIMIT 200`,
+          `SELECT ${SZAMLA_MEZOK} FROM szamla s
+           WHERE s.szamlaszam ILIKE $1 OR s.gyermek_nev ILIKE $1
+              OR s.gyermek_id IN (SELECT gyermek_id FROM gyermek_email WHERE email ILIKE $1)
+           ORDER BY s.created_at DESC LIMIT 200`,
           [`%${q}%`]
         )
-      : await db.query(`SELECT ${SZAMLA_MEZOK} FROM szamla ORDER BY created_at DESC LIMIT 100`)
+      : await db.query(`SELECT ${SZAMLA_MEZOK} FROM szamla s ORDER BY s.created_at DESC LIMIT 100`)
   ) as Szamla[];
   const [stat] = (await db.query(
-    `SELECT count(*)::int AS osszes,
-            count(*) FILTER (WHERE ertesitve_at IS NULL)::int AS nincs_ertesitve,
-            count(DISTINCT email)::int AS szulok
-     FROM szamla`
-  )) as { osszes: number; nincs_ertesitve: number; szulok: number }[];
+    `SELECT (SELECT count(*) FROM szamla)::int AS osszes,
+            (SELECT count(*) FROM szamla WHERE ertesitve_at IS NULL)::int AS nincs_ertesitve,
+            (SELECT count(*) FROM gyermek)::int AS gyermekek`
+  )) as { osszes: number; nincs_ertesitve: number; gyermekek: number }[];
 
   return (
     <main className="min-h-screen">
-      <PageHero
-        breadcrumb="Számlák kezelése"
-        eyebrow="Pénzügy"
-        title="Számlák kezelése"
-        subtitle={`${stat.osszes} számla · ${stat.szulok} szülő · ${stat.nincs_ertesitve} értesítés nélkül`}
-        aside={
-          <div className="flex items-center gap-3">
-            <Link href="/fiok" className="border border-white/25 hover:bg-white/10 transition-colors text-white font-semibold px-4 py-2 rounded-md text-sm">
-              Saját fiók
-            </Link>
-            <KilepesGomb />
-          </div>
-        }
+      <AdminFejlec
+        aktiv="szamlak"
+        alcim={`${stat.osszes} számla · ${stat.gyermekek} gyermek a névjegyzékben · ${stat.nincs_ertesitve} értesítés nélkül`}
       />
 
       <section className="bg-cream">
@@ -74,7 +62,7 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
                 <input
                   name="q"
                   defaultValue={q}
-                  placeholder="E-mail, számlaszám, név…"
+                  placeholder="Számlaszám, gyermek, e-mail…"
                   className="rounded-md border border-gray-200 px-3 py-2 text-sm text-navy focus:outline-none focus:border-royal"
                 />
                 <button className="bg-navy hover:bg-royal transition-colors text-white font-semibold px-4 py-2 rounded-md text-sm">
@@ -90,7 +78,6 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
                   <thead className="text-left text-xs uppercase tracking-wider text-navy/55 border-b border-gray-100">
                     <tr>
                       <th className="py-2 pr-3">Számlaszám</th>
-                      <th className="py-2 pr-3">Szülő</th>
                       <th className="py-2 pr-3">Gyermek</th>
                       <th className="py-2 pr-3">Időszak</th>
                       <th className="py-2 pr-3 text-right">Összeg</th>
@@ -103,10 +90,6 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
                     {szamlak.map((sz) => (
                       <tr key={sz.id} className="align-top">
                         <td className="py-2.5 pr-3 whitespace-nowrap font-semibold text-navy">{sz.szamlaszam}</td>
-                        <td className="py-2.5 pr-3">
-                          <div className="text-navy">{sz.vevo_nev ?? "—"}</div>
-                          <div className="text-xs text-navy/50">{sz.email}</div>
-                        </td>
                         <td className="py-2.5 pr-3">{[sz.gyermek_nev, sz.korosztaly].filter(Boolean).join(" · ") || "—"}</td>
                         <td className="py-2.5 pr-3 whitespace-nowrap">{idoszak(sz.idoszak)}</td>
                         <td className="py-2.5 pr-3 text-right whitespace-nowrap">{ft(sz.osszeg)}</td>

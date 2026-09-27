@@ -1,49 +1,39 @@
 import { NextResponse } from "next/server";
-import { emailEnabled, sendEmail } from "../../../lib/email";
 import { fiokEnabled } from "../../../lib/fiok/db";
-import {
-  TulSokKeres,
-  ervenyesEmail,
-  normalizeEmail,
-  siteUrl,
-  ujBelepoLink,
-} from "../../../lib/fiok/auth";
-import { belepoLevel } from "../../../lib/fiok/levelek";
+import { belepes, normalizeEmail } from "../../../lib/fiok/auth";
 
-// Belépési link kérése: e-mail-cím -> egyszer használatos link levélben.
+// Belépés e-mail-címmel és jelszóval. 5 hibás próbálkozás után a fiók 15
+// percre zárol.
 export async function POST(req: Request) {
-  if (!fiokEnabled || !emailEnabled) {
+  if (!fiokEnabled) {
     return NextResponse.json({ error: "A szülői fiók hamarosan indul." }, { status: 503 });
   }
-
-  let body: { email?: string; website?: string };
+  let body: { email?: string; jelszo?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Hibás kérés." }, { status: 400 });
   }
-  if (body.website?.trim()) return NextResponse.json({ ok: true }); // honeypot
-
   const email = normalizeEmail(body.email ?? "");
-  if (!ervenyesEmail(email)) {
-    return NextResponse.json({ error: "Érvénytelen e-mail-cím." }, { status: 400 });
+  const jelszo = body.jelszo ?? "";
+  if (!email || !jelszo || jelszo.length > 200) {
+    return NextResponse.json({ error: "Add meg az e-mail-címed és a jelszavad." }, { status: 400 });
   }
 
-  try {
-    const link = await ujBelepoLink(email, siteUrl(req));
-    const level = belepoLevel(link);
-    await sendEmail({ to: email, ...level });
-  } catch (e) {
-    if (e instanceof TulSokKeres) {
-      return NextResponse.json(
-        { error: "Túl sok belépési kérés érkezett erre a címre. Próbáld újra 15 perc múlva." },
-        { status: 429 }
-      );
-    }
-    console.error("Belépési link hiba:", e);
+  const eredmeny = await belepes(email, jelszo);
+  if (eredmeny === "zarolva") {
     return NextResponse.json(
-      { error: "A belépési link elküldése nem sikerült. Próbáld újra később." },
-      { status: 500 }
+      { error: "Túl sok sikertelen próbálkozás. Próbáld újra 15 perc múlva, vagy állíts be új jelszót." },
+      { status: 429 }
+    );
+  }
+  if (eredmeny === "hibas") {
+    return NextResponse.json(
+      {
+        error:
+          "Hibás e-mail-cím vagy jelszó. Ha még nem állítottál be jelszót, használd a regisztrációs levél linkjét, vagy kérj újat az „Elfelejtett jelszó” oldalon.",
+      },
+      { status: 401 }
     );
   }
   return NextResponse.json({ ok: true });

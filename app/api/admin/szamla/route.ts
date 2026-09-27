@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { emailEnabled } from "../../../lib/email";
 import { SZAMLA_MEZOK, fiokEnabled, sql, type Szamla } from "../../../lib/fiok/db";
-import { aktualisEmail, ervenyesEmail, isAdmin, normalizeEmail, siteUrl } from "../../../lib/fiok/auth";
+import { aktualisEmail, isAdmin, siteUrl } from "../../../lib/fiok/auth";
+import { gyermekKeres } from "../../../lib/fiok/nevjegyzek";
 import { szamlaErtesites } from "../../../lib/fiok/szamlak";
 
-// Egy számla feltöltése (a pénzügyi felület soronként hívja, CSV-ből vagy
-// egyenként): PDF a privát Blob-tárba, adatok az adatbázisba, és kérésre
-// értesítő levél a szülőnek a PDF-fel csatolva.
+// Egy számla feltöltése (a pénzügyi felület soronként hívja, táblázatból vagy
+// egyenként): a számla a névjegyzék gyermekéhez párosul (vevőkód vagy név),
+// a PDF a privát Blob-tárba kerül, és kérésre értesítő levél megy a gyermekhez
+// rendelt összes szülői címre, a PDF-fel csatolva.
 
 const MAX_PDF = 4 * 1024 * 1024;
 const DATUM = /^\d{4}-\d{2}-\d{2}$/;
@@ -26,7 +28,8 @@ export async function POST(req: Request) {
   const mezo = (k: string) => String(fd.get(k) ?? "").trim() || null;
 
   const szamlaszam = mezo("szamlaszam");
-  const email = normalizeEmail(mezo("email") ?? "");
+  const gyermekNev = mezo("gyermek_nev");
+  const vevokod = mezo("vevokod");
   const osszeg = Number(String(mezo("osszeg") ?? "").replace(/[^\d]/g, ""));
   const kelt = mezo("kelt");
   const hatarido = mezo("hatarido");
@@ -34,7 +37,7 @@ export async function POST(req: Request) {
 
   const hibak: string[] = [];
   if (!szamlaszam || szamlaszam.length > 100) hibak.push("számlaszám");
-  if (!ervenyesEmail(email)) hibak.push("e-mail-cím");
+  if (!gyermekNev && !vevokod) hibak.push("gyermek neve vagy vevőkód");
   if (!Number.isInteger(osszeg) || osszeg <= 0) hibak.push("összeg");
   if (kelt && !DATUM.test(kelt)) hibak.push("kelt (ÉÉÉÉ-HH-NN)");
   if (hatarido && !DATUM.test(hatarido)) hibak.push("határidő (ÉÉÉÉ-HH-NN)");
@@ -42,6 +45,20 @@ export async function POST(req: Request) {
   if (hibak.length) {
     return NextResponse.json({ error: `Hiányzó vagy hibás: ${hibak.join(", ")}` }, { status: 400 });
   }
+
+  const talalat = await gyermekKeres(gyermekNev, vevokod);
+  if ("hiba" in talalat) {
+    return NextResponse.json(
+      {
+        error:
+          talalat.hiba === "tobb"
+            ? "Több azonos nevű gyermek van a névjegyzékben — adj meg vevőkódot."
+            : "Nincs ilyen gyermek a névjegyzékben — előbb vedd fel a Szülői névjegyzékbe.",
+      },
+      { status: 422 }
+    );
+  }
+  const gyermek = talalat.gyermek;
 
   const fajl = pdf as File;
   if (fajl.size > MAX_PDF) return NextResponse.json({ error: "A PDF túl nagy (max. 4 MB)." }, { status: 400 });
@@ -65,15 +82,15 @@ export async function POST(req: Request) {
   );
 
   const [sz] = (await db.query(
-    `INSERT INTO szamla (szamlaszam, email, vevo_nev, gyermek_nev, korosztaly, idoszak, osszeg, kelt, hatarido, pdf_pathname)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-     RETURNING ${SZAMLA_MEZOK}`,
+    `WITH uj AS (
+       INSERT INTO szamla (szamlaszam, gyermek_id, gyermek_nev, korosztaly, idoszak, osszeg, kelt, hatarido, pdf_pathname)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+     ) SELECT ${SZAMLA_MEZOK} FROM uj s`,
     [
       szamlaszam,
-      email,
-      mezo("vevo_nev"),
-      mezo("gyermek_nev"),
-      mezo("korosztaly"),
+      gyermek.id,
+      gyermek.nev,
+      gyermek.korosztaly ?? mezo("korosztaly"),
       idoszak,
       osszeg,
       kelt,
@@ -83,18 +100,22 @@ export async function POST(req: Request) {
   )) as Szamla[];
 
   let ertesitesHiba: string | null = null;
+  let cimzettek = 0;
   if (fd.get("ertesites") === "1") {
     if (!emailEnabled) {
       ertesitesHiba = "Az e-mail-küldés nincs bekapcsolva.";
     } else {
       try {
-        await szamlaErtesites(sz, siteUrl(req), bajtok);
+        cimzettek = await szamlaErtesites(sz, siteUrl(req), bajtok);
       } catch (e) {
-        console.error("Számla-értesítés hiba:", e);
-        ertesitesHiba = "A számla feltöltve, de az értesítő levél nem ment ki — később újraküldhető.";
+        ertesitesHiba =
+          e instanceof Error && e.message === "NINCS_CIM"
+            ? "Feltöltve, de a gyermekhez nincs szülői e-mail-cím a névjegyzékben."
+            : "Feltöltve, de az értesítő levél nem ment ki — később újraküldhető.";
+        if (!(e instanceof Error && e.message === "NINCS_CIM")) console.error("Számla-értesítés hiba:", e);
       }
     }
   }
 
-  return NextResponse.json({ ok: true, id: sz.id, ertesitesHiba });
+  return NextResponse.json({ ok: true, id: sz.id, gyermek: gyermek.nev, cimzettek, ertesitesHiba });
 }

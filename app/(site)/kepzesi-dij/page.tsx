@@ -25,7 +25,7 @@ const STEPS = [
   {
     n: "3",
     title: "Szülői fiók",
-    desc: "Belépés jelszó nélkül, az e-mail-címeddel: minden gyermeked számlája egy helyen.",
+    desc: "Regisztráció után e-mail-címmel és jelszóval: minden gyermeked számlája egy helyen, mindkét szülőnek.",
   },
   {
     n: "4",
@@ -123,16 +123,22 @@ export default async function KepzesiDijPage() {
             <div className="relative h-full flex flex-col">
               <h3 className="font-display font-bold text-lg mb-3">Szülői fiók</h3>
               <p className="text-sm text-white/70 leading-relaxed mb-6">
-                Külön regisztráció nem kell: az az e-mail-cím a belépési azonosítód, amelyre a
-                számlákat kapod. Belépéskor egy egyszer használatos linket küldünk erre a címre.
-                Egy fiókban az összes gyermeked számlája megjelenik.
+                Regisztrálj azzal az e-mail-címmel, amelyet a klubnál megadtál. Mindkét szülő
+                külön fiókot hozhat létre; a fiókban azoknak a gyermekeknek a számlái jelennek
+                meg, akikhez a klub a címedet hozzárendelte.
               </p>
-              <div className="mt-auto">
+              <div className="mt-auto flex flex-wrap gap-3">
                 <Link
                   href="/belepes"
                   className="inline-block bg-vasasRed hover:bg-vasasRedDark transition-colors text-white font-bold px-5 py-3 rounded-md text-sm"
                 >
                   Belépés
+                </Link>
+                <Link
+                  href="/regisztracio"
+                  className="inline-block border border-white/30 hover:bg-white/10 transition-colors text-white font-bold px-5 py-3 rounded-md text-sm"
+                >
+                  Regisztráció
                 </Link>
               </div>
             </div>

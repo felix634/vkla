@@ -8,26 +8,54 @@ const keret = (tartalom: string) =>
   tartalom +
   `<p style="color:#94a3b8;font-size:12px;margin-top:28px">Vasas Kubala Akadémia · 1139 Budapest, Fáy utca 58.</p></div>`;
 
-export function belepoLevel(link: string): { subject: string; html: string } {
+const labjegy = (szoveg: string) => `<p style="color:#64748b;font-size:13px">${szoveg}</p>`;
+
+// Regisztráció befejezése / új jelszó / már létező fiók — mindhárom egy
+// jelszó-beállító linket küld, csak a szöveg más.
+export function jelszoLevel(
+  tipus: "regisztracio" | "elfelejtett" | "marVanFiok",
+  link: string,
+  ervenyes: string
+): { subject: string; html: string } {
+  const szoveg = {
+    regisztracio: {
+      subject: "VKLA szülői fiók — regisztráció befejezése",
+      cim: "Már csak a jelszavad hiányzik",
+      bev: "Köszönjük a regisztrációt! Az alábbi gombra kattintva add meg a jelszavadat, és utána beléphetsz a Vasas Kubala Akadémia szülői fiókjába.",
+      gomb: "Jelszó beállítása",
+    },
+    elfelejtett: {
+      subject: "VKLA szülői fiók — új jelszó beállítása",
+      cim: "Új jelszó beállítása",
+      bev: "Az alábbi gombra kattintva adhatsz meg új jelszót a szülői fiókodhoz.",
+      gomb: "Új jelszó beállítása",
+    },
+    marVanFiok: {
+      subject: "VKLA szülői fiók — már van fiókod",
+      cim: "Ezzel a címmel már van fiókod",
+      bev: "Valaki (remélhetőleg te) regisztrálni próbált ezzel az e-mail-címmel, de már van szülői fiókod. Ha elfelejtetted a jelszavad, az alábbi gombra kattintva újat állíthatsz be.",
+      gomb: "Új jelszó beállítása",
+    },
+  }[tipus];
   return {
-    subject: "Belépés a VKLA szülői fiókba",
+    subject: szoveg.subject,
     html: keret(
-      `<h2 style="font-size:18px;margin:0 0 12px">Belépés a szülői fiókba</h2>` +
-        `<p>Az alábbi gombra kattintva léphetsz be a Vasas Kubala Akadémia szülői fiókjába, ahol a képzési díj számláidat találod.</p>` +
-        gomb(link, "Belépés a fiókba") +
-        `<p style="color:#64748b;font-size:13px">A link 30 percig érvényes, és egyszer használható. Ha nem te kérted, nyugodtan hagyd figyelmen kívül ezt a levelet.</p>`
+      `<h2 style="font-size:18px;margin:0 0 12px">${szoveg.cim}</h2>` +
+        `<p>${szoveg.bev}</p>` +
+        gomb(link, szoveg.gomb) +
+        labjegy(`A link ${ervenyes} érvényes, és egyszer használható. Ha nem te kérted, nyugodtan hagyd figyelmen kívül ezt a levelet.`)
     ),
   };
 }
 
-export function szamlaLevel(sz: Szamla, fiokUrl: string): { subject: string; html: string } {
+export function szamlaLevel(sz: Szamla, alapUrl: string): { subject: string; html: string } {
   const kinek = sz.gyermek_nev ? ` (${sz.gyermek_nev})` : "";
   return {
     subject: `Képzési díj számla — ${idoszak(sz.idoszak)}${kinek}`,
     html: keret(
       `<h2 style="font-size:18px;margin:0 0 12px">Új számla érkezett</h2>` +
-        `<p>Kedves ${esc(sz.vevo_nev ?? "Szülő")}!</p>` +
-        `<p>Elkészült a képzési díjról szóló számla. A számlát csatolva küldjük, és a szülői fiókodban is bármikor megtalálod.</p>` +
+        `<p>Kedves Szülő!</p>` +
+        `<p>Elkészült a képzési díjról szóló számla. A számlát csatolva küldjük, és a szülői fiókban is bármikor megtalálod.</p>` +
         sorok([
           ["Számlaszám", sz.szamlaszam],
           ["Gyermek", [sz.gyermek_nev, sz.korosztaly].filter(Boolean).join(" · ") || undefined],
@@ -37,7 +65,10 @@ export function szamlaLevel(sz: Szamla, fiokUrl: string): { subject: string; htm
         ]) +
         `<p style="margin-top:18px"><strong>Befizetés átutalással:</strong> ${esc(KEDVEZMENYEZETT)}, ${esc(BANKSZAMLA)}<br/>` +
         `<span style="color:#64748b">Közlemény: ${esc(kozlemeny(sz))}</span></p>` +
-        gomb(fiokUrl, "Szülői fiók megnyitása")
+        gomb(`${alapUrl}/fiok`, "Szülői fiók megnyitása") +
+        labjegy(
+          `Még nincs fiókod? <a href="${esc(`${alapUrl}/regisztracio`)}" style="color:#123274">Regisztrálj ezzel az e-mail-címmel</a>, és minden számlád egy helyen lesz.`
+        )
     ),
   };
 }

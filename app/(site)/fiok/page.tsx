@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import PageHero from "../../components/site/PageHero";
 import KilepesGomb from "../../components/fiok/KilepesGomb";
 import FizetesGomb from "../../components/fiok/FizetesGomb";
-import { fiokEnabled, szuloSzamlai, type Szamla } from "../../lib/fiok/db";
+import { fiokEnabled, sql, szuloGyermekei, szuloSzamlai, type Szamla } from "../../lib/fiok/db";
 import { aktualisEmail, isAdmin } from "../../lib/fiok/auth";
 import { BANKSZAMLA, KEDVEZMENYEZETT, datum, ft, idoszak, kozlemeny } from "../../lib/fiok/format";
 import { kartyasFizetes } from "../../lib/fiok/stripe";
@@ -41,22 +41,22 @@ export default async function FiokPage({ searchParams }: { searchParams: { fizet
   const email = await aktualisEmail();
   if (!email) redirect("/belepes");
 
-  const szamlak = await szuloSzamlai(email);
-  const nev = szamlak.find((s) => s.vevo_nev)?.vevo_nev ?? null;
+  // A gyermekek a pénzügy által vezetett névjegyzékből jönnek: azok, akikhez
+  // ennek a szülőnek az e-mail-címe hozzá van rendelve.
+  const [gyermekek, szamlak, szulo] = await Promise.all([
+    szuloGyermekei(email),
+    szuloSzamlai(email),
+    sql().query(`SELECT nev FROM szulo WHERE email = $1`, [email]),
+  ]);
+  const nev = (szulo[0]?.nev as string | null | undefined) ?? null;
   const ma = new Date().toISOString().slice(0, 10);
-
-  // A gyermekek a számlákból állnak össze (a legfrissebb korosztállyal).
-  const gyermekek = new Map<string, string | null>();
-  for (const s of szamlak) {
-    if (s.gyermek_nev && !gyermekek.has(s.gyermek_nev)) gyermekek.set(s.gyermek_nev, s.korosztaly);
-  }
 
   return (
     <main className="min-h-screen">
       <PageHero
         breadcrumb="Szülői fiók"
         eyebrow="Szülői fiók"
-        title={nev ?? "Üdvözlünk!"}
+        title={nev ?? "Szülői fiók"}
         subtitle={email}
         aside={
           <div className="flex items-center gap-3">
@@ -68,6 +68,12 @@ export default async function FiokPage({ searchParams }: { searchParams: { fizet
                 Számlák kezelése
               </Link>
             )}
+            <Link
+              href="/elfelejtett-jelszo"
+              className="border border-white/25 hover:bg-white/10 transition-colors text-white font-semibold px-4 py-2 rounded-md text-sm"
+            >
+              Jelszó módosítása
+            </Link>
             <KilepesGomb />
           </div>
         }
@@ -81,12 +87,12 @@ export default async function FiokPage({ searchParams }: { searchParams: { fizet
               <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
               <div className="relative">
                 <div className="text-xs uppercase tracking-widest text-white/50 mb-3">Gyermek(ek)</div>
-                {gyermekek.size ? (
+                {gyermekek.length ? (
                   <div className="space-y-2.5">
-                    {[...gyermekek].map(([gy, kor]) => (
-                      <div key={gy} className="flex items-center gap-3 rounded-md bg-white/5 border border-white/10 px-3 py-2.5">
+                    {gyermekek.map((gy) => (
+                      <div key={gy.id} className="flex items-center gap-3 rounded-md bg-white/5 border border-white/10 px-3 py-2.5">
                         <span className="h-8 w-8 rounded-full bg-vasasRed/80 flex items-center justify-center text-xs font-bold">
-                          {gy
+                          {gy.nev
                             .split(/\s+/)
                             .map((r) => r[0])
                             .slice(0, 2)
@@ -94,14 +100,17 @@ export default async function FiokPage({ searchParams }: { searchParams: { fizet
                             .toUpperCase()}
                         </span>
                         <span className="text-sm">
-                          {gy}
-                          {kor && <span className="text-white/50"> · {kor}</span>}
+                          {gy.nev}
+                          {gy.korosztaly && <span className="text-white/50"> · {gy.korosztaly}</span>}
                         </span>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-white/60">Az első számlával együtt jelennek meg.</p>
+                  <p className="text-sm text-white/60 leading-relaxed">
+                    A címedhez még nincs gyermek rendelve. Kérjük, jelezd a klub pénzügyi ügyintézőjének,
+                    hogy melyik gyermekedhez tartozol, és azt is, melyik e-mail-címmel regisztráltál.
+                  </p>
                 )}
               </div>
             </div>
@@ -128,9 +137,9 @@ export default async function FiokPage({ searchParams }: { searchParams: { fizet
               <h2 className="font-display font-bold text-xl text-navy mb-4">Számlák</h2>
               {szamlak.length === 0 ? (
                 <p className="text-sm text-navy/60 leading-relaxed">
-                  Ehhez az e-mail-címhez még nem érkezett számla. A számlákat arra a címre
-                  küldjük, amelyet a képzési szerződésben megadtál — ha több címet használsz,
-                  lépj be azzal.
+                  {gyermekek.length
+                    ? "Még nem érkezett számla. Az új számlákról e-mailt is küldünk."
+                    : "A számlák akkor jelennek meg, ha a klub a címedet hozzárendelte a gyermekedhez."}
                 </p>
               ) : (
                 <div className="divide-y divide-gray-100">

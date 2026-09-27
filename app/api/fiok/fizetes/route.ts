@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fiokEnabled, szamlaById } from "../../../lib/fiok/db";
+import { fiokEnabled, szamlaById, szamlaLathato } from "../../../lib/fiok/db";
 import { aktualisEmail, siteUrl } from "../../../lib/fiok/auth";
 import { kartyasFizetes, stripe } from "../../../lib/fiok/stripe";
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Hibás kérés." }, { status: 400 });
   }
   const sz = await szamlaById(id);
-  if (!sz || sz.email !== email) return NextResponse.json({ error: "Nem található." }, { status: 404 });
+  if (!sz || !(await szamlaLathato(email, sz))) return NextResponse.json({ error: "Nem található." }, { status: 404 });
   if (sz.fizetve_at) return NextResponse.json({ error: "Ez a számla már ki van fizetve." }, { status: 409 });
 
   const alap = siteUrl(req);

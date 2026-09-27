@@ -29,6 +29,12 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     try {
       await szamlaErtesites(sz, siteUrl(req));
     } catch (e) {
+      if (e instanceof Error && e.message === "NINCS_CIM") {
+        return NextResponse.json(
+          { error: "A gyermekhez nincs szülői e-mail-cím a névjegyzékben." },
+          { status: 422 }
+        );
+      }
       console.error("Újraküldési hiba:", e);
       return NextResponse.json({ error: "A levél elküldése nem sikerült." }, { status: 500 });
     }
