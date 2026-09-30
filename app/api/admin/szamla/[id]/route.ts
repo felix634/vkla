@@ -5,6 +5,9 @@ import { fiokEnabled, sql, szamlaById } from "../../../../lib/fiok/db";
 import { aktualisEmail, isAdmin, siteUrl } from "../../../../lib/fiok/auth";
 import { szamlaErtesites } from "../../../../lib/fiok/szamlak";
 
+// A levélküldés átmeneti hibáknál újrapróbál — ehhez több idő kell az alapnál.
+export const maxDuration = 60;
+
 // Pénzügyi műveletek egy számlán: értesítő újraküldése, fizetettnek jelölés
 // (és visszavonása), illetve törlés (pl. téves feltöltés).
 

@@ -7,8 +7,21 @@ import { szamlaLevel } from "./levelek";
 
 // Értesítő levél a gyermekhez tartozó MINDEN szülői e-mail-címre, a számla
 // PDF-jével csatolva. Visszaadja, hány címre ment ki; ha legalább egyre
-// sikerült, rögzíti az értesítés időpontját.
+// sikerült, rögzíti az értesítés időpontját. Ha egyre sem, a számla
+// „levél pótlandó” jelölést kap, és a pénzügyi felületről később egy
+// gombnyomással újraküldhető (pl. ha a levelező napi korlátja betelt).
 export async function szamlaErtesites(sz: Szamla, alapUrl: string, pdf?: Uint8Array): Promise<number> {
+  try {
+    const elkuldve = await kuldes(sz, alapUrl, pdf);
+    await sql().query(`UPDATE szamla SET ertesitve_at = now(), ertesites_hiba_at = NULL WHERE id = $1`, [sz.id]);
+    return elkuldve;
+  } catch (e) {
+    await sql().query(`UPDATE szamla SET ertesites_hiba_at = now() WHERE id = $1`, [sz.id]);
+    throw e;
+  }
+}
+
+async function kuldes(sz: Szamla, alapUrl: string, pdf?: Uint8Array): Promise<number> {
   const cimek = await gyermekEmailjei(sz.gyermek_id);
   if (cimek.length === 0) throw new Error("NINCS_CIM");
 
@@ -22,7 +35,7 @@ export async function szamlaErtesites(sz: Szamla, alapUrl: string, pdf?: Uint8Ar
   const level = szamlaLevel(sz, alapUrl);
   const csatolmany = {
     filename: `szamla-${sz.szamlaszam.replace(/[^\w.-]+/g, "_")}.pdf`,
-    content: Buffer.from(tartalom).toString("base64"),
+    content: Buffer.from(tartalom),
   };
 
   let elkuldve = 0;
@@ -38,6 +51,5 @@ export async function szamlaErtesites(sz: Szamla, alapUrl: string, pdf?: Uint8Ar
     }
   }
   if (elkuldve === 0) throw utolsoHiba ?? new Error("A levél nem ment ki");
-  await sql().query(`UPDATE szamla SET ertesitve_at = now() WHERE id = $1`, [sz.id]);
   return elkuldve;
 }

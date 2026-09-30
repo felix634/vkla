@@ -8,3 +8,6 @@ out
 # scraper kimenet (nagy, nem verziozott)
 scraped/
 tsconfig.tsbuildinfo
+
+# helyi teszt-postafiók (scripts/teszt-postafiok.mjs)
+.teszt-levelek/

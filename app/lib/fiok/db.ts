@@ -30,6 +30,7 @@ export type Szamla = {
   pdf_pathname: string;
   fizetve_at: string | null;
   ertesitve_at: string | null;
+  ertesites_hiba_at: string | null;
   created_at: string;
 };
 
@@ -43,7 +44,7 @@ export type Gyermek = {
 // A dátumokat szövegként kérjük le, hogy ne csússzanak el időzóna miatt.
 export const SZAMLA_MEZOK = `s.id, s.szamlaszam, s.gyermek_id, s.gyermek_nev, s.korosztaly, s.idoszak, s.osszeg,
   to_char(s.kelt, 'YYYY-MM-DD') AS kelt, to_char(s.hatarido, 'YYYY-MM-DD') AS hatarido,
-  s.pdf_pathname, s.fizetve_at, s.ertesitve_at, s.created_at`;
+  s.pdf_pathname, s.fizetve_at, s.ertesitve_at, s.ertesites_hiba_at, s.created_at`;
 
 // A szülő gyermekei: akikhez a névjegyzékben az ő e-mail-címe tartozik.
 export async function szuloGyermekei(email: string): Promise<Gyermek[]> {

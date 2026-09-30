@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import AdminFejlec from "../../../components/fiok/AdminFejlec";
+import LevelPotlas from "../../../components/fiok/LevelPotlas";
 import SzamlaFeltolto from "../../../components/fiok/SzamlaFeltolto";
 import SzamlaMuveletek from "../../../components/fiok/SzamlaMuveletek";
 import { emailEnabled } from "../../../lib/email";
@@ -41,6 +42,12 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
             (SELECT count(*) FROM szamla WHERE ertesitve_at IS NULL)::int AS nincs_ertesitve,
             (SELECT count(*) FROM gyermek)::int AS gyermekek`
   )) as { osszes: number; nincs_ertesitve: number; gyermekek: number }[];
+  // Feltöltéskor kért, de ki nem ment értesítők (pl. betelt a levelező korlátja).
+  const potlando = (await db.query(
+    `SELECT id, szamlaszam FROM szamla
+     WHERE ertesitve_at IS NULL AND ertesites_hiba_at IS NOT NULL
+     ORDER BY created_at`
+  )) as { id: string; szamlaszam: string }[];
 
   return (
     <main className="min-h-screen">
@@ -52,6 +59,7 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
       <section className="bg-cream">
         <div className="max-w-7xl mx-auto px-6 py-12 space-y-8">
           <SzamlaFeltolto levelEnabled={emailEnabled} />
+          <LevelPotlas szamlak={potlando} levelEnabled={emailEnabled} />
 
           <div className="bg-white rounded-lg border border-gray-100 p-6">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -99,7 +107,7 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
                             {sz.fizetve_at ? "Fizetve" : "Nincs jelölve"}
                           </div>
                           <div className={sz.ertesitve_at ? "text-green-700" : "text-vasasRed"}>
-                            {sz.ertesitve_at ? "Levél elküldve" : "Nincs levél"}
+                            {sz.ertesitve_at ? "Levél elküldve" : sz.ertesites_hiba_at ? "Levél pótlandó" : "Nincs levél"}
                           </div>
                         </td>
                         <td className="py-2.5">

@@ -6,6 +6,9 @@ import { aktualisEmail, isAdmin, siteUrl } from "../../../lib/fiok/auth";
 import { gyermekKeres } from "../../../lib/fiok/nevjegyzek";
 import { szamlaErtesites } from "../../../lib/fiok/szamlak";
 
+// A levélküldés átmeneti hibáknál újrapróbál — ehhez több idő kell az alapnál.
+export const maxDuration = 60;
+
 // Egy számla feltöltése (a pénzügyi felület soronként hívja, táblázatból vagy
 // egyenként): a számla a névjegyzék gyermekéhez párosul (vevőkód vagy név),
 // a PDF a privát Blob-tárba kerül, és kérésre értesítő levél megy a gyermekhez

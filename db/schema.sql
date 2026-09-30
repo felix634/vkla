@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS szamla (
   pdf_pathname  text NOT NULL,                 -- privát Vercel Blob
   fizetve_at    timestamptz,
   ertesitve_at  timestamptz,
+  ertesites_hiba_at timestamptz,               -- levelet kértek, de nem ment ki (pótolható)
   created_at    timestamptz NOT NULL DEFAULT now()
 );
 -- Átállás az első (e-mail-alapú) változatról: a számla már a gyermekhez kötődik.
@@ -71,6 +72,7 @@ ALTER TABLE szamla DROP COLUMN IF EXISTS email;
 ALTER TABLE szamla DROP COLUMN IF EXISTS vevo_nev;
 ALTER TABLE szamla ALTER COLUMN gyermek_id SET NOT NULL;
 CREATE INDEX IF NOT EXISTS szamla_gyermek_idx ON szamla (gyermek_id);
+ALTER TABLE szamla ADD COLUMN IF NOT EXISTS ertesites_hiba_at timestamptz;
 
 -- Munkamenetek (a sütiben csak a véletlen azonosító van, itt a hash-e).
 CREATE TABLE IF NOT EXISTS munkamenet (
