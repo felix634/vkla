@@ -127,7 +127,15 @@ export default function Footer({ b }: { b?: BeallitasokData | null }) {
 
       {/* Prometheus credit */}
       <div className="border-t border-white/5 py-4 text-center text-[11px] text-white/40">
-        Készítette: <span className="text-gold">Prometheus Digital</span> · Látványterv
+        Készítette:{" "}
+        <a
+          href="https://www.prometheusdigital.hu/"
+          target="_blank"
+          rel="noopener"
+          className="text-gold hover:text-white transition-colors"
+        >
+          Prometheus Digital
+        </a>
       </div>
     </footer>
   );
