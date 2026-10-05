@@ -1,5 +1,4 @@
 import SmoothScroll from "../components/SmoothScroll";
-import MockupBanner from "../components/MockupBanner";
 import TopBar from "../components/TopBar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -18,7 +17,6 @@ export default async function SiteLayout({
   return (
     <>
       <SmoothScroll />
-      <MockupBanner />
       <TopBar b={beallitasok} />
       <Header />
       {children}
