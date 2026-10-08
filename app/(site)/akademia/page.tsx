@@ -169,7 +169,7 @@ export default async function AkademiaPage() {
               „Akarni, küzdeni, játszani.”
             </blockquote>
             {kubala?.body ? (
-              <div className="[&_p]:text-white/75 [&_h3]:text-gold-light">
+              <div className="[&_p]:text-white/75 [&_h3]:text-gold-light [&_strong]:text-white">
                 <PortableBody value={kubala.body} />
               </div>
             ) : (

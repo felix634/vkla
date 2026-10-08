@@ -4,6 +4,8 @@
 //   node scripts/scrape-old-news.mjs                 # minden év (2011-2026)
 //   node scripts/scrape-old-news.mjs --from 2019     # csak 2019-től
 //   node scripts/scrape-old-news.mjs --only-listing  # csak a listák (gyors felmérés)
+//   node scripts/scrape-old-news.mjs --from 2026 --images-since 2026-08-28
+//                                     # frissítés: csak az ennél újabb cikkek képei
 //
 // Kimenet:
 //   scraped/index-<év>.json      — évenkénti cikklista (slug, cím, kategória, dátum, indexkép)
@@ -35,6 +37,8 @@ const TO = Number(argVal("--to", "2026"));
 // a teljes képanyag ~25 ezer fájl / ~8-10 GB lenne, feleslegesen.
 const IMG_FROM = Number(argVal("--images-from-year", "0"));
 const ONLY_LISTING = args.includes("--only-listing");
+// Frissítésnél csak az ennél a dátumnál (YYYY-MM-DD) újabb cikkek képei kellenek.
+const IMG_SINCE = argVal("--images-since", "");
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -266,7 +270,7 @@ async function main() {
       await writeFile(dest, JSON.stringify(record, null, 2));
     }
     const recYear = record.dateIso ? Number(record.dateIso.slice(0, 4)) : record.year;
-    if (recYear >= IMG_FROM) {
+    if (recYear >= IMG_FROM && (!IMG_SINCE || (record.dateIso ?? "") >= IMG_SINCE)) {
       if (record.thumb) imageUrls.add(record.thumb);
       for (const img of record.images ?? []) imageUrls.add(img);
     }
