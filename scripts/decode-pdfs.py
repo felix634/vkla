@@ -3,7 +3,7 @@
 import base64, glob, json, os
 
 TR = r"C:\Users\local_user\.claude\projects\C--Users-local-user-Desktop-Prometheus-Digital-Websites-Vasas\d9ec4dd9-6155-4179-82f3-540a76f2a48d\tool-results"
-BASE = r"C:\Users\local_user\Desktop\Prometheus Digital\Websites\Vasas\Drive-tartalom\VKLA - weboldal"
+BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "Drive-tartalom", "VKLA - weboldal")
 
 DEST = {
     "Nyílt pályázati felhívás fapótlási projektre - 2026.09.03.pdf": "TAO-program",

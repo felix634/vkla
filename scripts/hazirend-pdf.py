@@ -5,7 +5,7 @@ import re, os
 import win32com.client
 
 SRC = os.path.join(os.path.dirname(__file__), "import-letesitmenyek.mjs")
-OUT = r"C:\Users\local_user\Desktop\Prometheus Digital\Websites\Vasas\Drive-tartalom\VKLA - weboldal\Házirend\Házirend.pdf"
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "Drive-tartalom", "VKLA - weboldal", "Házirend", "Házirend.pdf")
 
 src = open(SRC, encoding="utf-8").read()
 block = re.search(r"const HAZIREND = \[(.*?)\n\];", src, re.S).group(1)
