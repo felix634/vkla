@@ -44,15 +44,8 @@ export const PRIMARY_NAV: NavItem[] = [
       { label: "Vasas FC II ↗", href: EXTERNAL.vasasFcII, external: true },
     ],
   },
-  {
-    label: "Mérkőzések",
-    href: "/merkozesek",
-    children: [
-      { label: "Naptár", href: "/merkozesek#naptar" },
-      { label: "Eredmények", href: "/merkozesek#eredmenyek" },
-      { label: "Bajnoki tabella", href: "/merkozesek#tabella" },
-    ],
-  },
+  // A Naptár / Eredmények / Tabella almenü az MLSZ-adatokkal együtt tér vissza.
+  { label: "Mérkőzések", href: "/merkozesek" },
   { label: "Programok", href: "/programok" },
   { label: "Galéria", href: "/galeria" },
   { label: "Létesítmények", href: "/letesitmenyek" },

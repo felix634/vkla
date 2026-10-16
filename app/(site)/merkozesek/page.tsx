@@ -17,7 +17,7 @@ export default function MerkozesekPage() {
             Menetrend és <span className="text-gold-light">eredmények.</span>
           </>
         }
-        subtitle="Naptár, eredmények és bajnoki tabella — korosztály szerint szűrhetően. Az adatok a talentX és az MLSZ adatbank integrációjával frissülnek majd automatikusan."
+        subtitle="A VKLA csapatainak mérkőzései, eredményei és tabellái — hamarosan automatikusan, az MLSZ adatbankból."
       />
       <div className="bg-cream">
         <MatchCenter />

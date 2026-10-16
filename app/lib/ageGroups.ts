@@ -1,6 +1,6 @@
 // Korosztályok — a Csapatok rács, a Mérkőzés-szűrő és a Programok
 // egyaránt innen dolgozik. A tényleges adatok (edzők, játékosok, időpontok)
-// a CMS-ből, illetve az MLSZ / talentX API-ból jönnek később.
+// a CMS-ből, a mérkőzések az MLSZ adatbankból jönnek.
 
 export type AgeGroup = {
   name: string;
