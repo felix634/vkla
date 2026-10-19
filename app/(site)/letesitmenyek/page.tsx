@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageHero from "../../components/site/PageHero";
-import SoonBadge from "../../components/site/SoonBadge";
+import TerkepBetolto from "../../components/TerkepBetolto";
 import PortableBody from "../../components/PortableBody";
 import { getLetesitmenyek } from "../../lib/sanity/tartalom";
 import { sized } from "../../lib/sanity/imageUrl";
@@ -131,7 +131,7 @@ export default async function LetesitmenyekPage() {
         );
       })}
 
-      {/* Térkép / sporttelep rajz — CMS-ből, amíg nincs: hamarosan */}
+      {/* Térkép / sporttelep rajz — CMS-ből; amíg nincs feltöltve, Google-térkép */}
       <section className="bg-navy text-white">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="text-center mb-10">
@@ -145,20 +145,10 @@ export default async function LetesitmenyekPage() {
                 {f.mapImageUrl ? (
                   <Image src={sized(f.mapImageUrl, 900)!} alt={`${f.name} — térkép`} fill className="object-cover" />
                 ) : (
-                  <>
-                    <div className="absolute inset-0 bg-grid opacity-30" />
-                    <div className="relative text-center px-6">
-                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-3 text-gold">
-                        <polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6" />
-                        <line x1="8" y1="3" x2="8" y2="18" />
-                        <line x1="16" y1="6" x2="16" y2="21" />
-                      </svg>
-                      <div className="font-display font-bold">{f.name}</div>
-                      <div className="mt-3">
-                        <SoonBadge label="Térkép és pályarajz — hamarosan" />
-                      </div>
-                    </div>
-                  </>
+                  // Amíg a klub nem tölt fel pályarajzot: kattintásra töltődő térkép.
+                  <div className="absolute inset-0 [&>div]:h-full [&>div]:rounded-none [&>div]:border-0">
+                    <TerkepBetolto nev={f.name} cim={f.address ?? f.name} minH="min-h-[260px]" />
+                  </div>
                 )}
               </div>
             ))}

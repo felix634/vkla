@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "../../components/site/PageHero";
-import SoonBadge from "../../components/site/SoonBadge";
+import TerkepBetolto from "../../components/TerkepBetolto";
 import KapcsolatForm from "../../components/KapcsolatForm";
 import ProbaedzesForm from "../../components/ProbaedzesForm";
 import { getBeallitasok } from "../../lib/sanity/tartalom";
@@ -71,22 +71,8 @@ export default async function KapcsolatPage() {
             <KapcsolatForm enabled={emailEnabled} />
           </div>
 
-          {/* Térkép placeholder */}
-          <div className="rounded-lg overflow-hidden border border-gray-100 bg-navy relative min-h-[340px] flex items-center justify-center">
-            <div className="absolute inset-0 bg-grid opacity-30" />
-            <div className="absolute inset-0 bg-gradient-to-br from-navy-dark/60 to-royal/30" />
-            <div className="relative text-center text-white/80 px-6">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="mx-auto mb-3 text-gold">
-                <path d="M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10z" />
-                <circle cx="12" cy="11" r="2" />
-              </svg>
-              <div className="font-display font-bold text-lg">Fáy utcai Sportkomplexum</div>
-              <div className="text-sm text-white/60 mt-1">{b?.address ?? "1139 Budapest, Fáy utca 58."}</div>
-              <div className="mt-4">
-                <SoonBadge label="Interaktív térkép — hamarosan" />
-              </div>
-            </div>
-          </div>
+          {/* Térkép — kattintásra töltődik (Google), mellette útvonaltervezés */}
+          <TerkepBetolto nev="Fáy utcai Sportkomplexum" cim={b?.address ?? "1139 Budapest, Fáy utca 58."} />
         </div>
       </section>
 
