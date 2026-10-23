@@ -1,17 +1,30 @@
 import { defineType, defineField } from "sanity";
-import { KOROSZTALYOK, POSZTOK } from "../constants";
+import { POSZTOK } from "../constants";
 
 export default defineType({
   name: "korosztaly",
   title: "Korosztály (csapat)",
   type: "document",
   fields: [
+    // Szabad szöveg: új korosztály (pl. U20) a Studióban felvehető, és utána
+    // a heti edzésrendnél is választható. A sorrendet a "Sorrend" mező adja.
     defineField({
       name: "name",
       title: "Korosztály",
       type: "string",
-      options: { list: [...KOROSZTALYOK] },
-      validation: (r) => r.required(),
+      description: "Pl. U19, U16 leány, Felnőtt női, Vasas FC II.",
+      validation: (r) =>
+        r.required().custom(async (value, context) => {
+          if (!value) return true;
+          const id = (context.document?._id ?? "").replace(/^drafts\./, "");
+          const n = await context
+            .getClient({ apiVersion: "2024-01-01" })
+            .fetch<number>(
+              `count(*[_type == "korosztaly" && name == $name && !(_id in [$id, "drafts." + $id])])`,
+              { name: value, id }
+            );
+          return n === 0 || "Ilyen nevű korosztály már van.";
+        }),
     }),
     defineField({
       name: "coach",
@@ -23,7 +36,7 @@ export default defineType({
       name: "section",
       title: "Szekció",
       type: "string",
-      options: { list: ["Akadémia", "Pre-akadémia", "Női szakág"] },
+      options: { list: ["Vasas FC II", "Akadémia", "Pre-akadémia", "Női szakág"] },
       description: "Üresen hagyva a csapat nem jelenik meg a weboldalon.",
     }),
     defineField({
@@ -62,7 +75,8 @@ export default defineType({
       name: "order",
       title: "Sorrend",
       type: "number",
-      description: "A csapatok megjelenítési sorrendje (kisebb = előrébb).",
+      description:
+        "A csapatok megjelenítési sorrendje (kisebb = előrébb) — a Csapatok oldalon és a heti edzésrend szűrőjében is.",
     }),
   ],
   orderings: [

@@ -1,5 +1,6 @@
 import { defineType, defineField } from "sanity";
-import { KOROSZTALYOK, NAPOK } from "../constants";
+import { NAPOK } from "../constants";
+import KorosztalyValasztoInput from "../components/KorosztalyValasztoInput";
 
 export default defineType({
   name: "hetirend",
@@ -10,7 +11,8 @@ export default defineType({
       name: "korosztaly",
       title: "Korosztály",
       type: "string",
-      options: { list: [...KOROSZTALYOK] },
+      description: "A Csapatok között felvett korosztályok közül; a szűrő a csapatok sorrendjét követi.",
+      components: { input: KorosztalyValasztoInput },
       validation: (r) => r.required(),
     }),
     defineField({

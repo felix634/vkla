@@ -1,5 +1,5 @@
 import { defineType, defineField } from "sanity";
-import { HIR_KATEGORIAK } from "../constants";
+import HirKategoriaInput from "../components/HirKategoriaInput";
 
 export default defineType({
   name: "hir",
@@ -30,20 +30,37 @@ export default defineType({
       name: "category",
       title: "Kategória",
       type: "string",
-      options: { list: [...HIR_KATEGORIAK] },
+      description: "Új korosztályt az Oldal beállítások → Hírek — korosztály-szűrő listájában lehet felvenni.",
+      components: { input: HirKategoriaInput },
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: "kiemelt",
+      title: "Kiemelt hír a főoldalon",
+      type: "boolean",
+      description:
+        "Bekapcsolva ez a hír jelenik meg nagyban a főoldal tetején. Ha több hír is kiemelt, a legfrissebb látszik; ha egy sem, a legújabb hír.",
     }),
     defineField({
       name: "heroImage",
       title: "Indexkép",
       type: "image",
       options: { hotspot: true },
+      description:
+        "Fekvő kép, legalább 1600 px széles. Feltöltés után a kép melletti ceruza ikonnal kijelölhető a fókuszpont (pl. az arcok) — a kép kivágása mindig e köré igazodik.",
+    }),
+    defineField({
+      name: "lead",
+      title: "Lead (kiemelt bevezető a kép alatt, opcionális)",
+      type: "text",
+      rows: 3,
     }),
     defineField({
       name: "excerpt",
       title: "Rövid összefoglaló (opcionális)",
       type: "text",
       rows: 3,
+      description: "A hírlistában a cím alatt jelenik meg.",
     }),
     defineField({
       name: "body",

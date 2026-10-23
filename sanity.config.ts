@@ -24,16 +24,8 @@ const structure: StructureResolver = (S) =>
               S.documentTypeListItem("hetirend").title("Heti edzésrend"),
             ])
         ),
-      S.listItem()
-        .title("Média")
-        .child(
-          S.list()
-            .title("Média")
-            .items([
-              S.documentTypeListItem("galeria").title("Galéria albumok"),
-              S.documentTypeListItem("video").title("Videók (Vasas TV)"),
-            ])
-        ),
+      // A Videók rész a klub kérésére lekerült (Tóth Patrik, 2026.10.23.).
+      S.documentTypeListItem("galeria").title("Galéria albumok"),
       S.documentTypeListItem("szponzor").title("Szponzorok"),
       S.documentTypeListItem("letesitmeny").title("Létesítmények"),
       S.documentTypeListItem("dokumentum").title("Dokumentumok"),
