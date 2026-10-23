@@ -5,6 +5,7 @@ import KapcsolatForm from "../../components/KapcsolatForm";
 import ProbaedzesForm from "../../components/ProbaedzesForm";
 import { getBeallitasok } from "../../lib/sanity/tartalom";
 import { emailEnabled } from "../../lib/email";
+import { utvonalUrl } from "../../lib/terkep";
 
 export const metadata: Metadata = {
   title: "Kapcsolat — Vasas Kubala Akadémia",
@@ -23,11 +24,17 @@ export default async function KapcsolatPage() {
   const b = await getBeallitasok();
   // Az iroda-nyitvatartás / fogadóóra kártya az ügyfél kérésére lekerült
   // (Berkes Máté, 2026.09.08).
+  // Sorrend: telefon, e-mail, központi iroda, cím; mind kattintható (Tóth Patrik, 10.23.).
+  const phone = b?.phone ?? "+36 20 378 4880";
+  const email = b?.email ?? "info@vkla.hu";
+  const address = b?.address ?? "1139 Budapest, Fáy utca 58.";
   const CONTACTS = [
-    { label: "Cím", value: b?.address ?? "1139 Budapest, Fáy utca 58.", icon: ICONS.cim },
-    ...(b?.irodaCim ? [{ label: "Központi iroda", value: b.irodaCim, icon: ICONS.cim }] : []),
-    { label: "Telefon", value: b?.phone ?? "+36 20 378 4880", icon: ICONS.telefon },
-    { label: "E-mail", value: b?.email ?? "info@vkla.hu", icon: ICONS.email },
+    { label: "Telefon", value: phone, href: `tel:${phone.replace(/\s/g, "")}`, icon: ICONS.telefon },
+    { label: "E-mail", value: email, href: `mailto:${email}`, icon: ICONS.email },
+    ...(b?.irodaCim
+      ? [{ label: "Központi iroda", value: b.irodaCim, href: utvonalUrl(b.irodaCim), icon: ICONS.cim }]
+      : []),
+    { label: "Cím", value: address, href: utvonalUrl(address), icon: ICONS.cim },
   ];
   const probaedzesEmail = b?.probaedzesEmail ?? b?.email ?? "info@vkla.hu";
   return (
@@ -48,7 +55,12 @@ export default async function KapcsolatPage() {
         <div className="max-w-7xl mx-auto px-6 py-14">
           <div className={`grid gap-5 ${CONTACTS.length > 3 ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3"}`}>
             {CONTACTS.map((c) => (
-              <div key={c.label} className="rounded-md border border-gray-100 bg-cream p-6">
+              <a
+                key={c.label}
+                href={c.href}
+                {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="block rounded-md border border-gray-100 bg-cream p-6 hover:border-gold/60 transition-colors"
+              >
                 <div className="w-11 h-11 rounded-md bg-navy text-gold flex items-center justify-center mb-4">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <path d={c.icon} />
@@ -56,7 +68,7 @@ export default async function KapcsolatPage() {
                 </div>
                 <div className="text-xs uppercase tracking-widest text-navy/45 mb-1">{c.label}</div>
                 <div className="font-semibold text-navy text-sm leading-snug">{c.value}</div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -72,7 +84,7 @@ export default async function KapcsolatPage() {
           </div>
 
           {/* Térkép — kattintásra töltődik (Google), mellette útvonaltervezés */}
-          <TerkepBetolto nev="Fáy utcai Sportkomplexum" cim={b?.address ?? "1139 Budapest, Fáy utca 58."} />
+          <TerkepBetolto nev="Fáy utcai Sportcentrum" cim={address} />
         </div>
       </section>
 
@@ -82,7 +94,7 @@ export default async function KapcsolatPage() {
           <div className="text-center mb-10">
             <span className="section-eyebrow">Próbaedzés</span>
             <h2 className="heading-display text-3xl md:text-5xl mt-3 mb-4">
-              Jelentkezz ingyenes <span className="text-gold-light">próbaedzésre.</span>
+              Jelentkezz <span className="text-gold-light">próbaedzésre!</span>
             </h2>
             <div className="gold-divider mx-auto" />
             <p className="text-white/70 mt-6 max-w-2xl mx-auto">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { EXTERNAL } from "../lib/nav";
 import type { BeallitasokData } from "../lib/sanity/tartalom";
+import { utvonalUrl } from "../lib/terkep";
 
 // A telefonszám/e-mail/cím és a social linkek a CMS beállításaiból jönnek;
 // nélkülük a látványterv eredeti értékei jelennek meg.
@@ -13,8 +14,6 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
   const socials = [
     { key: "fb", url: b?.facebook ?? null, path: "M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" },
     { key: "ig", url: b?.instagram ?? null, path: "M12 2.16c3.2 0 3.58 0 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s0-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.18 8.8 2.16 12 2.16zm0 3.34a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm0 10.72a4.22 4.22 0 1 1 0-8.44 4.22 4.22 0 0 1 0 8.44zm6.75-10.97a1.52 1.52 0 1 0 0 3.04 1.52 1.52 0 0 0 0-3.04z" },
-    { key: "yt", url: b?.youtubeChannel ?? null, path: "M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8c.3 1 1.1 1.8 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z" },
-    { key: "x", url: b?.twitter ?? null, path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" },
   ];
 
   return (
@@ -34,8 +33,14 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
             </svg>
             {email}
           </a>
-          <span className="hidden lg:inline text-white/50">{address}</span>
-          {iroda && <span className="hidden xl:inline text-white/50">Központi iroda: {iroda}</span>}
+          <a href={utvonalUrl(address)} target="_blank" rel="noopener noreferrer" className="hidden lg:inline text-white/50 hover:text-gold transition">
+            {address}
+          </a>
+          {iroda && (
+            <a href={utvonalUrl(iroda)} target="_blank" rel="noopener noreferrer" className="hidden xl:inline text-white/50 hover:text-gold transition">
+              Központi iroda: {iroda}
+            </a>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-3 pr-4 mr-1 border-r border-white/15">
@@ -58,10 +63,9 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
               )
             )}
           </div>
-          <div className="hidden md:flex items-center gap-2 pl-4 border-l border-white/15">
-            <Link href="/belepes" className="text-white/70 hover:text-white transition">Szülői fiók</Link>
-            <span className="text-white/30">/</span>
-            <Link href="/kepzesi-dij" className="bg-vasasRed text-white px-3 py-1 rounded-sm font-semibold hover:bg-vasasRedDark transition">Képzési díj</Link>
+          {/* A képzési díj oldalán az információk és a belépés is megvan (Tóth Patrik, 10.23.). */}
+          <div className="hidden md:flex items-center pl-4 border-l border-white/15">
+            <Link href="/kepzesi-dij" className="bg-vasasRed text-white px-3 py-1 rounded-sm font-semibold hover:bg-vasasRedDark transition">Szülői belépés</Link>
           </div>
         </div>
       </div>

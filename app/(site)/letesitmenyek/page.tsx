@@ -6,6 +6,8 @@ import TerkepBetolto from "../../components/TerkepBetolto";
 import PortableBody from "../../components/PortableBody";
 import { getLetesitmenyek } from "../../lib/sanity/tartalom";
 import { sized } from "../../lib/sanity/imageUrl";
+import { utvonalUrl } from "../../lib/terkep";
+import LetesitmenyKep from "../../components/LetesitmenyKep";
 
 export const metadata: Metadata = {
   title: "Létesítmények — Vasas Kubala Akadémia",
@@ -17,11 +19,12 @@ export const revalidate = 300;
 const FACILITIES = [
   {
     _id: "fay",
-    name: "Fáy utcai Sportkomplexum",
+    name: "Fáy utcai Sportcentrum",
     address: "1139 Budapest, Fáy utca 58.",
     body: null,
     amenities: ["2 nagypálya (füves)", "1 műfüves pálya", "Öltözők és kiszolgáló helyiségek", "Fedett lelátó", "Parkolás"],
     rentInfo: null,
+    berelheto: false,
     imageUrls: ["/images/flag.jpg"],
     mapImageUrl: null,
   },
@@ -32,6 +35,7 @@ const FACILITIES = [
     body: null,
     amenities: ["Edzőpályák", "Műfüves pálya", "Öltözők", "Kiegészítő terek", "Megközelítés tömegközlekedéssel"],
     rentInfo: null,
+    berelheto: false,
     imageUrls: ["/images/player.jpg"],
     mapImageUrl: null,
   },
@@ -68,15 +72,12 @@ export default async function LetesitmenyekPage() {
         <section key={f._id} id={f._id} className={`scroll-mt-28 ${idx % 2 === 0 ? "bg-white" : "bg-cream"}`}>
           <div className={`max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-12 gap-10 items-start ${idx % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
             <div className="lg:col-span-6 lg:[direction:ltr]">
-              <div className="relative aspect-[16/10] rounded-md overflow-hidden bg-navy">
-                <Image src={img} alt={f.name} fill className="object-cover opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent" />
-                {f.rentInfo != null && (
-                  <span className="absolute top-4 left-4 text-[10px] font-bold uppercase tracking-wider bg-gold text-navy px-3 py-1 rounded-sm">
-                    Bérelhető
-                  </span>
-                )}
-              </div>
+              <LetesitmenyKep
+                src={img}
+                kepek={f.imageUrls ?? []}
+                nev={f.name}
+                berelheto={!!f.berelheto || f.rentInfo != null}
+              />
               {f.amenities && f.amenities.length > 0 && (
                 <ul className="grid sm:grid-cols-2 gap-2.5 mt-6">
                   {f.amenities.map((a) => (
@@ -93,17 +94,21 @@ export default async function LetesitmenyekPage() {
               )}
             </div>
             <div className="lg:col-span-6 lg:[direction:ltr]">
-              <span className="section-eyebrow">Helyszín {idx + 1}</span>
-              <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3 mb-3">{f.name}</h2>
+              <h2 className="heading-display text-3xl md:text-4xl text-navy mb-3">{f.name}</h2>
               <div className="gold-divider mb-5" />
               {f.address && (
-                <div className="flex items-center gap-2 text-navy/60 text-sm mb-6">
+                <a
+                  href={utvonalUrl(f.address, f.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-navy/60 hover:text-vasasRed transition-colors text-sm mb-6"
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-vasasRed">
                     <path d="M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10z" />
                     <circle cx="12" cy="11" r="2" />
                   </svg>
-                  {f.address}
-                </div>
+                  <span className="underline decoration-navy/20 underline-offset-4">{f.address}</span>
+                </a>
               )}
               {f.body && f.body.length > 0 && (
                 <div className="mb-6">

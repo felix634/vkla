@@ -35,6 +35,18 @@ const item = {
   },
 };
 
+// A logó a szponzor weboldalára visz, ha a Studióban meg van adva a link.
+export function PartnerLink({ url, name, children }: { url: string | null; name: string; children: React.ReactNode }) {
+  const cls = "w-full p-6 flex items-center justify-center";
+  return url ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" aria-label={name} title={name} className={cls}>
+      {children}
+    </a>
+  ) : (
+    <div className={cls}>{children}</div>
+  );
+}
+
 export default function Sponsors({ szponzorok }: { szponzorok?: SzponzorData[] | null }) {
   const reduced = useReducedMotion();
   const fo = szponzorok?.filter((x) => x.tier === "fo") ?? [];
@@ -84,8 +96,10 @@ export default function Sponsors({ szponzorok }: { szponzorok?: SzponzorData[] |
         )}
 
         {/* További partnerek */}
+        {/* 2 × 3-as rács külön kártyákkal: üres szürke cella akkor sem marad, ha a
+            partnerek száma nem osztható hárommal (Tóth Patrik, 10.23.). */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-md overflow-hidden"
+          className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto"
           variants={container}
           initial="hidden"
           whileInView="visible"
@@ -96,8 +110,9 @@ export default function Sponsors({ szponzorok }: { szponzorok?: SzponzorData[] |
                 <motion.div
                   key={x._id}
                   variants={item}
-                  className="bg-white p-6 flex items-center justify-center min-h-[110px] group"
+                  className="bg-white rounded-md flex items-stretch min-h-[110px] group"
                 >
+                  <PartnerLink url={x.url} name={x.name}>
                   {x.logoUrl ? (
                     <motion.div
                       whileHover={reduced ? undefined : { scale: 1.06 }}
@@ -115,6 +130,7 @@ export default function Sponsors({ szponzorok }: { szponzorok?: SzponzorData[] |
                       {x.name}
                     </motion.span>
                   )}
+                  </PartnerLink>
                 </motion.div>
               ))
             : SPONSORS.map((s) => (
@@ -124,7 +140,7 @@ export default function Sponsors({ szponzorok }: { szponzorok?: SzponzorData[] |
                   whileHover={
                     reduced ? undefined : { backgroundColor: "rgba(12, 33, 67, 1)", transition: { duration: 0.3 } }
                   }
-                  className="no-click bg-navy-dark p-8 flex items-center justify-center min-h-[100px] cursor-default group"
+                  className="no-click bg-navy-dark rounded-md border border-white/10 p-8 flex items-center justify-center min-h-[100px] cursor-default group"
                 >
                   <motion.span
                     whileHover={reduced ? undefined : { scale: 1.1, color: "#ffffff" }}

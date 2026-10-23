@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageHero from "../../components/site/PageHero";
-import { getSzponzorok } from "../../lib/sanity/tartalom";
+import { getBeallitasok, getSzponzorok } from "../../lib/sanity/tartalom";
+import { PartnerLink } from "../../components/Sponsors";
 import { sized } from "../../lib/sanity/imageUrl";
 
 export const metadata: Metadata = {
@@ -12,33 +13,36 @@ export const metadata: Metadata = {
 const MAIN = ["Fő támogató 1", "Fő támogató 2", "Fő támogató 3"];
 const PARTNERS = Array.from({ length: 12 }, (_, i) => `Partner ${i + 1}`);
 
+// Sorrend: arany – ezüst – bronz (Tóth Patrik, 10.23.). Az árakat a klub a
+// Studióban adja meg (Oldal beállítások → Szponzorációs csomagok árai).
 const PACKAGES = [
   {
-    tier: "Bronz",
-    price: "— Ft / év",
-    accent: "border-gray-200",
-    perks: ["Logó a szponzori oldalon", "Említés a közösségi médiában", "2 db meccsnapi megjelenés"],
+    key: "arany",
+    tier: "Arany",
+    accent: "border-gold/60",
+    featured: true,
+    perks: ["Minden Ezüst elem", "Kiemelt „Fő támogató” megjelenés", "Névadó szponzoráció lehetősége", "Egyedi aktivációk"],
   },
   {
+    key: "ezust",
     tier: "Ezüst",
-    price: "— Ft / év",
     accent: "border-royal/40",
     featured: false,
     perks: ["Minden Bronz elem", "Logó a főoldali partnersávban", "Mezreklám lehetőség", "Rendezvény-meghívók"],
   },
   {
-    tier: "Arany",
-    price: "— Ft / év",
-    accent: "border-gold/60",
-    featured: true,
-    perks: ["Minden Ezüst elem", "Kiemelt „Fő támogató” megjelenés", "Névadó szponzoráció lehetősége", "Egyedi aktivációk"],
+    key: "bronz",
+    tier: "Bronz",
+    accent: "border-gray-200",
+    featured: false,
+    perks: ["Logó a szponzori oldalon", "Említés a közösségi médiában", "2 db meccsnapi megjelenés"],
   },
-];
+] as const;
 
 export const revalidate = 300;
 
 export default async function SzponzoracioPage() {
-  const szponzorok = await getSzponzorok();
+  const [szponzorok, b] = await Promise.all([getSzponzorok(), getBeallitasok()]);
   const fo = szponzorok?.filter((x) => x.tier === "fo") ?? [];
   const partnerek = szponzorok?.filter((x) => x.tier === "partner") ?? [];
   const cmsOn = !!(szponzorok && szponzorok.length > 0);
@@ -84,21 +88,24 @@ export default async function SzponzoracioPage() {
             <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3">Támogatóink köre</h2>
             <div className="gold-divider mx-auto mt-4" />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-gray-200 border border-gray-200 rounded-md overflow-hidden">
+          {/* 2 × 3-as rács külön kártyákkal — üres szürke cella nem marad (Tóth Patrik, 10.23.). */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {cmsOn
               ? partnerek.map((x) => (
-                  <div key={x._id} className="bg-white p-8 flex items-center justify-center min-h-[130px]">
-                    {x.logoUrl ? (
-                      <div className="relative h-16 w-full">
-                        <Image src={sized(x.logoUrl, 500)!} alt={x.name} fill className="object-contain" />
-                      </div>
-                    ) : (
-                      <span className="font-display font-bold text-lg tracking-wider text-navy/60">{x.name}</span>
-                    )}
+                  <div key={x._id} className="bg-white border border-gray-200 rounded-md flex items-stretch min-h-[130px] hover:border-gold/60 transition-colors">
+                    <PartnerLink url={x.url} name={x.name}>
+                      {x.logoUrl ? (
+                        <div className="relative h-16 w-full">
+                          <Image src={sized(x.logoUrl, 500)!} alt={x.name} fill className="object-contain" />
+                        </div>
+                      ) : (
+                        <span className="font-display font-bold text-lg tracking-wider text-navy/60">{x.name}</span>
+                      )}
+                    </PartnerLink>
                   </div>
                 ))
               : PARTNERS.map((p) => (
-                  <div key={p} className="bg-white p-8 flex items-center justify-center min-h-[110px]">
+                  <div key={p} className="bg-white border border-gray-200 rounded-md p-8 flex items-center justify-center min-h-[110px]">
                     <span className="font-display font-bold text-lg tracking-wider text-navy/40">{p}</span>
                   </div>
                 ))}
@@ -125,8 +132,8 @@ export default async function SzponzoracioPage() {
                 <div className={`text-xs uppercase tracking-[0.2em] font-bold mb-2 ${pkg.featured ? "text-gold-light" : "text-vasasRed"}`}>
                   {pkg.tier} csomag
                 </div>
-                <div className={`font-display font-black text-3xl mb-6 ${pkg.featured ? "text-white" : "text-navy"}`}>
-                  {pkg.price}
+                <div className={`font-display font-black text-2xl mb-6 ${pkg.featured ? "text-white" : "text-navy"}`}>
+                  {b?.szponzorArak?.[pkg.key] || "Tervezés alatt"}
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
                   {pkg.perks.map((perk) => (
@@ -149,9 +156,6 @@ export default async function SzponzoracioPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-xs text-navy/40 mt-6">
-            Az árak és a csomagok tartalma egyeztetés alatt — a végleges feltételek a tartalomfeltöltés során kerülnek fel.
-          </p>
         </div>
       </section>
     </main>

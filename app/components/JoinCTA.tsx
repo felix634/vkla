@@ -3,9 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import type { BeallitasokData } from "../lib/sanity/tartalom";
+import { utvonalUrl } from "../lib/terkep";
 
-export default function JoinCTA() {
+export default function JoinCTA({ b }: { b?: BeallitasokData | null }) {
   const reduced = useReducedMotion();
+  const phone = b?.phone ?? "+36 20 378 4880";
+  const email = b?.email ?? "info@vkla.hu";
+  const address = b?.address ?? "1139 Budapest, Fáy utca 58.";
+  const elerhetosegek = [
+    { cimke: "Telefon", ertek: phone, href: `tel:${phone.replace(/\s/g, "")}` },
+    { cimke: "E-mail", ertek: email, href: `mailto:${email}` },
+    ...(b?.irodaCim ? [{ cimke: "Központi iroda", ertek: b.irodaCim, href: utvonalUrl(b.irodaCim) }] : []),
+    { cimke: "Cím", ertek: address, href: utvonalUrl(address) },
+  ];
 
   return (
     <section className="relative py-24 px-6 overflow-hidden">
@@ -48,7 +59,7 @@ export default function JoinCTA() {
           <div className="gold-divider mb-6" />
           <p className="text-lg text-white/80 max-w-xl mb-8 leading-relaxed">
             U5-től U9-ig folyamatosan várjuk a focit szerető gyerekeket.
-            Próbaedzés előzetes regisztrációval — teljesen ingyenesen.
+            Próbaedzés előzetes regisztrációval.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href="/kapcsolat#probaedzes">
@@ -102,23 +113,21 @@ export default function JoinCTA() {
             className="bg-white/5 backdrop-blur-sm border border-white/15 rounded-md p-8 text-white"
           >
             <div className="text-xs uppercase tracking-[0.3em] text-gold mb-4">Kapcsolat</div>
+            {/* Ugyanaz a sorrend és ugyanazok a kattintható elérhetőségek, mint a
+                Kapcsolat oldalon (Tóth Patrik, 10.23.); az adatok a Studióból jönnek. */}
             <div className="space-y-5">
-              <div>
-                <div className="text-xs text-white/50 uppercase tracking-widest mb-1">Cím</div>
-                <div className="text-white/95 font-medium">Budapest, Fáy utca 58.</div>
-              </div>
-              <div>
-                <div className="text-xs text-white/50 uppercase tracking-widest mb-1">Telefon</div>
-                <div className="text-white/95 font-medium">+36 20 378 4880</div>
-              </div>
-              <div>
-                <div className="text-xs text-white/50 uppercase tracking-widest mb-1">E-mail</div>
-                <div className="text-white/95 font-medium">info@vkla.hu</div>
-              </div>
-              <div className="pt-4 border-t border-white/10">
-                <div className="text-xs text-white/50 uppercase tracking-widest mb-1">Iroda</div>
-                <div className="text-white/95 font-medium">H-P: 9:00–17:00</div>
-              </div>
+              {elerhetosegek.map((e) => (
+                <div key={e.cimke}>
+                  <div className="text-xs text-white/50 uppercase tracking-widest mb-1">{e.cimke}</div>
+                  <a
+                    href={e.href}
+                    {...(e.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="text-white/95 font-medium hover:text-gold-light transition-colors"
+                  >
+                    {e.ertek}
+                  </a>
+                </div>
+              ))}
             </div>
           </motion.div>
         </motion.div>

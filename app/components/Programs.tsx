@@ -14,7 +14,7 @@ const PROGRAMS = [
   },
   {
     tag: "Próbaedzés",
-    title: "Ingyenes próbaedzés",
+    title: "Próbaedzés",
     desc: "U5-től U9-ig folyamatosan várjuk a focit szerető gyerekeket — jelentkezz az online űrlapon.",
     cta: "Jelentkezem",
     href: "/kapcsolat#probaedzes",

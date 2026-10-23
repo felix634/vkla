@@ -6,14 +6,11 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import SoonBadge from "./site/SoonBadge";
 import type { HirListItem } from "../lib/sanity/hirek";
-import { sized } from "../lib/sanity/imageUrl";
+import { fokusz, sized } from "../lib/sanity/imageUrl";
 import { catColor, formatDate } from "../lib/newsFormat";
+import type { HirKorosztaly } from "@/sanity/constants";
 
 const FO_KATEGORIAK = ["Összes", "VKLA", "VFC", "VFCII", "MLSZ", "KUPA", "SAJTÓ"];
-const KOROSZTALY_KATEGORIAK = [
-  "U5", "U6", "U7", "U8", "U9", "U10", "U11", "U12", "U13", "U14", "U15",
-  "U16", "U17", "U18", "U19", "U10L", "U11L", "U12L", "U13L", "U14L", "U16L", "U19L", "Női",
-];
 
 function hrefFor(category: string, page = 1): string {
   const p = new URLSearchParams();
@@ -50,6 +47,7 @@ export default function HirekList({
   page,
   pageSize,
   cmsOn,
+  korosztalyok,
 }: {
   items: HirListItem[];
   total: number;
@@ -57,12 +55,14 @@ export default function HirekList({
   page: number;
   pageSize: number;
   cmsOn: boolean;
+  /** A korosztály-szűrő elemei sorrendben (Studio: Oldal beállítások). */
+  korosztalyok: HirKorosztaly[];
 }) {
   const router = useRouter();
   const [featured, ...rest] = items;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const activeCat = category === "" ? "Összes" : category;
-  const korosztalyActive = KOROSZTALY_KATEGORIAK.includes(activeCat);
+  const korosztalyActive = korosztalyok.some((k) => k.kod === activeCat);
 
   return (
     <section className="bg-white">
@@ -93,9 +93,9 @@ export default function HirekList({
             aria-label="Korosztály szűrő"
           >
             <option value="">Korosztályok…</option>
-            {KOROSZTALY_KATEGORIAK.map((c) => (
-              <option key={c} value={c}>
-                {c}
+            {korosztalyok.map((k) => (
+              <option key={k.kod} value={k.kod}>
+                {k.nev || k.kod}
               </option>
             ))}
           </select>
@@ -128,6 +128,7 @@ export default function HirekList({
                     alt={featured.title}
                     fill
                     className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                    style={{ objectPosition: fokusz(featured.imagePos) }}
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />
@@ -174,6 +175,7 @@ export default function HirekList({
                       alt={n.title}
                       fill
                       className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                      style={{ objectPosition: fokusz(n.imagePos) }}
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />

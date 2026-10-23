@@ -107,7 +107,7 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                 </span>
               </div>
               <div className="text-[11px] text-white/70 mt-3 truncate">
-                {g.coachName ?? "Edző neve"}
+                {g.coachName ?? (teams && teams.length > 0 ? "Stáb feltöltés alatt" : "Edző neve")}
               </div>
               <div className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-gold group-hover:text-gold-light transition-colors">
                 Névsor
@@ -150,9 +150,9 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                     <div className="font-display font-black text-2xl text-gold-light leading-none">
                       {selected.name}
                     </div>
-                    <div className="text-sm text-white/60 mt-1 truncate">
-                      {selected.coachName ?? "Edző neve"} · vezetőedző
-                    </div>
+                    {selected.coachName && (
+                      <div className="text-sm text-white/60 mt-1 truncate">{selected.coachName} · vezetőedző</div>
+                    )}
                   </div>
                 </div>
                 <button

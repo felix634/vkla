@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import PageHero from "../../components/site/PageHero";
-import { getEdzok, getSzekciok, type EdzoData } from "../../lib/sanity/tartalom";
+import { getEdzok, getSzekciok, type EdzoData, type SzekcioData } from "../../lib/sanity/tartalom";
 import PortableBody from "../../components/PortableBody";
 import SzekcioBlock from "../../components/SzekcioBlock";
 import { sized } from "../../lib/sanity/imageUrl";
@@ -19,10 +19,10 @@ const VALUES = [
   { title: "Család az első", desc: "Szoros együttműködés a szülőkkel, mert a háttér nélkül nincs eredmény." },
 ];
 
+// Angyal Péter a klub kérésére kikerült a vezetőségből (Tóth Patrik, 2026.10.23.).
 const LEADERSHIP = [
   { role: "Akadémia igazgató", name: "Nagy Miklós" },
   { role: "Szakmai vezető", name: "Tóth Csaba" },
-  { role: "Alsó szekció vezetője", name: "Angyal Péter" },
   { role: "Szervezési és technikai vezető", name: "Kiss Dávid" },
 ];
 
@@ -32,6 +32,10 @@ const STAFF_PLACEHOLDER: EdzoData[] = Array.from({ length: 8 }, () => ({
   order: null,
   photoUrl: null,
 }));
+
+function vanTartalma(sz: SzekcioData | null | undefined): boolean {
+  return !!sz && (!!sz.headerImageUrl || (sz.body?.length ?? 0) > 0 || (sz.imageUrls?.length ?? 0) > 0);
+}
 
 function initials(name: string): string {
   return name.split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
@@ -94,7 +98,7 @@ export default async function AkademiaPage() {
                 <p className="text-navy/75 leading-relaxed mb-4">
                   A Vasas Kubala Akadémia 2007-ben alakult, és azóta a magyar utánpótlás-labdarúgás
                   egyik meghatározó műhelye. Évente több, mint 450 fiatal sportoló edz nálunk, 16
-                  korosztályban, a Fáy utcai sportkomplexumban.
+                  korosztályban, a Fáy utcai sportcentrumban.
                 </p>
                 <p className="text-navy/65 leading-relaxed">
                   Célunk, hogy a gyerekek technikai, taktikai és emberi fejlődése egyaránt fontos
@@ -216,24 +220,25 @@ export default async function AkademiaPage() {
             <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3">Vezetőség</h2>
             <div className="gold-divider mt-4" />
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* A vezetők is az edzői stáb 2:3-as portréival egyező kártyát kapnak —
+              a kis kör-avatár a 2:3-as képből a fejet vágta le (Tóth Patrik, 10.23.). */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {LEADERSHIP.map((p, i) => {
-              // Vezetői portré a CMS-ből, ha van — különben monogram.
               const foto = edzok?.find((e) => e.name === p.name)?.photoUrl ?? null;
               return (
                 <Reveal key={p.role} delay={i * 0.08} className="h-full">
-                  <HoverCard className="h-full rounded-md border border-gray-100 bg-cream p-6 text-center">
-                    {foto ? (
-                      <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-4">
-                        <Image src={sized(foto, 200)!} alt={p.name} fill className="object-cover" />
-                      </div>
-                    ) : (
-                      <div className="w-16 h-16 rounded-full bg-navy/5 mx-auto mb-4 flex items-center justify-center text-navy/40 font-display font-black text-xl">
-                        {initials(p.name)}
-                      </div>
-                    )}
-                    <div className="font-display font-bold text-navy">{p.name}</div>
-                    <div className="text-xs uppercase tracking-widest text-vasasRed mt-1">{p.role}</div>
+                  <HoverCard className="h-full bg-cream rounded-md border border-gray-100 overflow-hidden">
+                    <div className="relative aspect-[2/3] bg-navy flex items-center justify-center">
+                      {foto ? (
+                        <Image src={sized(foto, 500)!} alt={p.name} fill className="object-cover object-top opacity-90" />
+                      ) : (
+                        <span className="font-display font-black text-4xl text-white/15">{initials(p.name)}</span>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <div className="font-display font-bold text-navy">{p.name}</div>
+                      <div className="text-xs uppercase tracking-widest text-vasasRed mt-1">{p.role}</div>
+                    </div>
                   </HoverCard>
                 </Reveal>
               );
@@ -284,9 +289,18 @@ export default async function AkademiaPage() {
         </div>
       </section>
 
-      {/* CMS-szekciók: Képzési modell, Együttműködések, Sportiskolai háttér */}
+      {/* CMS-szekciók: Képzési modell, Szervezeti ábra, Büszkeségeink, Együttműködések.
+          A Sportiskolai és kollégiumi háttér szekció a klub kérésére lekerült
+          (Tóth Patrik, 2026.10.23.). A Szervezeti ábra és a Büszkeségeink csak
+          akkor jelenik meg, ha a Studióban van tartalmuk. */}
       {szekciok?.["kepzesi-modell"] && (
         <SzekcioBlock szekcio={szekciok["kepzesi-modell"]} id="kepzesi-modell" eyebrow="Szakmai munka" tone="cream" />
+      )}
+      {vanTartalma(szekciok?.["szervezeti-abra"]) && (
+        <SzekcioBlock szekcio={szekciok!["szervezeti-abra"]} id="szervezeti-abra" eyebrow="Szervezet" />
+      )}
+      {vanTartalma(szekciok?.["buszkesegeink"]) && (
+        <SzekcioBlock szekcio={szekciok!["buszkesegeink"]} id="buszkesegeink" eyebrow="Büszkeségeink" tone="cream" />
       )}
       {szekciok?.["egyuttmukodes-vasas"] && (
         <SzekcioBlock szekcio={szekciok["egyuttmukodes-vasas"]} id="egyuttmukodes" eyebrow="Együttműködés" />
@@ -296,9 +310,6 @@ export default async function AkademiaPage() {
       )}
       {szekciok?.["egyuttmukodes-tf"] && (
         <SzekcioBlock szekcio={szekciok["egyuttmukodes-tf"]} id="tf" eyebrow="Együttműködés" />
-      )}
-      {szekciok?.["oktatasi-program"] && (
-        <SzekcioBlock szekcio={szekciok["oktatasi-program"]} id="oktatas" eyebrow="Oktatás" />
       )}
 
     </main>

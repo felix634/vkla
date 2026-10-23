@@ -4,6 +4,7 @@ import HirekList from "../../components/HirekList";
 import { getHirek, HIREK_OLDALMERET } from "../../lib/sanity/hirek";
 import { sanityEnabled } from "../../lib/sanity/client";
 import { getBeallitasok } from "../../lib/sanity/tartalom";
+import { HIR_KOROSZTALYOK_ALAP } from "@/sanity/constants";
 
 export const metadata: Metadata = {
   title: "Hírek — Vasas Kubala Akadémia",
@@ -40,6 +41,7 @@ export default async function HirekPage({
         page={page}
         pageSize={HIREK_OLDALMERET}
         cmsOn={sanityEnabled}
+        korosztalyok={b?.hirKorosztalyok?.length ? b.hirKorosztalyok : HIR_KOROSZTALYOK_ALAP}
       />
     </main>
   );

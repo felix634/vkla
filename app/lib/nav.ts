@@ -16,7 +16,6 @@ export type NavItem = NavLink & {
 export const EXTERNAL = {
   webshop: "https://vasasfcshop.hu/",
   vasasFc: "https://www.vasasfc.hu/",
-  vasasFcII: "https://www.vasasfc.hu/",
 } as const;
 
 // Elsődleges, vízszintes menü (xl felett). Alattuk mobil menü.
@@ -28,8 +27,8 @@ export const PRIMARY_NAV: NavItem[] = [
     children: [
       { label: "Bemutatkozás", href: "/akademia#bemutatkozas" },
       { label: "Kubala László", href: "/akademia#kubala" },
-      { label: "Edzői stáb", href: "/akademia#stab" },
       { label: "Vezetőség", href: "/akademia#vezetoseg" },
+      { label: "Edzői stáb", href: "/akademia#stab" },
       { label: "Képzési modell", href: "/akademia#kepzesi-modell" },
       { label: "Együttműködések", href: "/akademia#osei" },
     ],
@@ -38,10 +37,10 @@ export const PRIMARY_NAV: NavItem[] = [
     label: "Csapatok",
     href: "/csapatok",
     children: [
+      { label: "Vasas FC II", href: "/csapatok#vasas-fc-ii" },
       { label: "Akadémia (U15–U19)", href: "/csapatok#akademia" },
       { label: "Pre-akadémia (U12–U14)", href: "/csapatok#pre-akademia" },
       { label: "Női szakág", href: "/csapatok#noi" },
-      { label: "Vasas FC II ↗", href: EXTERNAL.vasasFcII, external: true },
     ],
   },
   // A Naptár / Eredmények / Tabella almenü az MLSZ-adatokkal együtt tér vissza.
@@ -98,7 +97,6 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
       { label: "Szponzoráció", href: "/szponzoracio" },
       { label: "Webshop ↗", href: EXTERNAL.webshop, external: true },
       { label: "Vasas FC ↗", href: EXTERNAL.vasasFc, external: true },
-      { label: "Vasas FC II ↗", href: EXTERNAL.vasasFcII, external: true },
     ],
   },
 ];

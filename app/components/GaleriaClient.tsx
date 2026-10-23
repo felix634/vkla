@@ -1,59 +1,59 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import PageHero from "./site/PageHero";
-import SoonBadge from "./site/SoonBadge";
-import YouTubeEmbed from "./YouTubeEmbed";
+import KepNezegeto from "./KepNezegeto";
 import { sized } from "../lib/sanity/imageUrl";
-import type { GaleriaAlbumData, VideoData } from "../lib/sanity/tartalom";
-import { GALERIA_ALBUMOK } from "@/sanity/constants";
+import { formatDate } from "../lib/newsFormat";
+import type { GaleriaAlbumData } from "../lib/sanity/tartalom";
 
-const PLACEHOLDER_ALBUMS = ["Összes", "Mérkőzés", "Esemény", "Edzés"];
-// Csak valódi fotók — a kampánybannerek (focizzteis*, vasas*, vasassc*) szélesvásznúak,
-// négyzetes csempébe vágva olvashatatlan szövegtöredék látszana belőlük.
-const PLACEHOLDER_IMAGES = ["/images/flag.jpg", "/images/team.jpg", "/images/player.jpg"];
+// A galéria három szintje (Tóth Patrik, 2026.10.23., „akárcsak a Facebookon”):
+// 1. két nagy album egymás mellett (Mérkőzések, Események) borítóképpel;
+// 2. a kiválasztott kategória albumai;
+// 3. az album képei, kattintásra nagyítva.
+// A szintek URL-ből jönnek (?kategoria=…, ?album=…), így a Vissza gomb is működik.
+export const KATEGORIAK = [
+  { slug: "merkozesek", cms: "Mérkőzés", cim: "Mérkőzések", tartalek: "/images/flag.jpg" },
+  { slug: "esemenyek", cms: "Esemény", cim: "Események", tartalek: "/images/team.jpg" },
+] as const;
 
-const PLACEHOLDER_PHOTOS = Array.from({ length: 12 }, (_, i) => ({
-  album: ["Mérkőzés", "Esemény", "Edzés"][i % 3],
-  src: PLACEHOLDER_IMAGES[i % PLACEHOLDER_IMAGES.length],
-  title: "Galéria kép",
-}));
+function Vissza({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center gap-2 text-sm font-semibold text-navy/60 hover:text-vasasRed transition-colors mb-6"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+      {children}
+    </Link>
+  );
+}
 
-type Photo = { album: string; src: string; title: string };
+function Ures({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-md border border-gray-100 bg-cream px-6 py-12 text-center text-navy/50 text-sm">{children}</div>
+  );
+}
 
 export default function GaleriaClient({
   albumok,
-  videok,
+  kategoria,
+  albumId,
 }: {
   albumok?: GaleriaAlbumData[] | null;
-  videok?: VideoData[] | null;
+  kategoria?: string;
+  albumId?: string;
 }) {
-  const cmsOn = !!(albumok && albumok.length > 0);
-  const photos: Photo[] = cmsOn
-    ? albumok!.flatMap((a) =>
-        (a.imageUrls ?? []).map((u) => ({ album: a.category, src: u, title: a.title }))
-      )
-    : PLACEHOLDER_PHOTOS;
-  const chips = cmsOn ? ["Összes", ...GALERIA_ALBUMOK] : PLACEHOLDER_ALBUMS;
-  const hasVideos = !!(videok && videok.length > 0);
-
-  const [album, setAlbum] = useState("Összes");
-  const [lightbox, setLightbox] = useState<string | null>(null);
-  const filtered = album === "Összes" ? photos : photos.filter((p) => p.album === album);
-
-  useEffect(() => {
-    if (!lightbox) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setLightbox(null);
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [lightbox]);
+  const lista = (albumok ?? []).filter((a) => (a.imageUrls?.length ?? 0) > 0);
+  const album = albumId ? lista.find((a) => a._id === albumId) ?? null : null;
+  const kat = KATEGORIAK.find((k) => k.slug === kategoria) ?? (album ? KATEGORIAK.find((k) => k.cms === album.category) : undefined);
+  const [index, setIndex] = useState<number | null>(null);
 
   return (
     <main className="min-h-screen">
@@ -65,149 +65,112 @@ export default function GaleriaClient({
             Pillanatok a <span className="text-gold-light">pályáról.</span>
           </>
         }
-        subtitle={
-          cmsOn
-            ? "Mérkőzés- és eseményképek, valamint videós tartalmaink."
-            : "Mérkőzés- és eseményképek, valamint videós tartalmaink. A galéria a tartalomfeltöltés során telik meg."
-        }
+        subtitle="Mérkőzés- és eseményképek az akadémia életéből."
       />
 
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-14">
-          <div className="flex flex-wrap items-center gap-2 mb-8">
-            {chips.map((a) => (
-              <button
-                key={a}
-                onClick={() => setAlbum(a)}
-                className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                  album === a
-                    ? "bg-vasasRed text-white border-vasasRed"
-                    : "bg-white text-navy/70 border-gray-200 hover:border-vasasRed/50 hover:text-vasasRed"
-                }`}
-              >
-                {a}
-              </button>
-            ))}
-            {!cmsOn && (
-              <span className="sm:ml-auto">
-                <SoonBadge label="CMS feltöltés — hamarosan" />
-              </span>
-            )}
-          </div>
-
-          {filtered.length === 0 ? (
-            <div className="rounded-md border border-gray-100 bg-cream px-6 py-12 text-center text-navy/50 text-sm">
-              Ebben a kategóriában még nincsenek képek.
-            </div>
-          ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {filtered.map((p, i) => (
-              <motion.button
-                key={`${album}-${i}`}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.35, delay: (i % 8) * 0.03 }}
-                onClick={() => setLightbox(p.src)}
-                className={`relative overflow-hidden rounded-md bg-navy group ${
-                  i % 5 === 0 ? "col-span-2 aspect-[16/9]" : "aspect-square"
-                }`}
-              >
-                <Image
-                  src={sized(p.src, 800) ?? p.src}
-                  alt={p.title}
-                  fill
-                  className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition-colors flex items-center justify-center">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <line x1="11" y1="8" x2="11" y2="14" />
-                    <line x1="8" y1="11" x2="14" y2="11" />
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-          )}
-
-          {/* Videók */}
-          <div className="mt-16">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="font-display font-black text-2xl text-navy">Videók</h2>
-              <span className="text-xs font-bold uppercase tracking-wider bg-vasasRed/10 text-vasasRed px-2 py-1 rounded-sm">Vasas TV</span>
-            </div>
-            {hasVideos ? (
-              <div className="grid md:grid-cols-3 gap-5">
-                {videok!.map((v) => (
-                  <div key={v._id} className="rounded-md overflow-hidden border border-gray-100 bg-white">
-                    <div className="[&>div]:my-0 [&>div]:rounded-none">
-                      <YouTubeEmbed url={v.url} />
-                    </div>
-                    <div className="p-4">
-                      <div className="font-display font-bold text-navy">{v.title}</div>
-                      <div className="text-xs uppercase tracking-widest text-navy/50 mt-1">Vasas TV</div>
-                    </div>
-                  </div>
+          {album ? (
+            // 3. szint: az album képei
+            <>
+              <Vissza href={kat ? `/galeria?kategoria=${kat.slug}` : "/galeria"}>{kat?.cim ?? "Galéria"}</Vissza>
+              <h2 className="heading-display text-3xl md:text-4xl text-navy">{album.title}</h2>
+              <div className="text-sm text-navy/50 mt-2 mb-8">
+                {[album.date ? formatDate(album.date) : null, `${album.imageUrls!.length} kép`].filter(Boolean).join(" · ")}
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {album.imageUrls!.map((src, i) => (
+                  <motion.button
+                    key={src}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.35, delay: (i % 8) * 0.03 }}
+                    onClick={() => setIndex(i)}
+                    className="relative overflow-hidden rounded-md bg-navy group aspect-square"
+                    aria-label={`${album.title} — ${i + 1}. kép`}
+                  >
+                    <Image
+                      src={sized(src, 800) ?? src}
+                      alt={album.title}
+                      fill
+                      className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </motion.button>
                 ))}
               </div>
-            ) : (
-              <div className="grid md:grid-cols-3 gap-5">
-                {PLACEHOLDER_IMAGES.map((img, i) => (
-                  <div key={i} className="rounded-md overflow-hidden border border-gray-100 bg-white group cursor-pointer">
-                    <div className="relative aspect-video bg-navy">
-                      <Image src={img} alt="Videó címe" fill className="object-cover opacity-70" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="h-14 w-14 rounded-full bg-vasasRed/90 flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="6 4 20 12 6 20 6 4" /></svg>
-                        </span>
+              <KepNezegeto kepek={album.imageUrls!} index={index} setIndex={setIndex} alt={album.title} />
+            </>
+          ) : kat ? (
+            // 2. szint: a kategória albumai
+            <>
+              <Vissza href="/galeria">Galéria</Vissza>
+              <h2 className="heading-display text-3xl md:text-4xl text-navy mb-8">{kat.cim}</h2>
+              {lista.filter((a) => a.category === kat.cms).length === 0 ? (
+                <Ures>Ebben a kategóriában még nincs album.</Ures>
+              ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {lista
+                    .filter((a) => a.category === kat.cms)
+                    .map((a) => (
+                      <Link key={a._id} href={`/galeria?album=${a._id}`} className="group block">
+                        <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-navy">
+                          <Image
+                            src={sized(a.imageUrls![0], 800)!}
+                            alt={a.title}
+                            fill
+                            className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                          />
+                          <span className="absolute bottom-3 right-3 text-xs font-semibold bg-navy/70 text-white px-2.5 py-1 rounded-sm backdrop-blur-sm">
+                            {a.imageUrls!.length} kép
+                          </span>
+                        </div>
+                        <div className="pt-4">
+                          <h3 className="font-display font-bold text-xl text-navy group-hover:text-vasasRed transition-colors">
+                            {a.title}
+                          </h3>
+                          {a.date && <div className="text-xs text-navy/50 mt-1">{formatDate(a.date)}</div>}
+                        </div>
+                      </Link>
+                    ))}
+                </div>
+              )}
+            </>
+          ) : (
+            // 1. szint: a két nagy album
+            <div className="grid md:grid-cols-2 gap-6">
+              {KATEGORIAK.map((k) => {
+                const sajat = lista.filter((a) => a.category === k.cms);
+                const borito = sajat[0]?.imageUrls?.[0];
+                return (
+                  <Link
+                    key={k.slug}
+                    href={`/galeria?kategoria=${k.slug}`}
+                    className="group relative block aspect-[4/3] rounded-lg overflow-hidden bg-navy"
+                  >
+                    <Image
+                      src={borito ? sized(borito, 1400)! : k.tartalek}
+                      alt={k.cim}
+                      fill
+                      className="object-cover opacity-85 transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
+                    <div className="absolute left-0 right-0 bottom-0 p-8">
+                      <h2 className="heading-display text-4xl md:text-5xl text-white">{k.cim}</h2>
+                      <div className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-gold-light">
+                        {sajat.length > 0 ? `${sajat.length} album` : "Hamarosan"}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
                       </div>
                     </div>
-                    <div className="p-4">
-                      <div className="font-display font-bold text-navy">Videó címe</div>
-                      <div className="text-xs uppercase tracking-widest text-navy/50 mt-1">Vasas TV</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
-
-      {/* Lightbox */}
-      <AnimatePresence>
-        {lightbox && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-navy-deep/90 backdrop-blur-sm"
-            onClick={() => setLightbox(null)}
-          >
-            <button
-              className="absolute top-5 right-5 h-10 w-10 flex items-center justify-center rounded-md bg-white/10 hover:bg-white/20 text-white transition-colors"
-              aria-label="Bezárás"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
-              className="relative w-full max-w-4xl aspect-[16/10] rounded-md overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Image src={sized(lightbox, 1600) ?? lightbox} alt="Nagyított kép" fill className="object-contain" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </main>
   );
 }

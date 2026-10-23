@@ -1,4 +1,5 @@
 import { client, sanityEnabled } from "./client";
+import type { HirKorosztaly } from "@/sanity/constants";
 
 // Drive-ból importált tartalmak lekérdezői (dokumentumok, állások, csapatok, stáb).
 // CMS nélkül minden null-t ad — az oldalak ilyenkor a placeholderüket mutatják.
@@ -132,7 +133,7 @@ export async function getSzekciok(): Promise<Record<string, SzekcioData> | null>
       title,
       body[]{ ..., _type == "image" => { ..., "url": asset->url } },
       "headerImageUrl": headerImage.asset->url,
-      "imageUrls": images[].asset->url
+      "imageUrls": array::unique(images[].asset->url)
     }`,
     {},
     REVALIDATE
@@ -158,6 +159,8 @@ export type BeallitasokData = {
   webshopUrl: string | null;
   vasasFcUrl: string | null;
   vasasFcIIUrl: string | null;
+  hirKorosztalyok: HirKorosztaly[] | null;
+  szponzorArak: { arany: string | null; ezust: string | null; bronz: string | null } | null;
 };
 
 // Oldal-beállítások singleton (elérhetőségek, social + külső linkek).
@@ -167,7 +170,9 @@ export async function getBeallitasok(): Promise<BeallitasokData | null> {
     `*[_type == "beallitasok" && _id == "beallitasok"][0]{
       phone, email, probaedzesEmail, address, irodaCim, hirekKezdete, officeHours, kepzesiDijFiu, kepzesiDijLany,
       facebook, instagram, youtubeChannel, twitter, tiktok,
-      webshopUrl, vasasFcUrl, vasasFcIIUrl
+      webshopUrl, vasasFcUrl, vasasFcIIUrl,
+      hirKorosztalyok[]{ kod, nev },
+      szponzorArak{ arany, ezust, bronz }
     }`,
     {},
     REVALIDATE
@@ -189,10 +194,12 @@ export type HetirendData = {
 export async function getHetirend(): Promise<HetirendData[] | null> {
   if (!sanityEnabled || !client) return null;
   return client.fetch(
-    `*[_type == "hetirend"] | order(korosztaly asc) {
+    // A szűrő a Csapatok sorrendjét követi: legnagyobbtól lefelé, előbb fiúk, aztán lányok.
+    `*[_type == "hetirend"] {
       korosztaly,
-      entries[]{ day, from, to, location }
-    }`,
+      entries[]{ day, from, to, location },
+      "sorrend": *[_type == "korosztaly" && name == ^.korosztaly][0].order
+    } | order(coalesce(sorrend, 9999) asc, korosztaly asc)`,
     {},
     REVALIDATE
   );
@@ -216,8 +223,8 @@ export type VideoData = {
 export async function getGaleriaAlbumok(): Promise<GaleriaAlbumData[] | null> {
   if (!sanityEnabled || !client) return null;
   return client.fetch(
-    `*[_type == "galeria"] | order(date desc) {
-      _id, title, category, date, "imageUrls": images[].asset->url
+    `*[_type == "galeria"] | order(coalesce(date, _createdAt) desc) {
+      _id, title, category, date, "imageUrls": array::unique(images[].asset->url)
     }`,
     {},
     REVALIDATE
@@ -239,6 +246,7 @@ export type LetesitmenyData = {
   address: string | null;
   body: unknown[] | null;
   amenities: string[] | null;
+  berelheto: boolean | null;
   rentInfo: string | null;
   imageUrls: string[] | null;
   mapImageUrl: string | null;
@@ -248,8 +256,8 @@ export async function getLetesitmenyek(): Promise<LetesitmenyData[] | null> {
   if (!sanityEnabled || !client) return null;
   return client.fetch(
     `*[_type == "letesitmeny"] | order(order asc) {
-      _id, name, address, body, amenities, rentInfo,
-      "imageUrls": images[].asset->url,
+      _id, name, address, body, amenities, berelheto, rentInfo,
+      "imageUrls": array::unique(images[].asset->url),
       "mapImageUrl": mapImage.asset->url
     }`,
     {},

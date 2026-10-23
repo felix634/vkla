@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getHir } from "../../../lib/sanity/hirek";
 import PortableBody from "../../../components/PortableBody";
-import { sized } from "../../../lib/sanity/imageUrl";
+import { fokusz, sized } from "../../../lib/sanity/imageUrl";
 
 export const revalidate = 300;
 
@@ -80,6 +80,7 @@ export default async function HirPage({ params }: { params: { slug: string } }) 
               fill
               priority
               className="object-cover"
+              style={{ objectPosition: fokusz(hir.imagePos) }}
             />
           </div>
         </div>
@@ -87,6 +88,12 @@ export default async function HirPage({ params }: { params: { slug: string } }) 
 
       {/* Törzs */}
       <article className="max-w-3xl mx-auto px-6 py-10">
+        {/* Lead: külön szövegdoboz a kép alatt (Tóth Patrik kérdése, 10.23.). */}
+        {hir.lead && (
+          <p className="text-lg md:text-xl font-semibold text-navy leading-relaxed border-l-4 border-vasasRed pl-5 mb-8">
+            {hir.lead}
+          </p>
+        )}
         {hir.body && hir.body.length > 0 ? (
           <PortableBody value={hir.body} />
         ) : (

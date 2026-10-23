@@ -1,5 +1,6 @@
 import { client, sanityEnabled } from "./client";
 import { getArchivIndex, getArchivCikk, archivLetezik } from "../archiv";
+import type { Fokuszpont } from "./imageUrl";
 
 export type HirListItem = {
   _id: string;
@@ -8,7 +9,9 @@ export type HirListItem = {
   publishedAt: string | null;
   category: string;
   excerpt: string | null;
+  lead?: string | null;
   imageUrl: string | null;
+  imagePos?: Fokuszpont;
 };
 
 export type HirDetail = HirListItem & {
@@ -24,7 +27,9 @@ const LIST_FIELDS = `
   publishedAt,
   category,
   excerpt,
-  "imageUrl": heroImage.asset->url
+  lead,
+  "imageUrl": heroImage.asset->url,
+  "imagePos": heroImage.hotspot{ x, y }
 `;
 
 // Helykitöltő hírek — amíg a CMS nincs bekötve, a látványterv ezt mutatja.
@@ -98,6 +103,25 @@ export async function getHirek(opts: {
     items = items.concat(archiv.slice(aFrom, aTo));
   }
   return { items, total };
+}
+
+// A főoldal tetejének hírei: 1 kiemelt (a Studióban „Kiemelt hír a főoldalon”,
+// ha nincs ilyen, a legújabb) + az 5 legfrissebb (Tóth Patrik, 2026.10.23.).
+export async function getFooldalHirek(): Promise<{ kiemelt: HirListItem | null; tovabbi: HirListItem[] }> {
+  if (!sanityEnabled || !client) {
+    const [kiemelt, ...tovabbi] = PLACEHOLDER_HIREK;
+    return { kiemelt, tovabbi: tovabbi.slice(0, 5) };
+  }
+  const { rogzitett, friss } = await client.fetch<{ rogzitett: HirListItem | null; friss: HirListItem[] }>(
+    `{
+      "rogzitett": *[_type == "hir" && defined(slug.current) && kiemelt == true] | order(publishedAt desc)[0]{ ${LIST_FIELDS} },
+      "friss": *[_type == "hir" && defined(slug.current)] | order(publishedAt desc)[0...6]{ ${LIST_FIELDS} }
+    }`,
+    {},
+    { next: { revalidate: 300 } }
+  );
+  const kiemelt = rogzitett ?? friss[0] ?? null;
+  return { kiemelt, tovabbi: friss.filter((h) => h._id !== kiemelt?._id).slice(0, 5) };
 }
 
 export async function getHir(slug: string): Promise<HirDetail | null> {

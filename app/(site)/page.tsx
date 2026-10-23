@@ -1,40 +1,30 @@
-import Hero from "../components/Hero";
-import QuickActions from "../components/QuickActions";
-import News from "../components/News";
+import KiemeltHirek from "../components/KiemeltHirek";
 import Academy from "../components/Academy";
-import Teams from "../components/Teams";
-import Matches from "../components/Matches";
-import Programs from "../components/Programs";
-import FacilitiesTeaser from "../components/FacilitiesTeaser";
 import Sponsors from "../components/Sponsors";
 import JoinCTA from "../components/JoinCTA";
-import { getHirek } from "../lib/sanity/hirek";
-import { getCsapatok, getSzponzorok } from "../lib/sanity/tartalom";
+import { getFooldalHirek } from "../lib/sanity/hirek";
+import { getBeallitasok, getSzponzorok } from "../lib/sanity/tartalom";
 
 export const revalidate = 300;
 
 // A chrome (banner, TopBar, Header, Footer) a layout.tsx-ben van — minden aloldal osztozik rajta.
-// Az "Oktatás" szekció kikerült; helyére a Létesítmények teaser került (jegyzőkönyv).
+// Új elrendezés (Tóth Patrik, 2026.10.23.): kiemelt hír + 5 friss hír, alatta a
+// „Több, mint egy klub” bemutatkozás, majd a partnerek. A korábbi blokkok
+// (Hero, gyorslinkek, Csapatok, Mérkőzések, Programok, Létesítmények) kikerültek,
+// mert a menüből mind elérhetők — a főoldal így nem duplikálja őket.
 export default async function Home() {
-  // A 3 legfrissebb hír a CMS-ből; env nélkül a News a saját placeholderét mutatja.
-  const [{ items }, csapatok, szponzorok] = await Promise.all([
-    getHirek({ page: 1 }),
-    getCsapatok(),
+  const [{ kiemelt, tovabbi }, szponzorok, b] = await Promise.all([
+    getFooldalHirek(),
     getSzponzorok(),
+    getBeallitasok(),
   ]);
 
   return (
     <main className="min-h-screen">
-      <Hero />
-      <QuickActions />
-      <News items={items.slice(0, 3)} />
+      <KiemeltHirek kiemelt={kiemelt} tovabbi={tovabbi} />
       <Academy />
-      <Teams teams={csapatok} />
-      <Matches />
-      <Programs />
-      <FacilitiesTeaser />
       <Sponsors szponzorok={szponzorok} />
-      <JoinCTA />
+      <JoinCTA b={b} />
     </main>
   );
 }

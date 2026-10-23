@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { utvonalUrl } from "../lib/terkep";
 
 // Kattintásra töltődő Google-térkép (mint a YouTubeEmbed): amíg a látogató nem
 // kéri, a Google-tól semmi nem töltődik be (nincs külső süti, gyors az oldal).
@@ -44,7 +45,7 @@ export default function TerkepBetolto({ nev, cim, minH = "min-h-[340px]" }: { ne
             Térkép megjelenítése
           </button>
           <a
-            href={`https://www.google.com/maps/dir/?api=1&destination=${q}`}
+            href={utvonalUrl(cim, nev)}
             target="_blank"
             rel="noopener noreferrer"
             className="border border-white/25 hover:bg-white/10 transition-colors text-white font-semibold px-4 py-2 rounded-md text-sm"

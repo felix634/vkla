@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import CoachRoster from "./CoachRoster";
-import { EXTERNAL } from "../lib/nav";
 import type { CsapatData } from "../lib/sanity/tartalom";
 
 export default function Teams({ teams }: { teams?: CsapatData[] | null }) {
@@ -63,19 +62,15 @@ export default function Teams({ teams }: { teams?: CsapatData[] | null }) {
               Csatlakozz egy csapathoz
             </motion.span>
           </Link>
-          <a href={EXTERNAL.vasasFcII} target="_blank" rel="noopener noreferrer">
+          <Link href="/csapatok#vasas-fc-ii">
             <motion.span
               whileHover={reduced ? undefined : { y: -3 }}
               whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 border-2 border-white/20 hover:border-gold hover:text-gold transition-colors px-7 py-3.5 font-bold rounded-sm text-sm"
             >
-              Vasas FC II oldala
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                <path d="M7 17L17 7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
+              Vasas FC II
             </motion.span>
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

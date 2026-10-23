@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const FACILITIES = [
   {
-    name: "Fáy utcai Sportkomplexum",
+    name: "Fáy utcai Sportcentrum",
     meta: "Fő létesítmény · 3 pálya",
     img: "/images/flag.jpg",
   },
