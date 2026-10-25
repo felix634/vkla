@@ -30,6 +30,7 @@ export const PRIMARY_NAV: NavItem[] = [
       { label: "Vezetőség", href: "/akademia#vezetoseg" },
       { label: "Edzői stáb", href: "/akademia#stab" },
       { label: "Képzési modell", href: "/akademia#kepzesi-modell" },
+      { label: "Szervezeti ábra", href: "/akademia#szervezeti-abra" },
       { label: "Együttműködések", href: "/akademia#osei" },
     ],
   },

@@ -10,11 +10,14 @@ export default function SzekcioBlock({
   id,
   eyebrow,
   tone = "light",
+  nagyithato = false,
 }: {
   szekcio: SzekcioData;
   id: string;
   eyebrow?: string;
   tone?: "light" | "cream";
+  /** A fejléc-kép kattintásra teljes méretben nyílik (pl. a sűrű szervezeti ábra). */
+  nagyithato?: boolean;
 }) {
   return (
     <section
@@ -30,7 +33,7 @@ export default function SzekcioBlock({
           <div className="gold-divider mt-4" />
         </div>
 
-        {szekcio.headerImageUrl && (
+        {szekcio.headerImageUrl && !nagyithato && (
           <div className="relative w-full rounded-md overflow-hidden bg-navy/5 mb-8">
             {/* A fejléc-bannerek eredeti (széles) arányukban jelennek meg */}
             <Image
@@ -41,6 +44,26 @@ export default function SzekcioBlock({
               className="w-full h-auto"
             />
           </div>
+        )}
+        {szekcio.headerImageUrl && nagyithato && (
+          // Új lapon az eredeti felbontás nyílik: mobilon is ráközelíthető.
+          <a
+            href={sized(szekcio.headerImageUrl, 3000)!}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative block w-full rounded-md overflow-hidden bg-navy/5 mb-8"
+          >
+            <Image
+              src={sized(szekcio.headerImageUrl, 1600)!}
+              alt={szekcio.title}
+              width={1140}
+              height={400}
+              className="w-full h-auto"
+            />
+            <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 text-xs font-semibold bg-navy/80 group-hover:bg-vasasRed text-white px-3 py-1.5 rounded-sm transition-colors">
+              Nagyítás ↗
+            </span>
+          </a>
         )}
 
         {szekcio.body && szekcio.body.length > 0 && (

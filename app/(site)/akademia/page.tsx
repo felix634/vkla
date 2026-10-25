@@ -19,11 +19,13 @@ const VALUES = [
   { title: "Család az első", desc: "Szoros együttműködés a szülőkkel, mert a háttér nélkül nincs eredmény." },
 ];
 
-// Angyal Péter a klub kérésére kikerült a vezetőségből (Tóth Patrik, 2026.10.23.).
+// Angyal Péter a klub kérésére kikerült a vezetőségből (Tóth Patrik, 2026.10.23.);
+// pre-akadémiai szekcióvezetőként az edzői stábban szerepel. A beosztások a
+// 2026/27-es szervezeti ábrát követik.
 const LEADERSHIP = [
   { role: "Akadémia igazgató", name: "Nagy Miklós" },
   { role: "Szakmai vezető", name: "Tóth Csaba" },
-  { role: "Szervezési és technikai vezető", name: "Kiss Dávid" },
+  { role: "Operatív vezető", name: "Kiss Dávid" },
 ];
 
 const STAFF_PLACEHOLDER: EdzoData[] = Array.from({ length: 8 }, () => ({
@@ -38,7 +40,7 @@ function vanTartalma(sz: SzekcioData | null | undefined): boolean {
 }
 
 function initials(name: string): string {
-  return name.split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
+  return name.replace(/^dr\.?\s+/i, "").split(/\s+/).slice(0, 2).map((w) => w[0] ?? "").join("").toUpperCase();
 }
 
 
@@ -59,6 +61,7 @@ export default async function AkademiaPage() {
   const csoport = (pred: (r: string) => boolean) =>
     stab.filter((e) => pred((e.role ?? "").toLowerCase()));
   const stabCsoportok = [
+    { title: "Szekcióvezetők", tagok: csoport((r) => r.includes("szekció vezetője")) },
     { title: "Vezetőedzők", tagok: csoport((r) => r.includes("vezetőedző")) },
     { title: "Asszisztensedzők", tagok: csoport((r) => r.includes("asszisztens")) },
     { title: "Erőnléti edzők", tagok: csoport((r) => r.includes("erőnléti") || r.includes("teljesítmény")) },
@@ -297,7 +300,7 @@ export default async function AkademiaPage() {
         <SzekcioBlock szekcio={szekciok["kepzesi-modell"]} id="kepzesi-modell" eyebrow="Szakmai munka" tone="cream" />
       )}
       {vanTartalma(szekciok?.["szervezeti-abra"]) && (
-        <SzekcioBlock szekcio={szekciok!["szervezeti-abra"]} id="szervezeti-abra" eyebrow="Szervezet" />
+        <SzekcioBlock szekcio={szekciok!["szervezeti-abra"]} id="szervezeti-abra" eyebrow="Szervezet" nagyithato />
       )}
       {vanTartalma(szekciok?.["buszkesegeink"]) && (
         <SzekcioBlock szekcio={szekciok!["buszkesegeink"]} id="buszkesegeink" eyebrow="Büszkeségeink" tone="cream" />
