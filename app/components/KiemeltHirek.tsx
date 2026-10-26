@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { HirListItem } from "../lib/sanity/hirek";
 import { fokusz, sized } from "../lib/sanity/imageUrl";
+import LogoHelyettes from "./site/LogoHelyettes";
 import { catColor, formatDate } from "../lib/newsFormat";
 
 // A főoldal nyitóblokkja (Tóth Patrik, 2026.10.23.): balra nagyban a kiemelt
@@ -31,7 +32,7 @@ export default function KiemeltHirek({ kiemelt, tovabbi }: { kiemelt: HirListIte
           </span>
           <Link href={href(kiemelt)} className="group block">
             <div className="relative aspect-[16/10] rounded-md overflow-hidden bg-navy-dark">
-              {kiemelt.imageUrl && (
+              {kiemelt.imageUrl ? (
                 <Image
                   src={sized(kiemelt.imageUrl, 1400)!}
                   alt={kiemelt.title}
@@ -41,6 +42,9 @@ export default function KiemeltHirek({ kiemelt, tovabbi }: { kiemelt: HirListIte
                   className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
                   style={{ objectPosition: fokusz(kiemelt.imagePos) }}
                 />
+              ) : (
+                // A cím alul ráúszik a képre, ezért a logó feljebb ül.
+                <LogoHelyettes meret="h-[42%]" className="pb-[16%]" />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
               <div className="absolute left-0 right-0 bottom-0 p-5 md:p-8">
@@ -78,7 +82,7 @@ export default function KiemeltHirek({ kiemelt, tovabbi }: { kiemelt: HirListIte
               >
                 <Link href={href(h)} className="group flex gap-4 items-center rounded-md p-2 -m-2 hover:bg-white/5 transition-colors">
                   <div className="relative w-28 sm:w-32 aspect-[16/10] flex-shrink-0 rounded overflow-hidden bg-navy-dark">
-                    {h.imageUrl && (
+                    {h.imageUrl ? (
                       <Image
                         src={sized(h.imageUrl, 320)!}
                         alt={h.title}
@@ -87,6 +91,8 @@ export default function KiemeltHirek({ kiemelt, tovabbi }: { kiemelt: HirListIte
                         className="object-cover opacity-90"
                         style={{ objectPosition: fokusz(h.imagePos) }}
                       />
+                    ) : (
+                      <LogoHelyettes meret="h-3/4" />
                     )}
                   </div>
                   <div className="min-w-0">

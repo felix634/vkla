@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import SoonBadge from "./site/SoonBadge";
 import type { HirListItem } from "../lib/sanity/hirek";
 import { fokusz, sized } from "../lib/sanity/imageUrl";
+import LogoHelyettes from "./site/LogoHelyettes";
 import { catColor, formatDate } from "../lib/newsFormat";
 import type { HirKorosztaly } from "@/sanity/constants";
 
@@ -122,7 +123,7 @@ export default function HirekList({
           >
             <CardWrap slug={featured.slug} className="grid lg:grid-cols-2 gap-8 mb-12 group">
               <div className="relative aspect-[16/10] rounded-md overflow-hidden bg-navy">
-                {featured.imageUrl && (
+                {featured.imageUrl ? (
                   <Image
                     src={sized(featured.imageUrl, 1200)!}
                     alt={featured.title}
@@ -130,6 +131,8 @@ export default function HirekList({
                     className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
                     style={{ objectPosition: fokusz(featured.imagePos) }}
                   />
+                ) : (
+                  <LogoHelyettes />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />
                 <span
@@ -169,7 +172,7 @@ export default function HirekList({
             >
               <CardWrap slug={n.slug} className="block">
                 <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-navy">
-                  {n.imageUrl && (
+                  {n.imageUrl ? (
                     <Image
                       src={sized(n.imageUrl, 700)!}
                       alt={n.title}
@@ -177,6 +180,8 @@ export default function HirekList({
                       className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
                       style={{ objectPosition: fokusz(n.imagePos) }}
                     />
+                  ) : (
+                    <LogoHelyettes />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />
                   <span
