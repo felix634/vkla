@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MLSZ_ADATBANK_URL } from "./MatchCenter";
+import { MLSZ_ADATBANK_URL } from "../lib/mlsz";
 
 // Főoldali mérkőzés-sáv. Amíg az MLSZ adatbank bekötése nem él, helykitöltő
 // mérkőzések helyett a jelenleg is elérhető forrásokra mutat (Hírek, MLSZ).

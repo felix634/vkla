@@ -1,0 +1,9 @@
+# Csak a szinkron kimenetét szolgálja ki (nyilvános mérkőzésadat, nincs benne titok).
+# A sslip.io név az IP-re mutat; élesítés előtt saját aldomainre cserélendő
+# (és akkor az app/lib/mlsz.ts címe is).
+85-9-201-114.sslip.io {
+	root * /var/lib/vkla-mlsz/public
+	file_server
+	encode gzip
+	header Cache-Control "public, max-age=120"
+}

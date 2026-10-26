@@ -39,12 +39,13 @@ export const PRIMARY_NAV: NavItem[] = [
     href: "/csapatok",
     children: [
       { label: "Vasas FC II", href: "/csapatok#vasas-fc-ii" },
-      { label: "Akadémia (U15–U19)", href: "/csapatok#akademia" },
-      { label: "Pre-akadémia (U12–U14)", href: "/csapatok#pre-akademia" },
+      // Korosztály-tartomány nélkül: a szekciók összetétele a CMS-ben változhat.
+      { label: "Akadémia", href: "/csapatok#akademia" },
+      { label: "Pre-akadémia", href: "/csapatok#pre-akademia" },
       { label: "Női szakág", href: "/csapatok#noi" },
     ],
   },
-  // A Naptár / Eredmények / Tabella almenü az MLSZ-adatokkal együtt tér vissza.
+  // Egy oldal: következő mérkőzések, eredmények, tabella (MLSZ adatbank).
   { label: "Mérkőzések", href: "/merkozesek" },
   { label: "Programok", href: "/programok" },
   { label: "Galéria", href: "/galeria" },

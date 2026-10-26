@@ -1,0 +1,15 @@
+[Unit]
+Description=VKLA: MLSZ adatbank szinkron (vkla.json)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=vkla
+Group=vkla
+ExecStart=/usr/bin/python3 /opt/vkla/mlsz-sync.py
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/vkla-mlsz
