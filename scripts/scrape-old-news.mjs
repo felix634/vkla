@@ -144,7 +144,11 @@ function parseListing(html, year) {
       slug: decodeURIComponent(link[1]).trim(),
       title: decodeEntities(link[2]),
       category: cat ? decodeEntities(cat[1]) : null,
-      thumb: img ? img[1] : null,
+      // A listán 195x97-es bélyegkép áll, a big/ alatt ugyanez 800x400-ban.
+      // Az img_kubala.png a régi oldal helykitöltője: ott a klub logója jön.
+      thumb: img && img[1].includes("uploads/images/news/")
+        ? img[1].replace(/uploads\/images\/news\/(?!big\/)/, "uploads/images/news/big/")
+        : null,
       dateRaw: datum ? datum[1].trim() : null,
       dateIso: datum ? parseDate(datum[1]) : null,
     });
