@@ -25,4 +25,13 @@ const uj = JSON.parse(readFileSync(INDEX, "utf8")).filter((a) => !regiSlugok.has
 console.log(`\nÚj cikk a régi oldalon ${since} óta: ${uj.length}`);
 for (const a of uj) console.log(`  ${a.dateRaw}  ${a.title}`);
 
+// A klub néha régebbi dátummal tesz fel cikket (2026.11.16-án 6 ilyen jött).
+// Ezek képei az első körben kimaradnak, ezért a legrégebbi új cikk napjától
+// még egyszer lefut a letöltés (a cikkek és a meglévő képek a gyorsítótárból jönnek).
+const legregebbi = uj.map((a) => a.dateIso ?? "").filter(Boolean).sort()[0]?.slice(0, 10);
+if (legregebbi && legregebbi < since) {
+  console.log(`\nRégebbi dátumú új cikk is van (${legregebbi}), a képeit is letöltöm.`);
+  futtat("scripts/scrape-old-news.mjs", ["--from", String(EV), "--to", String(EV), "--images-from-year", String(EV), "--images-since", legregebbi]);
+}
+
 futtat("scripts/import-news.mjs", ["--from-year", String(EV)]);
