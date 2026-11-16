@@ -79,6 +79,12 @@ for (const [katNev, albumok] of Object.entries(manifest)) {
       kihagyott++;
       continue;
     }
+    // Csak teljesen letöltött album kerül fel (a letöltés még futhat).
+    const hianyzo = a.files.filter((f) => !existsSync(path.join(kepekDir, a.id, `${f.id}.jpg`))).length;
+    if (hianyzo) {
+      console.log(`  MÉG LETÖLTÉS ALATT (${hianyzo} kép hiányzik), kihagyva: ${a.title}`);
+      continue;
+    }
     // Borító elöl, utána a Drive-sorrend (fájlnév szerint).
     let fajlok = [...a.files];
     const b = borito[a.id];
