@@ -74,7 +74,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
-        <Link href="/" className="flex-shrink-0" aria-label="Vasas Kubala Akadémia — Főoldal">
+        <Link href="/" className="flex-shrink-0" aria-label="Vasas Kubala Akadémia – Főoldal">
           <motion.span
             className="block"
             whileHover={reduced ? undefined : { scale: 1.04 }}

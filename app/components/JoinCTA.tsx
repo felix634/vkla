@@ -88,15 +88,6 @@ export default function JoinCTA({ b }: { b?: BeallitasokData | null }) {
                 </motion.svg>
               </motion.span>
             </Link>
-            <Link href="/dokumentumok">
-              <motion.span
-                whileHover={reduced ? undefined : { y: -3 }}
-                whileTap={{ scale: 0.97 }}
-                className="block border-2 border-white/30 hover:border-gold hover:text-gold transition-colors px-8 py-4 font-bold rounded-sm"
-              >
-                Letöltöm a brosúrát
-              </motion.span>
-            </Link>
           </div>
         </motion.div>
 

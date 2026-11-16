@@ -76,7 +76,7 @@ export default function SzekcioBlock({
               <div key={i} className="relative aspect-[3/2] rounded-md overflow-hidden bg-navy/5">
                 <Image
                   src={sized(u, 700)!}
-                  alt={`${szekcio.title} — fotó ${i + 1}`}
+                  alt={`${szekcio.title} – fotó ${i + 1}`}
                   fill
                   className="object-cover"
                 />

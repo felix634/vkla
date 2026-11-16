@@ -9,7 +9,7 @@ import { aktualisEmail, isAdmin } from "../../../../lib/fiok/auth";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Szülői névjegyzék — Vasas Kubala Akadémia",
+  title: "Szülői névjegyzék – Vasas Kubala Akadémia",
   robots: { index: false },
 };
 
@@ -87,7 +87,7 @@ export default async function NevjegyzekPage({ searchParams }: { searchParams: {
               Zöld pipa: a szülő már regisztrált. Új cím hozzáadásához írd be a címet a sor végén, és nyomj Entert.
             </p>
             {sorok.length === 0 ? (
-              <p className="text-sm text-navy/60">{q ? "Nincs találat." : "A névjegyzék még üres — töltsd fel a fenti táblázattal."}</p>
+              <p className="text-sm text-navy/60">{q ? "Nincs találat." : "A névjegyzék még üres – töltsd fel a fenti táblázattal."}</p>
             ) : (
               <div className="divide-y divide-gray-100">
                 {sorok.map((g) => (
@@ -97,7 +97,7 @@ export default async function NevjegyzekPage({ searchParams }: { searchParams: {
                       <div className="text-xs text-navy/50">
                         {[g.korosztaly, g.vevokod && `vevőkód: ${g.vevokod}`, g.szamlak ? `${g.szamlak} számla` : null]
                           .filter(Boolean)
-                          .join(" · ") || "—"}
+                          .join(" · ") || "–"}
                       </div>
                     </div>
                     <div className="md:col-span-8">

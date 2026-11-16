@@ -38,7 +38,7 @@ export const PRIMARY_NAV: NavItem[] = [
     label: "Csapatok",
     href: "/csapatok",
     children: [
-      { label: "Vasas FC II", href: "/csapatok#vasas-fc-ii" },
+      { label: "Vasas FC II.", href: "/csapatok#vasas-fc-ii" },
       // Korosztály-tartomány nélkül: a szekciók összetétele a CMS-ben változhat.
       { label: "Akadémia", href: "/csapatok#akademia" },
       { label: "Pre-akadémia", href: "/csapatok#pre-akademia" },
@@ -96,7 +96,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   {
     title: "Partnerek",
     links: [
-      { label: "Szponzoráció", href: "/szponzoracio" },
+      { label: "Szponzorok", href: "/szponzoracio" },
       { label: "Webshop ↗", href: EXTERNAL.webshop, external: true },
       { label: "Vasas FC ↗", href: EXTERNAL.vasasFc, external: true },
     ],

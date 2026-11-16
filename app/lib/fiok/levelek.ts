@@ -19,19 +19,19 @@ export function jelszoLevel(
 ): { subject: string; html: string } {
   const szoveg = {
     regisztracio: {
-      subject: "VKLA szülői fiók — regisztráció befejezése",
+      subject: "VKLA szülői fiók – regisztráció befejezése",
       cim: "Már csak a jelszavad hiányzik",
       bev: "Köszönjük a regisztrációt! Az alábbi gombra kattintva add meg a jelszavadat, és utána beléphetsz a Vasas Kubala Akadémia szülői fiókjába.",
       gomb: "Jelszó beállítása",
     },
     elfelejtett: {
-      subject: "VKLA szülői fiók — új jelszó beállítása",
+      subject: "VKLA szülői fiók – új jelszó beállítása",
       cim: "Új jelszó beállítása",
       bev: "Az alábbi gombra kattintva adhatsz meg új jelszót a szülői fiókodhoz.",
       gomb: "Új jelszó beállítása",
     },
     marVanFiok: {
-      subject: "VKLA szülői fiók — már van fiókod",
+      subject: "VKLA szülői fiók – már van fiókod",
       cim: "Ezzel a címmel már van fiókod",
       bev: "Valaki (remélhetőleg te) regisztrálni próbált ezzel az e-mail-címmel, de már van szülői fiókod. Ha elfelejtetted a jelszavad, az alábbi gombra kattintva újat állíthatsz be.",
       gomb: "Új jelszó beállítása",
@@ -51,7 +51,7 @@ export function jelszoLevel(
 export function szamlaLevel(sz: Szamla, alapUrl: string): { subject: string; html: string } {
   const kinek = sz.gyermek_nev ? ` (${sz.gyermek_nev})` : "";
   return {
-    subject: `Képzési díj számla — ${idoszak(sz.idoszak)}${kinek}`,
+    subject: `Képzési díj számla – ${idoszak(sz.idoszak)}${kinek}`,
     html: keret(
       `<h2 style="font-size:18px;margin:0 0 12px">Új számla érkezett</h2>` +
         `<p>Kedves Szülő!</p>` +

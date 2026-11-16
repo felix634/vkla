@@ -6,7 +6,7 @@ import { getBeallitasok } from "../../lib/sanity/tartalom";
 import { HIR_KOROSZTALYOK_ALAP } from "@/sanity/constants";
 
 export const metadata: Metadata = {
-  title: "Mérkőzések — Vasas Kubala Akadémia",
+  title: "Mérkőzések – Vasas Kubala Akadémia",
 };
 
 // Az MLSZ-adat óránként frissül a szerveren; az oldal 10 percenként újrarenderel.

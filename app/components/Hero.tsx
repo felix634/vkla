@@ -138,8 +138,8 @@ export default function Hero() {
           >
             {[
               { n: "2007", label: "alapítás éve" },
-              { n: "16", label: "korosztály" },
-              { n: "450+", label: "aktív játékos" },
+              { n: "20", label: "korosztály" },
+              { n: "400+", label: "aktív játékos" },
             ].map((s, i) => (
               <motion.div
                 key={s.label}

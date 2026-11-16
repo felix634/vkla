@@ -8,7 +8,7 @@ import { aktualisEmail } from "../../lib/fiok/auth";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Belépés a szülői fiókba — Vasas Kubala Akadémia",
+  title: "Belépés a szülői fiókba – Vasas Kubala Akadémia",
   robots: { index: false },
 };
 

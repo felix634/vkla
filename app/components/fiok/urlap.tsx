@@ -20,7 +20,7 @@ export async function kuld(url: string, body: object): Promise<{ ok: boolean; er
     const adat = await res.json().catch(() => ({}));
     return res.ok ? { ok: true } : { ok: false, error: adat.error ?? "A művelet nem sikerült." };
   } catch {
-    return { ok: false, error: "Hálózati hiba — próbáld újra." };
+    return { ok: false, error: "Hálózati hiba – próbáld újra." };
   }
 }
 

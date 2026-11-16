@@ -43,7 +43,7 @@ export default function Education() {
             <div className="gold-divider mb-7" />
             <p className="text-lg text-navy/75 leading-relaxed mb-6">
               Saját videós tananyagaink lehetővé teszik, hogy gyermeke az
-              edzéseken kívül is gyakorolhasson — szakképzett edzőink által
+              edzéseken kívül is gyakorolhasson – szakképzett edzőink által
               összeállított programokkal.
             </p>
             <ul className="space-y-3 mb-8">

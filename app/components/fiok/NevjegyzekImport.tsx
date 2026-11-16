@@ -131,7 +131,7 @@ export default function NevjegyzekImport() {
         <h2 className="font-display font-bold text-xl text-navy mb-2">Névjegyzék feltöltése</h2>
         <p className="text-sm text-navy/60">
           Soronként egy gyermek: a neve (ahogy a számlákon vevőként szerepel), és a szülők e-mail-címei
-          — akárhány oszlopban, egy cellában akár több cím is lehet. Korosztály és vevőkód opcionális.
+          – akárhány oszlopban, egy cellában akár több cím is lehet. Korosztály és vevőkód opcionális.
           Meglévő gyermeknél a feltöltés csak hozzáad, semmit nem töröl.{" "}
           <button type="button" onClick={() => mintaLetoltes("nevjegyzek-minta.csv", MINTA)} className="font-semibold text-royal underline">
             Minta letöltése
@@ -184,11 +184,11 @@ export default function NevjegyzekImport() {
                 return (
                   <tr key={i}>
                     <td className="px-3 py-2">{s.nev || <span className="text-vasasRed">hiányzik</span>}</td>
-                    <td className="px-3 py-2">{s.korosztaly || "—"}</td>
-                    <td className="px-3 py-2">{s.vevokod || "—"}</td>
+                    <td className="px-3 py-2">{s.korosztaly || "–"}</td>
+                    <td className="px-3 py-2">{s.vevokod || "–"}</td>
                     <td className="px-3 py-2">{s.emailek.join(", ") || <span className="text-gold-dark">nincs</span>}</td>
                     <td className={`px-3 py-2 font-semibold ${!e ? "text-navy/40" : e.allapot === "hiba" ? "text-vasasRed" : "text-green-700"}`}>
-                      {e ? e.uzenet : eredmenyek ? "…" : "—"}
+                      {e ? e.uzenet : eredmenyek ? "…" : "–"}
                     </td>
                   </tr>
                 );

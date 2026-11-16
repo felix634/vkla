@@ -7,7 +7,7 @@ import { getBeallitasok } from "../../lib/sanity/tartalom";
 import { HIR_KOROSZTALYOK_ALAP } from "@/sanity/constants";
 
 export const metadata: Metadata = {
-  title: "Hírek — Vasas Kubala Akadémia",
+  title: "Hírek – Vasas Kubala Akadémia",
 };
 
 export default async function HirekPage({

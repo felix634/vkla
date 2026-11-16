@@ -49,6 +49,6 @@ export default defineType({
   ],
   preview: {
     select: { title: "korosztaly" },
-    prepare: ({ title }) => ({ title: `${title} — heti edzésrend` }),
+    prepare: ({ title }) => ({ title: `${title} – heti edzésrend` }),
   },
 });

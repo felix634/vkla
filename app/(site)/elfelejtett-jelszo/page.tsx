@@ -5,7 +5,7 @@ import { emailEnabled } from "../../lib/email";
 import { fiokEnabled } from "../../lib/fiok/db";
 
 export const metadata: Metadata = {
-  title: "Elfelejtett jelszó — Szülői fiók — Vasas Kubala Akadémia",
+  title: "Elfelejtett jelszó – Szülői fiók – Vasas Kubala Akadémia",
   robots: { index: false },
 };
 

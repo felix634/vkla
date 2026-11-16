@@ -5,7 +5,7 @@ import PortableBody from "../../components/PortableBody";
 import { getDokumentumok, getSzekciok, type DokumentumData } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
-  title: "TAO — Vasas Kubala Akadémia",
+  title: "TAO – Vasas Kubala Akadémia",
 };
 
 export const revalidate = 300;

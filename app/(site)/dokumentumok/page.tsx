@@ -5,7 +5,7 @@ import SoonBadge from "../../components/site/SoonBadge";
 import { getDokumentumok, type DokumentumData } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
-  title: "Dokumentumok — Vasas Kubala Akadémia",
+  title: "Dokumentumok – Vasas Kubala Akadémia",
 };
 
 export const revalidate = 300;
@@ -68,7 +68,7 @@ export default async function DokumentumokPage() {
             Dokumentumok <span className="text-gold-light">és nyomtatványok.</span>
           </>
         }
-        subtitle="Szabályzatok, nyomtatványok és egyéb hasznos dokumentumok — kategóriákba rendezve, letölthető formában."
+        subtitle="Szabályzatok, nyomtatványok és egyéb hasznos dokumentumok – kategóriákba rendezve, letölthető formában."
       />
 
       <section className="bg-white">

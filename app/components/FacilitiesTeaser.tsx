@@ -54,7 +54,7 @@ export default function FacilitiesTeaser() {
             <div className="gold-divider mb-7" />
             <p className="text-lg text-navy/75 leading-relaxed mb-6">
               Két korszerű létesítményben edzenek csapataink. A pályák és öltözők
-              szabad időpontokban <span className="font-semibold text-navy">bérelhetők</span> is —
+              szabad időpontokban <span className="font-semibold text-navy">bérelhetők</span> is –
               csapatoknak, iskoláknak, rendezvényekre.
             </p>
             <ul className="space-y-3 mb-8">

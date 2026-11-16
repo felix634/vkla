@@ -33,7 +33,7 @@ const ACTIONS = [
   },
   {
     title: "Próbaedzés",
-    desc: "Jelentkezz próbaedzésre — néhány kattintás az egész.",
+    desc: "Jelentkezz próbaedzésre – néhány kattintás az egész.",
     href: "/kapcsolat#probaedzes",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -45,7 +45,7 @@ const ACTIONS = [
   },
   {
     title: "Létesítmények",
-    desc: "Pályáink, öltözőink — és bérlési lehetőség két helyszínen.",
+    desc: "Pályáink, öltözőink – és bérlési lehetőség két helyszínen.",
     badge: "Bérlés",
     href: "/letesitmenyek",
     icon: (

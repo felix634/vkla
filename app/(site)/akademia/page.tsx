@@ -9,12 +9,16 @@ import Reveal from "../../components/motion/Reveal";
 import HoverCard from "../../components/motion/HoverCard";
 
 export const metadata: Metadata = {
-  title: "Akadémia — Vasas Kubala Akadémia",
+  title: "Akadémia – Vasas Kubala Akadémia",
 };
+
+// A Bemutatkozás első bekezdései a kép mellé kerülnek, a többi alá. A 303/2019-es
+// rendeletről szóló bekezdés már lent áll, a „2019-ben…” bekezdés előtt (Tóth Patrik, 2. kör, 2026.11.16.).
+const FELSO_BEKEZDESEK = 3;
 
 const VALUES = [
   { title: "Szakmai program", desc: "Egységes, nemzetközi módszertan a legkisebbektől a felnőtt csapatig." },
-  { title: "Etikai kódex", desc: "Tisztelet, fegyelem és sportszerűség — ezek az értékek vezérelnek." },
+  { title: "Etikai kódex", desc: "Tisztelet, fegyelem és sportszerűség – ezek az értékek vezérelnek." },
   { title: "Egyéni fejlődés", desc: "Minden játékos saját fejlődési tervvel és visszajelzésekkel halad." },
   { title: "Család az első", desc: "Szoros együttműködés a szülőkkel, mert a háttér nélkül nincs eredmény." },
 ];
@@ -50,9 +54,19 @@ export default async function AkademiaPage() {
   const kubala = szekciok?.["kubala"] ?? null;
   // A vezetők külön kártyákon szerepelnek — a rácsban a szakmai stáb többi tagja.
   const leaderNames = new Set(LEADERSHIP.map((l) => l.name));
+  // Aki a vezetőségben van, de szekciót is vezet (Tóth Csaba), az a Szekcióvezetők
+  // között is megjelenik, a szekcióvezetői beosztásával (Tóth Patrik, 2. kör, 2026.11.16.).
+  const szekcioBeosztas = (role: string | null) => {
+    const resz = (role ?? "").split(",").map((s) => s.trim()).find((s) => s.toLowerCase().includes("szekció vezetője"));
+    return resz ? resz.charAt(0).toUpperCase() + resz.slice(1) : null;
+  };
   const stab =
     edzok && edzok.length > 0
-      ? edzok.filter((e) => !leaderNames.has(e.name))
+      ? edzok.flatMap((e) => {
+          if (!leaderNames.has(e.name)) return [e];
+          const beosztas = szekcioBeosztas(e.role);
+          return beosztas ? [{ ...e, role: beosztas }] : [];
+        })
       : STAFF_PLACEHOLDER;
 
   // A stáb csoportosított megjelenítése (Berkes Máté 2026.09.08-i kérése):
@@ -95,17 +109,17 @@ export default async function AkademiaPage() {
             <h2 className="heading-display text-3xl md:text-4xl text-navy mt-3 mb-5">Az utánpótlás otthona 2007 óta</h2>
             <div className="gold-divider mb-6" />
             {bemutatkozas?.body ? (
-              <PortableBody value={bemutatkozas.body.slice(0, 4)} />
+              <PortableBody value={bemutatkozas.body.slice(0, FELSO_BEKEZDESEK)} />
             ) : (
               <>
                 <p className="text-navy/75 leading-relaxed mb-4">
                   A Vasas Kubala Akadémia 2007-ben alakult, és azóta a magyar utánpótlás-labdarúgás
-                  egyik meghatározó műhelye. Évente több, mint 450 fiatal sportoló edz nálunk, 16
+                  egyik meghatározó műhelye. Évente több mint 400 fiatal sportoló edz nálunk, 20
                   korosztályban, a Fáy utcai sportcentrumban.
                 </p>
                 <p className="text-navy/65 leading-relaxed">
                   Célunk, hogy a gyerekek technikai, taktikai és emberi fejlődése egyaránt fontos
-                  legyen — az utánpótlástól a profi pályáig vezető úton. A Vasas FC és a Vasas SC
+                  legyen – az utánpótlástól a profi pályáig vezető úton. A Vasas FC és a Vasas SC
                   szoros együttműködésében dolgozunk.
                 </p>
               </>
@@ -113,8 +127,8 @@ export default async function AkademiaPage() {
             <div className="grid grid-cols-3 gap-6 mt-8 pt-8 border-t border-gray-100">
               {[
                 { n: "2007", l: "alapítás éve" },
-                { n: "16", l: "korosztály" },
-                { n: "450+", l: "aktív játékos" },
+                { n: "20", l: "korosztály" },
+                { n: "400+", l: "aktív játékos" },
               ].map((s) => (
                 <div key={s.l}>
                   <div className="font-display font-black text-3xl text-vasasRed">{s.n}</div>
@@ -137,14 +151,14 @@ export default async function AkademiaPage() {
             </HoverCard>
           </Reveal>
         </div>
-        {bemutatkozas?.body && bemutatkozas.body.length > 4 && (
+        {bemutatkozas?.body && bemutatkozas.body.length > FELSO_BEKEZDESEK && (
           <div className="max-w-4xl mx-auto px-6 pb-16">
-            <PortableBody value={bemutatkozas.body.slice(4)} />
+            <PortableBody value={bemutatkozas.body.slice(FELSO_BEKEZDESEK)} />
             {bemutatkozas.imageUrls && bemutatkozas.imageUrls.length > 1 && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-8">
                 {bemutatkozas.imageUrls.slice(1).map((u, i) => (
                   <div key={i} className="relative aspect-[3/2] rounded-md overflow-hidden bg-navy/5">
-                    <Image src={sized(u, 700)!} alt={`Akadémia — fotó ${i + 2}`} fill className="object-cover" />
+                    <Image src={sized(u, 700)!} alt={`Akadémia – fotó ${i + 2}`} fill className="object-cover" />
                   </div>
                 ))}
               </div>
@@ -182,7 +196,7 @@ export default async function AkademiaPage() {
             ) : (
               <p className="text-white/75 leading-relaxed">
                 Akadémiánk névadója Kubala László, minden idők egyik legnagyobb magyar labdarúgója.
-                Hagyatékát hűségesen ápoljuk — szellemisége minden korosztályunk munkájában jelen van.
+                Hagyatékát hűségesen ápoljuk – szellemisége minden korosztályunk munkájában jelen van.
               </p>
             )}
           </Reveal>

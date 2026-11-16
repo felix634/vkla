@@ -12,6 +12,7 @@ export const revalidate = 300;
 // „Több, mint egy klub” bemutatkozás, majd a partnerek. A korábbi blokkok
 // (Hero, gyorslinkek, Csapatok, Mérkőzések, Programok, Létesítmények) kikerültek,
 // mert a menüből mind elérhetők — a főoldal így nem duplikálja őket.
+// A „Focizz Te is” blokk a partnerek elé került (Tóth Patrik, 2. kör, 2026.11.16.).
 export default async function Home() {
   const [{ kiemelt, tovabbi }, szponzorok, b] = await Promise.all([
     getFooldalHirek(),
@@ -23,8 +24,8 @@ export default async function Home() {
     <main className="min-h-screen">
       <KiemeltHirek kiemelt={kiemelt} tovabbi={tovabbi} />
       <Academy />
-      <Sponsors szponzorok={szponzorok} />
       <JoinCTA b={b} />
+      <Sponsors szponzorok={szponzorok} />
     </main>
   );
 }

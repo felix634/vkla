@@ -18,6 +18,7 @@ export default defineType({
     defineField({
       name: "images",
       title: "Képek",
+      description: "Az első kép az album borítóképe – a képek sorrendje húzással módosítható.",
       type: "array",
       of: [{ type: "image", options: { hotspot: true } }],
       validation: (r) => r.min(1),

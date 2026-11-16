@@ -8,7 +8,7 @@ import PageHero from "./site/PageHero";
 import KepNezegeto from "./KepNezegeto";
 import { sized } from "../lib/sanity/imageUrl";
 import { formatDate } from "../lib/newsFormat";
-import type { GaleriaAlbumData } from "../lib/sanity/tartalom";
+import type { GaleriaAlbumData, GaleriaAlbumReszletek } from "../lib/sanity/tartalom";
 
 // A galéria három szintje (Tóth Patrik, 2026.10.23., „akárcsak a Facebookon”):
 // 1. két nagy album egymás mellett (Mérkőzések, Események) borítóképpel;
@@ -41,17 +41,19 @@ function Ures({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Az albumlista csak a borítót és a képszámot hozza; a képek címei csak a megnyitott
+// albumnál töltődnek le (2026.11.: a klub ~1700 képpel, 38 albummal töltötte fel a galériát).
 export default function GaleriaClient({
   albumok,
+  album,
   kategoria,
-  albumId,
 }: {
   albumok?: GaleriaAlbumData[] | null;
+  album?: GaleriaAlbumReszletek | null;
   kategoria?: string;
-  albumId?: string;
 }) {
-  const lista = (albumok ?? []).filter((a) => (a.imageUrls?.length ?? 0) > 0);
-  const album = albumId ? lista.find((a) => a._id === albumId) ?? null : null;
+  const lista = (albumok ?? []).filter((a) => a.kepszam > 0 && a.boritoUrl);
+  const kepek = album?.imageUrls ?? [];
   const kat = KATEGORIAK.find((k) => k.slug === kategoria) ?? (album ? KATEGORIAK.find((k) => k.cms === album.category) : undefined);
   const [index, setIndex] = useState<number | null>(null);
 
@@ -70,35 +72,36 @@ export default function GaleriaClient({
 
       <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-14">
-          {album ? (
+          {album && kepek.length > 0 ? (
             // 3. szint: az album képei
             <>
               <Vissza href={kat ? `/galeria?kategoria=${kat.slug}` : "/galeria"}>{kat?.cim ?? "Galéria"}</Vissza>
               <h2 className="heading-display text-3xl md:text-4xl text-navy">{album.title}</h2>
               <div className="text-sm text-navy/50 mt-2 mb-8">
-                {[album.date ? formatDate(album.date) : null, `${album.imageUrls!.length} kép`].filter(Boolean).join(" · ")}
+                {[album.date ? formatDate(album.date) : null, `${kepek.length} kép`].filter(Boolean).join(" · ")}
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {album.imageUrls!.map((src, i) => (
+                {kepek.map((src, i) => (
                   <motion.button
                     key={src}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.35, delay: (i % 8) * 0.03 }}
+                    transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.03 }}
                     onClick={() => setIndex(i)}
                     className="relative overflow-hidden rounded-md bg-navy group aspect-square"
-                    aria-label={`${album.title} — ${i + 1}. kép`}
+                    aria-label={`${album.title} – ${i + 1}. kép`}
                   >
                     <Image
-                      src={sized(src, 800) ?? src}
+                      src={sized(src, 600) ?? src}
                       alt={album.title}
                       fill
-                      className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </motion.button>
                 ))}
               </div>
-              <KepNezegeto kepek={album.imageUrls!} index={index} setIndex={setIndex} alt={album.title} />
+              <KepNezegeto kepek={kepek} index={index} setIndex={setIndex} alt={album.title} />
             </>
           ) : kat ? (
             // 2. szint: a kategória albumai
@@ -115,13 +118,13 @@ export default function GaleriaClient({
                       <Link key={a._id} href={`/galeria?album=${a._id}`} className="group block">
                         <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-navy">
                           <Image
-                            src={sized(a.imageUrls![0], 800)!}
+                            src={sized(a.boritoUrl!, 800)!}
                             alt={a.title}
                             fill
-                            className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
                           />
                           <span className="absolute bottom-3 right-3 text-xs font-semibold bg-navy/70 text-white px-2.5 py-1 rounded-sm backdrop-blur-sm">
-                            {a.imageUrls!.length} kép
+                            {a.kepszam} kép
                           </span>
                         </div>
                         <div className="pt-4">
@@ -140,7 +143,7 @@ export default function GaleriaClient({
             <div className="grid md:grid-cols-2 gap-6">
               {KATEGORIAK.map((k) => {
                 const sajat = lista.filter((a) => a.category === k.cms);
-                const borito = sajat[0]?.imageUrls?.[0];
+                const borito = sajat[0]?.boritoUrl;
                 return (
                   <Link
                     key={k.slug}
@@ -151,7 +154,7 @@ export default function GaleriaClient({
                       src={borito ? sized(borito, 1400)! : k.tartalek}
                       alt={k.cim}
                       fill
-                      className="object-cover opacity-85 transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
                     <div className="absolute left-0 right-0 bottom-0 p-8">

@@ -58,7 +58,7 @@ export default function Footer({ b }: { b?: BeallitasokData | null }) {
               </div>
             </Link>
             <p className="text-white/65 text-sm leading-relaxed max-w-sm mb-6">
-              A Vasas Kubala Akadémia 2007 óta a fiatal tehetségek otthona —
+              A Vasas Kubala Akadémia 2007 óta a fiatal tehetségek otthona –
               a magyar utánpótlás-labdarúgás egyik meghatározó műhelye.
             </p>
             <div className="flex items-center gap-3">

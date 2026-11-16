@@ -9,7 +9,7 @@ import { aktualisEmail } from "../../lib/fiok/auth";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Regisztráció — Szülői fiók — Vasas Kubala Akadémia",
+  title: "Regisztráció – Szülői fiók – Vasas Kubala Akadémia",
   robots: { index: false },
 };
 
@@ -18,7 +18,7 @@ export default async function RegisztracioPage() {
   return (
     <FiokOldal
       cim="Regisztráció"
-      alcim="Add meg a neved és azt az e-mail-címed, amelyet a klubnál megadtál — küldünk egy levelet, amelyben beállíthatod a jelszavad."
+      alcim="Add meg a neved és azt az e-mail-címed, amelyet a klubnál megadtál – küldünk egy levelet, amelyben beállíthatod a jelszavad."
       megjegyzes="A fiókban azoknak a gyermekeknek a számlái jelennek meg, akikhez a klub a címedet hozzárendelte. Ha regisztráció után nem látod a gyermeked, keresd a klub pénzügyi ügyintézőjét."
     >
       <RegisztracioForm enabled={fiokEnabled && emailEnabled} />

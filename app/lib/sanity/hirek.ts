@@ -41,7 +41,7 @@ const PLACEHOLDER_HIREK: HirListItem[] = Array.from({ length: 9 }, (_, i) => ({
   publishedAt: null,
   category: ["VKLA", "MLSZ", "VFCII", "SAJTÓ"][i % 4],
   excerpt:
-    "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+    "Rövid bevezető szöveg a hírhez – két-három mondatos összefoglaló a kattintható tartalomról.",
   imageUrl: PLACEHOLDER_IMAGES[i % PLACEHOLDER_IMAGES.length],
 }));
 

@@ -30,7 +30,7 @@ export default defineType({
       name: "category",
       title: "Kategória",
       type: "string",
-      description: "Új korosztályt az Oldal beállítások → Hírek — korosztály-szűrő listájában lehet felvenni.",
+      description: "Új korosztályt az Oldal beállítások → Hírek – korosztály-szűrő listájában lehet felvenni.",
       components: { input: HirKategoriaInput },
       validation: (r) => r.required(),
     }),
@@ -47,7 +47,7 @@ export default defineType({
       type: "image",
       options: { hotspot: true },
       description:
-        "Fekvő kép, legalább 1600 px széles. Feltöltés után a kép melletti ceruza ikonnal kijelölhető a fókuszpont (pl. az arcok) — a kép kivágása mindig e köré igazodik.",
+        "Fekvő kép, legalább 1600 px széles. Feltöltés után a kép melletti ceruza ikonnal kijelölhető a fókuszpont (pl. az arcok) – a kép kivágása mindig e köré igazodik.",
     }),
     defineField({
       name: "lead",

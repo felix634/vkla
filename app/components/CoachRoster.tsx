@@ -80,8 +80,8 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
   return (
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        {/* A női csapatok kártyája is a többiével egyező, piros háttér nélkül (Tóth Patrik, 2. kör, 2026.11.16.). */}
         {list.map((g) => {
-          const noi = g.section === "Női szakág";
           return (
             <motion.button
               key={g.name}
@@ -91,14 +91,12 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                   ? undefined
                   : {
                       y: -6,
-                      borderColor: noi ? "rgba(225,29,46,0.9)" : "rgba(184,152,92,0.7)",
+                      borderColor: "rgba(184,152,92,0.7)",
                       transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] },
                     }
               }
               whileTap={{ scale: 0.97 }}
-              className={`group relative text-left p-4 rounded-md border overflow-hidden ${
-                noi ? "border-vasasRed/60 bg-vasasRed/10" : "border-white/10 bg-white/5"
-              }`}
+              className="group relative text-left p-4 rounded-md border overflow-hidden border-white/10 bg-white/5"
             >
               <div className="flex items-center gap-3">
                 <CoachAvatar name={g.coachName} photoUrl={g.coachPhotoUrl} size={40} />
@@ -110,7 +108,7 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                 {g.coachName ?? (teams && teams.length > 0 ? "Stáb feltöltés alatt" : "Edző neve")}
               </div>
               <div className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-gold group-hover:text-gold-light transition-colors">
-                Névsor
+                {g.csakCsapatkep ? "Csapatkép" : "Névsor"}
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
@@ -171,7 +169,20 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                   szakmai stáb (erőnléti, kapusedző stb.) az Akadémia oldalon
                   szerepel, csoportosítva (Berkes Máté, 2026.09.08). */}
               <div className="px-6 py-5">
-                {selected.players && selected.players.length > 0 ? (
+                {selected.teamPhotoUrl && (
+                  <div className={`relative aspect-[3/2] rounded-md overflow-hidden bg-navy-dark ${selected.csakCsapatkep ? "" : "mb-5"}`}>
+                    <Image src={sized(selected.teamPhotoUrl, 1400)!} alt={`${selected.name} csapatkép`} fill className="object-cover" />
+                  </div>
+                )}
+                {/* Az U11–U9 korosztályoknál csak csapatkép van, egyéni portrék nélkül
+                    (Tóth Patrik, 2. kör, 2026.11.16.) – a Studióban a „Csak csapatkép” kapcsoló. */}
+                {selected.csakCsapatkep ? (
+                  !selected.teamPhotoUrl && (
+                    <div className="rounded-md border border-white/10 bg-white/5 px-5 py-8 text-center text-white/70">
+                      A csapatkép hamarosan felkerül.
+                    </div>
+                  )
+                ) : selected.players && selected.players.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {selected.players.map((p, i) => (
                       <div key={i} className="rounded-md border border-white/10 bg-white/5 overflow-hidden">
@@ -201,7 +212,7 @@ export default function CoachRoster({ teams }: { teams?: CsapatData[] | null }) 
                 ) : (
                   <div className="rounded-md border border-white/10 bg-white/5 px-5 py-8 text-center">
                     <div className="text-white/70 mb-3">A játékos-névsor feltöltés alatt.</div>
-                    <SoonBadge label="Névsor és fotók — hamarosan" />
+                    <SoonBadge label="Névsor és fotók – hamarosan" />
                   </div>
                 )}
               </div>

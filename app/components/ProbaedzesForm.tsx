@@ -55,7 +55,7 @@ export default function ProbaedzesForm({ enabled }: { enabled: boolean }) {
           </svg>
         </div>
         <div className="font-display font-bold text-xl mb-1">Jelentkezés elküldve!</div>
-        <p className="text-sm text-white/60">Köszönjük — kollégáink hamarosan felveszik veled a kapcsolatot.</p>
+        <p className="text-sm text-white/60">Köszönjük – kollégáink hamarosan felveszik veled a kapcsolatot.</p>
       </div>
     );
   }
@@ -102,7 +102,7 @@ export default function ProbaedzesForm({ enabled }: { enabled: boolean }) {
       </button>
       {!enabled && (
         <p className="text-center text-xs text-white/45">
-          Az online jelentkezés hamarosan indul — addig a fenti központi e-mail címen várjuk a jelentkezést.
+          Az online jelentkezés hamarosan indul – addig a fenti központi e-mail címen várjuk a jelentkezést.
         </p>
       )}
     </form>

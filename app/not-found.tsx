@@ -8,7 +8,7 @@ export default function NotFound() {
         <div className="font-display font-black text-[7rem] leading-none text-[#d4b886]">404</div>
         <h1 className="font-display font-bold text-2xl mb-3">Az oldal nem található</h1>
         <p className="text-white/60 mb-8 max-w-md mx-auto text-sm">
-          A keresett cím nem létezik — lehet, hogy elköltözött, vagy hibás a link.
+          A keresett cím nem létezik – lehet, hogy elköltözött, vagy hibás a link.
         </p>
         <Link
           href="/"

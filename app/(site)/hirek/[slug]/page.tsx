@@ -23,9 +23,9 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const hir = await getHir(params.slug);
-  if (!hir) return { title: "Hír — Vasas Kubala Akadémia" };
+  if (!hir) return { title: "Hír – Vasas Kubala Akadémia" };
   return {
-    title: `${hir.title} — Vasas Kubala Akadémia`,
+    title: `${hir.title} – Vasas Kubala Akadémia`,
     description: hir.excerpt ?? undefined,
     openGraph: {
       title: hir.title,

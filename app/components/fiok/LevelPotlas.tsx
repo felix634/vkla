@@ -58,9 +58,9 @@ export default function LevelPotlas({
         `${kesz} levél kiment.`,
         nincsCim ? `${nincsCim} gyermekhez nincs szülői e-mail-cím a névjegyzékben.` : "",
         megallt
-          ? "A levelező most nem fogad több levelet (valószínűleg betelt a küldési korlát). Próbáld újra később — a gomb a maradékkal folytatja."
+          ? "A levelező most nem fogad több levelet (valószínűleg betelt a küldési korlát). Próbáld újra később – a gomb a maradékkal folytatja."
           : hibas
-            ? `${hibas} levél most sem ment ki — próbáld újra később.`
+            ? `${hibas} levél most sem ment ki – próbáld újra később.`
             : "",
       ]
         .filter(Boolean)

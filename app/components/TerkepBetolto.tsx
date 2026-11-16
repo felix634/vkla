@@ -16,7 +16,7 @@ export default function TerkepBetolto({ nev, cim, minH = "min-h-[340px]" }: { ne
       <div className={`rounded-lg overflow-hidden border border-gray-100 relative ${minH}`}>
         <iframe
           src={`https://www.google.com/maps?q=${q}&hl=hu&output=embed`}
-          title={`${nev} — térkép`}
+          title={`${nev} – térkép`}
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           className="absolute inset-0 h-full w-full"

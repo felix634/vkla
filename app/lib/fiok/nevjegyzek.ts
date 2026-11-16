@@ -50,7 +50,7 @@ export async function gyermekMentes(sor: ImportSor): Promise<ImportEredmeny> {
 
   const talalat = await gyermekKeres(nev, vevokod);
   if ("hiba" in talalat && talalat.hiba === "tobb") {
-    return { allapot: "hiba", uzenet: "Több azonos nevű gyermek van — adj meg vevőkódot" };
+    return { allapot: "hiba", uzenet: "Több azonos nevű gyermek van – adj meg vevőkódot" };
   }
 
   let id: string;

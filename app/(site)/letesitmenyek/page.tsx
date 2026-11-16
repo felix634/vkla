@@ -10,7 +10,7 @@ import { utvonalUrl } from "../../lib/terkep";
 import LetesitmenyKep from "../../components/LetesitmenyKep";
 
 export const metadata: Metadata = {
-  title: "Létesítmények — Vasas Kubala Akadémia",
+  title: "Létesítmények – Vasas Kubala Akadémia",
 };
 
 export const revalidate = 300;
@@ -31,7 +31,7 @@ const FACILITIES = [
   {
     _id: "ii",
     name: "II. számú Létesítmény",
-    address: "Cím — hamarosan",
+    address: "Cím – hamarosan",
     body: null,
     amenities: ["Edzőpályák", "Műfüves pálya", "Öltözők", "Kiegészítő terek", "Megközelítés tömegközlekedéssel"],
     rentInfo: null,
@@ -148,7 +148,7 @@ export default async function LetesitmenyekPage() {
             {facilities.map((f) => (
               <div key={f._id} className="rounded-md border border-white/10 bg-white/5 relative min-h-[260px] flex items-center justify-center overflow-hidden">
                 {f.mapImageUrl ? (
-                  <Image src={sized(f.mapImageUrl, 900)!} alt={`${f.name} — térkép`} fill className="object-cover" />
+                  <Image src={sized(f.mapImageUrl, 900)!} alt={`${f.name} – térkép`} fill className="object-cover" />
                 ) : (
                   // Amíg a klub nem tölt fel pályarajzot: kattintásra töltődő térkép.
                   <div className="absolute inset-0 [&>div]:h-full [&>div]:rounded-none [&>div]:border-0">
@@ -162,7 +162,7 @@ export default async function LetesitmenyekPage() {
             <div>
               <div className="font-display font-bold text-xl text-white">Bérelnél pályát vagy termet?</div>
               <div className="text-white/70 text-sm">
-                {cmsOn ? "Pályáink, a VIP terem és a skyboxok is bérelhetők — kérj ajánlatot." : "Mindkét létesítményben van szabad kapacitás — kérj ajánlatot."}
+                {cmsOn ? "Pályáink, a VIP terem és a skyboxok is bérelhetők – kérj ajánlatot." : "Mindkét létesítményben van szabad kapacitás – kérj ajánlatot."}
               </div>
             </div>
             <Link href="/kapcsolat" className="bg-vasasRed hover:bg-vasasRedDark transition-colors text-white px-6 py-3 font-bold rounded-sm text-sm flex-shrink-0">

@@ -13,7 +13,7 @@ export default function NotFound() {
           Ez a labda <span className="text-gold-light">kiment az alapvonalon.</span>
         </h1>
         <p className="text-white/70 max-w-xl mx-auto mb-8">
-          A keresett oldal nem található — lehet, hogy elköltözött, vagy hibás a link.
+          A keresett oldal nem található – lehet, hogy elköltözött, vagy hibás a link.
           A hírarchívumban és a főoldalon minden fontos tartalmat megtalálsz.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">

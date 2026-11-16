@@ -4,7 +4,7 @@ import PortableBody from "../../components/PortableBody";
 import { getSzekciok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
-  title: "Impresszum — Vasas Kubala Akadémia",
+  title: "Impresszum – Vasas Kubala Akadémia",
 };
 
 export const revalidate = 300;

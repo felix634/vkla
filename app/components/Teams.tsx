@@ -68,7 +68,7 @@ export default function Teams({ teams }: { teams?: CsapatData[] | null }) {
               whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 border-2 border-white/20 hover:border-gold hover:text-gold transition-colors px-7 py-3.5 font-bold rounded-sm text-sm"
             >
-              Vasas FC II
+              Vasas FC II.
             </motion.span>
           </Link>
         </motion.div>

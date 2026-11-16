@@ -7,7 +7,7 @@ import { JELSZO_MIN } from "../../lib/fiok/auth";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Jelszó beállítása — Szülői fiók — Vasas Kubala Akadémia",
+  title: "Jelszó beállítása – Szülői fiók – Vasas Kubala Akadémia",
   robots: { index: false },
   // A token ne kerüljön Referer fejlécbe.
   referrer: "no-referrer",

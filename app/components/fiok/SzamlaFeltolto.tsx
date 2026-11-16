@@ -327,11 +327,11 @@ export default function SzamlaFeltolto({ levelEnabled }: { levelEnabled: boolean
               <tbody className="divide-y divide-gray-100">
                 {lista.map((s, i) => (
                   <tr key={i}>
-                    <td className="px-3 py-2 whitespace-nowrap">{s.adat.szamlaszam || "—"}</td>
-                    <td className="px-3 py-2">{s.adat.gyermek_nev || s.adat.vevokod || "—"}</td>
-                    <td className="px-3 py-2 whitespace-nowrap">{s.adat.idoszak || "—"}</td>
-                    <td className="px-3 py-2 text-right whitespace-nowrap">{s.adat.osszeg ? `${s.adat.osszeg.replace(/\B(?=(\d{3})+(?!\d))/g, " ")} Ft` : "—"}</td>
-                    <td className="px-3 py-2 max-w-[160px] truncate">{s.pdf?.name ?? "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{s.adat.szamlaszam || "–"}</td>
+                    <td className="px-3 py-2">{s.adat.gyermek_nev || s.adat.vevokod || "–"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{s.adat.idoszak || "–"}</td>
+                    <td className="px-3 py-2 text-right whitespace-nowrap">{s.adat.osszeg ? `${s.adat.osszeg.replace(/\B(?=(\d{3})+(?!\d))/g, " ")} Ft` : "–"}</td>
+                    <td className="px-3 py-2 max-w-[160px] truncate">{s.pdf?.name ?? "–"}</td>
                     <td className={`px-3 py-2 font-semibold ${s.hiba ? "text-vasasRed" : allapotSzin[s.allapot]}`}>
                       {s.uzenet ?? s.hiba ?? (s.allapot === "var" ? "Kész a feltöltésre" : "…")}
                     </td>

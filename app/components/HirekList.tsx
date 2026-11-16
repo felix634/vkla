@@ -102,7 +102,7 @@ export default function HirekList({
           </select>
           {!cmsOn && (
             <span className="ml-auto">
-              <SoonBadge label="CMS hírek — hamarosan" />
+              <SoonBadge label="CMS hírek – hamarosan" />
             </span>
           )}
         </div>
@@ -128,13 +128,12 @@ export default function HirekList({
                     src={sized(featured.imageUrl, 1200)!}
                     alt={featured.title}
                     fill
-                    className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                     style={{ objectPosition: fokusz(featured.imagePos) }}
                   />
                 ) : (
                   <LogoHelyettes />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />
                 <span
                   className={`absolute top-4 left-4 ${catColor(featured.category)} text-white text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-sm`}
                 >
@@ -177,13 +176,12 @@ export default function HirekList({
                       src={sized(n.imageUrl, 700)!}
                       alt={n.title}
                       fill
-                      className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                       style={{ objectPosition: fokusz(n.imagePos) }}
                     />
                   ) : (
                     <LogoHelyettes />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />
                   <span
                     className={`absolute top-4 left-4 ${catColor(n.category)} text-white text-[10px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-sm`}
                   >

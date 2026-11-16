@@ -8,7 +8,7 @@ import { emailEnabled } from "../../lib/email";
 import { utvonalUrl } from "../../lib/terkep";
 
 export const metadata: Metadata = {
-  title: "Kapcsolat — Vasas Kubala Akadémia",
+  title: "Kapcsolat – Vasas Kubala Akadémia",
 };
 
 export const revalidate = 300;
@@ -44,7 +44,7 @@ export default async function KapcsolatPage() {
         eyebrow="Kapcsolat"
         title={
           <>
-            Írj nekünk, <span className="text-gold-light">vagy gyere el.</span>
+            Keress minket <span className="text-gold-light">bizalommal!</span>
           </>
         }
         subtitle="Kérdésed van, vagy próbaedzésre jelentkeznél? Töltsd ki az űrlapot, és felvesszük veled a kapcsolatot."

@@ -5,7 +5,7 @@ import SoonBadge from "../../components/site/SoonBadge";
 import { getAllasok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
-  title: "Karrier — Vasas Kubala Akadémia",
+  title: "Karrier – Vasas Kubala Akadémia",
 };
 
 export const revalidate = 300;
@@ -23,7 +23,7 @@ export default async function KarrierPage() {
             Csatlakozz a <span className="text-gold-light">stábhoz.</span>
           </>
         }
-        subtitle="Nyitott pozícióink egy helyen. Ha nem találsz megfelelőt, küldd el önéletrajzod — nyilvántartásba vesszük."
+        subtitle="Nyitott pozícióink egy helyen. Ha nem találsz megfelelőt, küldd el önéletrajzod – nyilvántartásba vesszük."
       />
 
       <section className="bg-white">
@@ -98,7 +98,7 @@ export default async function KarrierPage() {
             <div className="relative">
               <h3 className="font-display font-bold text-2xl mb-2">Nem találod a megfelelő pozíciót?</h3>
               <p className="text-white/70 text-sm mb-5 max-w-xl mx-auto">
-                Küldd el önéletrajzod és motivációs leveled a központi e-mail címünkre — ha nyílik lehetőség, keresünk.
+                Küldd el önéletrajzod és motivációs leveled a központi e-mail címünkre – ha nyílik lehetőség, keresünk.
               </p>
               <Link href="/kapcsolat" className="inline-block bg-vasasRed hover:bg-vasasRedDark transition-colors text-white px-6 py-3 font-bold rounded-sm text-sm">
                 Önéletrajz küldése

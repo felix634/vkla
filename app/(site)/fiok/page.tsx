@@ -12,7 +12,7 @@ import { kartyasFizetes } from "../../lib/fiok/stripe";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Szülői fiók — Vasas Kubala Akadémia",
+  title: "Szülői fiók – Vasas Kubala Akadémia",
   robots: { index: false },
 };
 

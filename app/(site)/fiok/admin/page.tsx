@@ -12,7 +12,7 @@ import { datum, ft, idoszak } from "../../../lib/fiok/format";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Számlák kezelése — Vasas Kubala Akadémia",
+  title: "Számlák kezelése – Vasas Kubala Akadémia",
   robots: { index: false },
 };
 
@@ -98,7 +98,7 @@ export default async function SzamlaAdminPage({ searchParams }: { searchParams: 
                     {szamlak.map((sz) => (
                       <tr key={sz.id} className="align-top">
                         <td className="py-2.5 pr-3 whitespace-nowrap font-semibold text-navy">{sz.szamlaszam}</td>
-                        <td className="py-2.5 pr-3">{[sz.gyermek_nev, sz.korosztaly].filter(Boolean).join(" · ") || "—"}</td>
+                        <td className="py-2.5 pr-3">{[sz.gyermek_nev, sz.korosztaly].filter(Boolean).join(" · ") || "–"}</td>
                         <td className="py-2.5 pr-3 whitespace-nowrap">{idoszak(sz.idoszak)}</td>
                         <td className="py-2.5 pr-3 text-right whitespace-nowrap">{ft(sz.osszeg)}</td>
                         <td className="py-2.5 pr-3 whitespace-nowrap">{datum(sz.hatarido)}</td>

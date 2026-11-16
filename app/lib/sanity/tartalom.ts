@@ -36,6 +36,8 @@ export type CsapatData = {
   coachPhotoUrl: string | null;
   assistants: string[] | null;
   players: JatekosData[] | null;
+  teamPhotoUrl?: string | null;
+  csakCsapatkep?: boolean | null;
 };
 
 export type EdzoData = {
@@ -79,7 +81,9 @@ export async function getCsapatok(): Promise<CsapatData[] | null> {
       "coachRole": coach->role,
       "coachPhotoUrl": coach->photo.asset->url,
       assistants,
-      "players": players[]{ name, position, number, "photoUrl": photo.asset->url }
+      "players": players[]{ name, position, number, "photoUrl": photo.asset->url },
+      "teamPhotoUrl": teamPhoto.asset->url,
+      csakCsapatkep
     }`,
     {},
     REVALIDATE
@@ -210,8 +214,11 @@ export type GaleriaAlbumData = {
   title: string;
   category: string;
   date: string | null;
-  imageUrls: string[] | null;
+  boritoUrl: string | null;
+  kepszam: number;
 };
+
+export type GaleriaAlbumReszletek = GaleriaAlbumData & { imageUrls: string[] | null };
 
 export type VideoData = {
   _id: string;
@@ -224,9 +231,22 @@ export async function getGaleriaAlbumok(): Promise<GaleriaAlbumData[] | null> {
   if (!sanityEnabled || !client) return null;
   return client.fetch(
     `*[_type == "galeria"] | order(coalesce(date, _createdAt) desc) {
-      _id, title, category, date, "imageUrls": array::unique(images[].asset->url)
+      _id, title, category, date, "boritoUrl": images[0].asset->url, "kepszam": count(images)
     }`,
     {},
+    REVALIDATE
+  );
+}
+
+// Egy album a képeivel (a galéria 3. szintje).
+export async function getGaleriaAlbum(id: string): Promise<GaleriaAlbumReszletek | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "galeria" && _id == $id][0] {
+      _id, title, category, date, "boritoUrl": images[0].asset->url, "kepszam": count(images),
+      "imageUrls": array::unique(images[].asset->url)
+    }`,
+    { id },
     REVALIDATE
   );
 }

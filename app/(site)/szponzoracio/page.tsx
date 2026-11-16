@@ -7,7 +7,7 @@ import { PartnerLink } from "../../components/Sponsors";
 import { sized } from "../../lib/sanity/imageUrl";
 
 export const metadata: Metadata = {
-  title: "Szponzoráció — Vasas Kubala Akadémia",
+  title: "Szponzorok – Vasas Kubala Akadémia",
 };
 
 const MAIN = ["Fő támogató 1", "Fő támogató 2", "Fő támogató 3"];
@@ -49,7 +49,7 @@ export default async function SzponzoracioPage() {
   return (
     <main className="min-h-screen">
       <PageHero
-        breadcrumb="Szponzoráció"
+        breadcrumb="Szponzorok"
         eyebrow="Partnereink"
         title={
           <>

@@ -44,7 +44,7 @@ export default function WeeklySchedule({ rendek }: { rendek?: HetirendData[] | n
     <>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <GroupFilter filter={filter} setFilter={setFilter} options={groupOptions} />
-        {!cmsOn && <SoonBadge label="CMS időpontok — hamarosan" />}
+        {!cmsOn && <SoonBadge label="CMS időpontok – hamarosan" />}
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {days.map((d, di) => (
@@ -56,7 +56,7 @@ export default function WeeklySchedule({ rendek }: { rendek?: HetirendData[] | n
                   cmsSlotsFor(d).map((s, i) => (
                     <div key={i} className="px-3 py-3">
                       <div className="text-vasasRed font-bold text-sm">
-                        {s.from ?? "—:—"} – {s.to ?? "—:—"}
+                        {s.from ?? "–:–"} – {s.to ?? "–:–"}
                       </div>
                       <div className="text-navy/60 text-xs mt-0.5">
                         {s.korosztaly}
@@ -70,7 +70,7 @@ export default function WeeklySchedule({ rendek }: { rendek?: HetirendData[] | n
               ) : (
                 placeholderSlotsFor(di).map((g, i) => (
                   <div key={i} className="px-3 py-3">
-                    <div className="text-vasasRed font-bold text-sm">—:— – —:—</div>
+                    <div className="text-vasasRed font-bold text-sm">–:– – –:–</div>
                     <div className="text-navy/60 text-xs mt-0.5">{g} · pálya</div>
                   </div>
                 ))

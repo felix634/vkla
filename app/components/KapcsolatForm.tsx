@@ -43,7 +43,7 @@ export default function KapcsolatForm({ enabled }: { enabled: boolean }) {
           </svg>
         </div>
         <div className="font-display font-bold text-xl text-navy mb-1">Üzenet elküldve!</div>
-        <p className="text-sm text-navy/60">Köszönjük a megkeresést — hamarosan válaszolunk.</p>
+        <p className="text-sm text-navy/60">Köszönjük a megkeresést – hamarosan válaszolunk.</p>
       </div>
     );
   }
@@ -90,7 +90,7 @@ export default function KapcsolatForm({ enabled }: { enabled: boolean }) {
       </button>
       {!enabled && (
         <p className="text-center text-xs text-navy/45">
-          Az online üzenetküldés hamarosan indul — addig írj közvetlenül e-mailben.
+          Az online üzenetküldés hamarosan indul – addig írj közvetlenül e-mailben.
         </p>
       )}
     </form>

@@ -36,7 +36,8 @@ export default defineType({
       name: "section",
       title: "Szekció",
       type: "string",
-      options: { list: ["Vasas FC II", "Akadémia", "Pre-akadémia", "Női szakág"] },
+      // A „Vasas FC II” érték a kódban kulcs; a cím ponttal (Tóth Patrik, 2. kör, 2026.11.16.).
+      options: { list: [{ title: "Vasas FC II.", value: "Vasas FC II" }, "Akadémia", "Pre-akadémia", "Női szakág"] },
       description: "Üresen hagyva a csapat nem jelenik meg a weboldalon.",
     }),
     defineField({
@@ -44,6 +45,21 @@ export default defineType({
       title: "Asszisztensedzők / utánpótlásedzők",
       type: "array",
       of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "teamPhoto",
+      title: "Csapatkép",
+      type: "image",
+      options: { hotspot: true },
+      description: "A Névsor ablak tetején jelenik meg.",
+    }),
+    defineField({
+      name: "csakCsapatkep",
+      title: "Csak csapatkép",
+      type: "boolean",
+      description:
+        "Bekapcsolva a Névsor ablakban csak a csapatkép látszik, az egyéni játékosportrék nem (az U11–U9 korosztályoknál így kérte a klub).",
+      initialValue: false,
     }),
     defineField({
       name: "players",
@@ -76,7 +92,7 @@ export default defineType({
       title: "Sorrend",
       type: "number",
       description:
-        "A csapatok megjelenítési sorrendje (kisebb = előrébb) — a Csapatok oldalon és a heti edzésrend szűrőjében is.",
+        "A csapatok megjelenítési sorrendje (kisebb = előrébb) – a Csapatok oldalon és a heti edzésrend szűrőjében is.",
     }),
   ],
   orderings: [

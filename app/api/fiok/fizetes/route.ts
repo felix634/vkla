@@ -33,7 +33,7 @@ export async function POST(req: Request) {
             currency: "huf",
             unit_amount: sz.osszeg * 100,
             product_data: {
-              name: `Képzési díj — ${sz.szamlaszam}`,
+              name: `Képzési díj – ${sz.szamlaszam}`,
               description: [sz.gyermek_nev, sz.korosztaly, sz.idoszak].filter(Boolean).join(" · ") || undefined,
             },
           },

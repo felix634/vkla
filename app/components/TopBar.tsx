@@ -48,7 +48,7 @@ export default function TopBar({ b }: { b?: BeallitasokData | null }) {
               Vasas FC ↗
             </a>
             <span className="text-white/30">|</span>
-            <span className="text-gold font-semibold">Kubala Akadémia</span>
+            <span className="text-gold font-semibold">Vasas Kubala Akadémia</span>
           </div>
           <div className="flex items-center gap-3 text-white/60">
             {socials.map((s) =>

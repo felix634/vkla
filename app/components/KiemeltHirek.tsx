@@ -39,14 +39,16 @@ export default function KiemeltHirek({ kiemelt, tovabbi }: { kiemelt: HirListIte
                   fill
                   priority
                   sizes="(min-width: 1024px) 58vw, 100vw"
-                  className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   style={{ objectPosition: fokusz(kiemelt.imagePos) }}
                 />
               ) : (
                 // A cím alul ráúszik a képre, ezért a logó feljebb ül.
                 <LogoHelyettes meret="h-[42%]" className="pb-[16%]" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
+              {/* A képek eredeti színben (Tóth Patrik, 2. kör, 2026.11.16.): sötétítés csak
+                  a kép alján, ahol a cím olvashatósága miatt kell. */}
+              <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-navy/95 via-navy/50 to-transparent" />
               <div className="absolute left-0 right-0 bottom-0 p-5 md:p-8">
                 <div className="flex items-center gap-3 mb-3">
                   <span
@@ -88,7 +90,7 @@ export default function KiemeltHirek({ kiemelt, tovabbi }: { kiemelt: HirListIte
                         alt={h.title}
                         fill
                         sizes="128px"
-                        className="object-cover opacity-90"
+                        className="object-cover"
                         style={{ objectPosition: fokusz(h.imagePos) }}
                       />
                     ) : (

@@ -16,7 +16,7 @@ export function ft(n: number): string {
 
 // "2026-10-31" -> "2026. október 31."
 export function datum(d: string | null): string {
-  if (!d) return "—";
+  if (!d) return "–";
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
   if (!m) return d;
   return `${m[1]}. ${HONAPOK[Number(m[2]) - 1]} ${Number(m[3])}.`;
@@ -36,7 +36,7 @@ export function kozlemeny(sz: {
 
 // "2026-10" -> "2026. október"; más formátumot változatlanul hagy.
 export function idoszak(s: string | null): string {
-  if (!s) return "—";
+  if (!s) return "–";
   const m = /^(\d{4})-(\d{2})$/.exec(s.trim());
   if (!m) return s;
   return `${m[1]}. ${HONAPOK[Number(m[2]) - 1]}`;

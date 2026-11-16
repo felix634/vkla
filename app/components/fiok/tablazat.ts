@@ -54,7 +54,7 @@ export async function tablazatBeolvas(fajl: File): Promise<string[][]> {
     const adat = (await readSheet(fajl)) as unknown[][];
     sorok = adat.map((sor) => sor.map(cellaSzoveg));
   } else if (nev.endsWith(".xls")) {
-    throw new TablazatHiba("A régi .xls formátum nem olvasható — mentsd el .xlsx-ként vagy CSV-ként.");
+    throw new TablazatHiba("A régi .xls formátum nem olvasható – mentsd el .xlsx-ként vagy CSV-ként.");
   } else {
     sorok = csvParse(dekodol(await fajl.arrayBuffer())).map((sor) => sor.map((c) => c.trim()));
   }

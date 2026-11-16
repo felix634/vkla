@@ -16,7 +16,7 @@ const PLACEHOLDER: HirListItem[] = [
     publishedAt: null,
     category: "VKLA",
     excerpt:
-      "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+      "Rövid bevezető szöveg a hírhez – két-három mondatos összefoglaló a kattintható tartalomról.",
     imageUrl: "/images/flag.jpg",
   },
   {
@@ -26,7 +26,7 @@ const PLACEHOLDER: HirListItem[] = [
     publishedAt: null,
     category: "U10",
     excerpt:
-      "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+      "Rövid bevezető szöveg a hírhez – két-három mondatos összefoglaló a kattintható tartalomról.",
     imageUrl: "/images/team.jpg",
   },
   {
@@ -36,7 +36,7 @@ const PLACEHOLDER: HirListItem[] = [
     publishedAt: null,
     category: "MLSZ",
     excerpt:
-      "Rövid bevezető szöveg a hírhez — két-három mondatos összefoglaló a kattintható tartalomról.",
+      "Rövid bevezető szöveg a hírhez – két-három mondatos összefoglaló a kattintható tartalomról.",
     imageUrl: "/images/player.jpg",
   },
 ];

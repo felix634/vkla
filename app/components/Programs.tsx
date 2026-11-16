@@ -15,14 +15,14 @@ const PROGRAMS = [
   {
     tag: "Próbaedzés",
     title: "Próbaedzés",
-    desc: "U5-től U9-ig folyamatosan várjuk a focit szerető gyerekeket — jelentkezz az online űrlapon.",
+    desc: "U5-től U9-ig folyamatosan várjuk a focit szerető gyerekeket – jelentkezz az online űrlapon.",
     cta: "Jelentkezem",
     href: "/kapcsolat#probaedzes",
     color: "from-royal to-navy",
   },
   {
     tag: "Karitatív",
-    title: "Hajrá Vasas — Karitatív program",
+    title: "Hajrá Vasas – Karitatív program",
     desc: "Hátrányos helyzetű gyermekek bevonása a labdarúgásba, ingyenes edzésekkel és felszereléssel.",
     cta: "Csatlakozom",
     href: "/programok#karitativ",

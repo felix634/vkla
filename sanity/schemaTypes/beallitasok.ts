@@ -29,7 +29,7 @@ export default defineType({
     }),
     defineField({
       name: "hirKorosztalyok",
-      title: "Hírek — korosztály-szűrő",
+      title: "Hírek – korosztály-szűrő",
       type: "array",
       description:
         "A Hírek oldal korosztály-szűrője ebben a sorrendben mutatja az elemeket (húzással átrendezhető). Új korosztály (pl. U20) felvétele után a hírek Kategória mezőjében is választható.",
@@ -62,13 +62,13 @@ export default defineType({
     defineField({ name: "officeHours", title: "Iroda nyitvatartás", type: "string" }),
     defineField({
       name: "kepzesiDijFiu",
-      title: "Havi képzési díj — fiú korosztályok (Ft)",
+      title: "Havi képzési díj – fiú korosztályok (Ft)",
       type: "number",
       description: "A Képzési díj oldalon jelenik meg. Üresen hagyva az összeg nem látszik.",
     }),
     defineField({
       name: "kepzesiDijLany",
-      title: "Havi képzési díj — leány korosztályok (Ft)",
+      title: "Havi képzési díj – leány korosztályok (Ft)",
       type: "number",
     }),
     defineField({ name: "facebook", title: "Facebook link", type: "url" }),
@@ -79,7 +79,7 @@ export default defineType({
     defineField({ name: "tiktok", title: "TikTok link", type: "url" }),
     defineField({ name: "webshopUrl", title: "Vasas webshop link", type: "url" }),
     defineField({ name: "vasasFcUrl", title: "Vasas FC link", type: "url" }),
-    defineField({ name: "vasasFcIIUrl", title: "Vasas FC II link", type: "url", hidden: true }),
+    defineField({ name: "vasasFcIIUrl", title: "Vasas FC II. link", type: "url", hidden: true }),
     defineField({
       name: "szponzorArak",
       title: "Szponzorációs csomagok árai",

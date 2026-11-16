@@ -12,7 +12,7 @@ export default function StudioPage() {
       <main className="min-h-screen bg-navy text-white flex items-center justify-center p-8">
         <div className="max-w-lg">
           <h1 className="font-display font-black text-3xl mb-4 text-gold">
-            Sanity Studio — beállítás szükséges
+            Sanity Studio – beállítás szükséges
           </h1>
           <p className="text-white/75 leading-relaxed mb-4">
             A tartalomkezelő még nincs összekötve Sanity-projekttel. A

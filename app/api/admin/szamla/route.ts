@@ -55,8 +55,8 @@ export async function POST(req: Request) {
       {
         error:
           talalat.hiba === "tobb"
-            ? "Több azonos nevű gyermek van a névjegyzékben — adj meg vevőkódot."
-            : "Nincs ilyen gyermek a névjegyzékben — előbb vedd fel a Szülői névjegyzékbe.",
+            ? "Több azonos nevű gyermek van a névjegyzékben – adj meg vevőkódot."
+            : "Nincs ilyen gyermek a névjegyzékben – előbb vedd fel a Szülői névjegyzékbe.",
       },
       { status: 422 }
     );
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
         ertesitesHiba =
           e instanceof Error && e.message === "NINCS_CIM"
             ? "Feltöltve, de a gyermekhez nincs szülői e-mail-cím a névjegyzékben."
-            : "Feltöltve, de az értesítő levél nem ment ki — később újraküldhető.";
+            : "Feltöltve, de az értesítő levél nem ment ki – később újraküldhető.";
         if (!(e instanceof Error && e.message === "NINCS_CIM")) console.error("Számla-értesítés hiba:", e);
       }
     }

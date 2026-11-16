@@ -67,9 +67,13 @@ export function korosztalyKod(versenyNev: string): string | null {
   return /Leány/i.test(versenyNev) ? `U${m[1]}L` : `U${m[1]}`;
 }
 
-// „MLSZ Országos U19 Kiemelt” → „U19 Kiemelt”
+// „MLSZ Országos U19 Kiemelt” → „U19 Országos Kiemelt”, „MLSZ Országos U13 Dél-Kelet” →
+// „U13 Országos Dél-Kelet”: a korosztály elöl, a bajnokság teljes nevével (Tóth Patrik,
+// 2. kör, 2026.11.16.). A leány- és női versenyek neve csak az „MLSZ” előtagot veszti el.
 export function versenyRovidNev(nev: string): string {
-  return nev.replace(/^MLSZ\s+/, "").replace(/^Országos\s+/, "").replace(/\s+/g, " ").trim();
+  const n = nev.replace(/^MLSZ\s+/, "").replace(/\s+/g, " ").trim();
+  const m = n.match(/^Országos\s+(U-?\s?\d{1,2})\s+(.+)$/);
+  return m ? `${m[1]} Országos ${m[2]}` : n;
 }
 
 // A Mérkőzések oldal nézet-modellje (szerveren áll elő, a kliens csak szűr).

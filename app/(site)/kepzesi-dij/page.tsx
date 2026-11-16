@@ -5,7 +5,7 @@ import { BANKSZAMLA, KEDVEZMENYEZETT, ft } from "../../lib/fiok/format";
 import { getBeallitasok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
-  title: "Képzési díj — Vasas Kubala Akadémia",
+  title: "Képzési díj – Vasas Kubala Akadémia",
 };
 
 // A képzési díj a képzési szerződés alapján, havonta kiállított számlával
@@ -20,7 +20,7 @@ const STEPS = [
   {
     n: "2",
     title: "Értesítés e-mailben",
-    desc: "A számlát e-mailben is elküldjük, a PDF-et csatolva — így a levélből is könnyen fizethető.",
+    desc: "A számlát e-mailben is elküldjük, a PDF-et csatolva – így a levélből is könnyen fizethető.",
   },
   {
     n: "3",
@@ -53,7 +53,7 @@ export default async function KepzesiDijPage() {
             Képzési díj <span className="text-gold-light">egyszerűen.</span>
           </>
         }
-        subtitle="A havi képzési díj számláját e-mailben és a szülői fiókban is megkapod — egy fiókban látod az összes gyermeked számláit."
+        subtitle="A havi képzési díj számláját e-mailben és a szülői fiókban is megkapod – egy fiókban látod az összes gyermeked számláit."
         aside={
           <Link
             href="/belepes"

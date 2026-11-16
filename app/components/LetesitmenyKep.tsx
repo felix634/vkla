@@ -27,7 +27,7 @@ export default function LetesitmenyKep({
         type="button"
         disabled={!kattinthato}
         onClick={() => setIndex(0)}
-        aria-label={`${nev} — fotók`}
+        aria-label={`${nev} – fotók`}
         className="group block w-full relative aspect-[16/10] rounded-md overflow-hidden bg-navy disabled:cursor-default"
       >
         <Image
