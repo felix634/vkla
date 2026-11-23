@@ -78,8 +78,8 @@ export default async function KapcsolatPage() {
       <section className="bg-cream">
         <div className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-2 gap-8 items-stretch">
           <div className="bg-white rounded-lg border border-gray-100 shadow-xl shadow-navy/5 p-7">
-            <h2 className="font-display font-bold text-2xl text-navy mb-1">Általános megkeresés</h2>
-            <p className="text-sm text-navy/55 mb-6">Válaszolunk, amint tudunk.</p>
+            {/* A „Válaszolunk, amint tudunk.” alcím lekerült (Tóth Patrik, 2026.11.20.). */}
+            <h2 className="font-display font-bold text-2xl text-navy mb-6">Általános megkeresés</h2>
             <KapcsolatForm enabled={emailEnabled} />
           </div>
 
