@@ -238,6 +238,23 @@ export async function getGaleriaAlbumok(): Promise<GaleriaAlbumData[] | null> {
   );
 }
 
+// A Galéria nyitóoldalának két kártyája: a Studióban kiválasztott borítókép a
+// fókuszponttal. Üres mezőnél null → a kategória legfrissebb albumának borítója.
+export type GaleriaBorito = { url: string | null; hotspot: { x: number; y: number } | null } | null;
+export type GaleriaBoritokData = { merkozesek: GaleriaBorito; esemenyek: GaleriaBorito };
+
+export async function getGaleriaBoritok(): Promise<GaleriaBoritokData | null> {
+  if (!sanityEnabled || !client) return null;
+  return client.fetch(
+    `*[_type == "galeriaBoritok" && _id == "galeriaBoritok"][0]{
+      "merkozesek": merkozesek{ "url": asset->url, "hotspot": hotspot{ x, y } },
+      "esemenyek": esemenyek{ "url": asset->url, "hotspot": hotspot{ x, y } }
+    }`,
+    {},
+    REVALIDATE
+  );
+}
+
 // Egy album a képeivel (a galéria 3. szintje).
 export async function getGaleriaAlbum(id: string): Promise<GaleriaAlbumReszletek | null> {
   if (!sanityEnabled || !client) return null;

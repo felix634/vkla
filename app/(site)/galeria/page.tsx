@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import GaleriaClient from "../../components/GaleriaClient";
-import { getGaleriaAlbum, getGaleriaAlbumok } from "../../lib/sanity/tartalom";
+import { getGaleriaAlbum, getGaleriaAlbumok, getGaleriaBoritok } from "../../lib/sanity/tartalom";
 
 export const metadata: Metadata = {
   title: "Galéria – Vasas Kubala Akadémia",
@@ -13,9 +13,10 @@ export default async function GaleriaPage({
 }: {
   searchParams: { kategoria?: string; album?: string };
 }) {
-  const [albumok, album] = await Promise.all([
+  const [albumok, album, boritok] = await Promise.all([
     getGaleriaAlbumok(),
     searchParams.album ? getGaleriaAlbum(searchParams.album) : null,
+    getGaleriaBoritok(),
   ]);
-  return <GaleriaClient albumok={albumok} album={album} kategoria={searchParams.kategoria} />;
+  return <GaleriaClient albumok={albumok} album={album} kategoria={searchParams.kategoria} boritok={boritok} />;
 }

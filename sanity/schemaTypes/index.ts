@@ -8,6 +8,7 @@ import letesitmeny from "./letesitmeny";
 import dokumentum from "./dokumentum";
 import allas from "./allas";
 import galeria from "./galeria";
+import galeriaBoritok from "./galeriaBoritok";
 import video from "./video";
 import hetirend from "./hetirend";
 import beallitasok from "./beallitasok";
@@ -23,6 +24,7 @@ export const schemaTypes = [
   dokumentum,
   allas,
   galeria,
+  galeriaBoritok,
   video,
   hetirend,
   beallitasok,

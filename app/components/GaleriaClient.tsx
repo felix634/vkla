@@ -6,9 +6,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import PageHero from "./site/PageHero";
 import KepNezegeto from "./KepNezegeto";
-import { sized } from "../lib/sanity/imageUrl";
+import { fokusz, sized } from "../lib/sanity/imageUrl";
 import { formatDate } from "../lib/newsFormat";
-import type { GaleriaAlbumData, GaleriaAlbumReszletek } from "../lib/sanity/tartalom";
+import type { GaleriaAlbumData, GaleriaAlbumReszletek, GaleriaBoritokData } from "../lib/sanity/tartalom";
 
 // A galéria három szintje (Tóth Patrik, 2026.10.23., „akárcsak a Facebookon”):
 // 1. két nagy album egymás mellett (Mérkőzések, Események) borítóképpel;
@@ -47,10 +47,12 @@ export default function GaleriaClient({
   albumok,
   album,
   kategoria,
+  boritok,
 }: {
   albumok?: GaleriaAlbumData[] | null;
   album?: GaleriaAlbumReszletek | null;
   kategoria?: string;
+  boritok?: GaleriaBoritokData | null;
 }) {
   const lista = (albumok ?? []).filter((a) => a.kepszam > 0 && a.boritoUrl);
   const kepek = album?.imageUrls ?? [];
@@ -143,7 +145,9 @@ export default function GaleriaClient({
             <div className="grid md:grid-cols-2 gap-6">
               {KATEGORIAK.map((k) => {
                 const sajat = lista.filter((a) => a.category === k.cms);
-                const borito = sajat[0]?.boritoUrl;
+                // A Studióban kiválasztott kép (Galéria borítóképek), különben a legfrissebb album borítója.
+                const valasztott = boritok?.[k.slug]?.url ? boritok[k.slug] : null;
+                const borito = valasztott?.url ?? sajat[0]?.boritoUrl;
                 return (
                   <Link
                     key={k.slug}
@@ -155,6 +159,7 @@ export default function GaleriaClient({
                       alt={k.cim}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      style={valasztott ? { objectPosition: fokusz(valasztott.hotspot) } : undefined}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
                     <div className="absolute left-0 right-0 bottom-0 p-8">

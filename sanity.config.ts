@@ -26,6 +26,9 @@ const structure: StructureResolver = (S) =>
         ),
       // A Videók rész a klub kérésére lekerült (Tóth Patrik, 2026.10.23.).
       S.documentTypeListItem("galeria").title("Galéria albumok"),
+      S.listItem()
+        .title("Galéria borítóképek")
+        .child(S.document().schemaType("galeriaBoritok").documentId("galeriaBoritok")),
       S.documentTypeListItem("szponzor").title("Szponzorok"),
       S.documentTypeListItem("letesitmeny").title("Létesítmények"),
       S.documentTypeListItem("dokumentum").title("Dokumentumok"),
@@ -47,4 +50,9 @@ export default defineConfig({
   dataset,
   plugins: [structureTool({ structure }), huHULocale()],
   schema: { types: schemaTypes },
+  // A Galéria borítóképekből egyetlen dokumentum van (a menüből nyílik), ezért
+  // az „Új dokumentum” listában nem kínáljuk fel.
+  document: {
+    newDocumentOptions: (elozo) => elozo.filter((t) => t.templateId !== "galeriaBoritok"),
+  },
 });
