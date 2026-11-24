@@ -9,9 +9,11 @@ export function catColor(cat: string): string {
 
 export function formatDate(iso: string | null): string {
   if (!iso) return "Dátum";
+  // Budapesti idő szerint: a szerver UTC-ben fut, így éjfél körül egy nappal elcsúszhatna.
   return new Date(iso).toLocaleDateString("hu-HU", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "Europe/Budapest",
   });
 }

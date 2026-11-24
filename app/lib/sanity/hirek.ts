@@ -16,6 +16,8 @@ export type HirListItem = {
 
 export type HirDetail = HirListItem & {
   body: unknown[] | null;
+  // A nyitókép mérete: a cikkoldalon a kép a saját arányában, vágás nélkül jelenik meg.
+  imageMeret?: { width: number; height: number } | null;
 };
 
 export const HIREK_OLDALMERET = 13; // 1 kiemelt + 12 rács
@@ -129,6 +131,7 @@ export async function getHir(slug: string): Promise<HirDetail | null> {
   const hir = await client.fetch<HirDetail | null>(
     `*[_type == "hir" && slug.current == $slug][0]{
       ${LIST_FIELDS},
+      "imageMeret": heroImage.asset->metadata.dimensions{ width, height },
       body[]{
         ...,
         _type == "image" => { ..., "url": asset->url }

@@ -4,17 +4,24 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getHir } from "../../../lib/sanity/hirek";
 import PortableBody from "../../../components/PortableBody";
-import { fokusz, sized } from "../../../lib/sanity/imageUrl";
+import { sized } from "../../../lib/sanity/imageUrl";
 
 export const revalidate = 300;
 
-function formatDate(iso: string | null): string {
+// A megnyitott cikknél a dátum mellett az időpont is látszik, pl. „2026. november 16. 14:05”
+// (a klub kérése, 2026.11.24.; a listákban továbbra is csak a dátum). Budapesti idő szerint,
+// mert a szerver UTC-ben fut.
+function formatDatumIdo(iso: string | null): string {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString("hu-HU", {
+  const d = new Date(iso);
+  const datum = d.toLocaleDateString("hu-HU", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "Europe/Budapest",
   });
+  const ido = d.toLocaleTimeString("hu-HU", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Budapest" });
+  return `${datum} ${ido}`;
 }
 
 export async function generateMetadata({
@@ -64,25 +71,35 @@ export default async function HirPage({ params }: { params: { slug: string } }) 
             >
               {hir.category}
             </Link>
-            <span className="text-sm text-white/60">{formatDate(hir.publishedAt)}</span>
+            {hir.publishedAt && (
+              <time dateTime={hir.publishedAt} className="text-sm text-white/60">
+                {formatDatumIdo(hir.publishedAt)}
+              </time>
+            )}
           </div>
           <h1 className="heading-display text-3xl md:text-5xl">{hir.title}</h1>
         </div>
       </section>
 
-      {/* Indexkép */}
+      {/* Indexkép: a saját arányában, vágás nélkül (a klub kérése, 2026.11.24.: a 16:9-es
+          keret a 3:2-es képek tetejét-alját levágta). Álló képnél a magasság korlátos. */}
       {hir.imageUrl && (
         <div className="max-w-3xl mx-auto px-6 -mt-0 pt-10">
-          <div className="relative aspect-[16/9] rounded-md overflow-hidden bg-navy/5">
+          {hir.imageMeret ? (
             <Image
               src={sized(hir.imageUrl, 1600)!}
               alt={hir.title}
-              fill
+              width={hir.imageMeret.width}
+              height={hir.imageMeret.height}
               priority
-              className="object-cover"
-              style={{ objectPosition: fokusz(hir.imagePos) }}
+              sizes="(max-width: 768px) 100vw, 720px"
+              className="w-full h-auto max-h-[80vh] object-contain rounded-md bg-navy/5"
             />
-          </div>
+          ) : (
+            <div className="relative aspect-[3/2] rounded-md overflow-hidden bg-navy/5">
+              <Image src={sized(hir.imageUrl, 1600)!} alt={hir.title} fill priority className="object-contain" />
+            </div>
+          )}
         </div>
       )}
 
